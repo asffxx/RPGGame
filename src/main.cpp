@@ -3230,7 +3230,7 @@ void showDictionary(Player& hero) {
     bool inDictionary = true;
     while (inDictionary) {
         system("cls");
-        std::vector<string> sections = {"Enemies", "Weapons", "Locations", "Events", "Special Characters", "Exit"};
+        std::vector<string> sections = {"1. Enemies", "2. Weapons", "3. Locations", "4. Events", "5. Special Characters", "6. Exit"};
         displayBorderedMenu(sections, "Choose a section: ");
         int choice = getNumberInput(1, 6);
         if (choice == 6) {
