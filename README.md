@@ -1,4 +1,4 @@
-# RPG
+# RPGGame
 A command-line based game written in C++
 
 ## Description
