@@ -2900,8 +2900,10 @@ void handleEvent(Player& hero, EnemyController& enemyCtrl, CombatSystem& combat,
         cout << "\nYou encounter an enemy!" << endl;
         Enemy enemy = enemyCtrl.getEnemyByName(event.enemyName, hero.stats.level, hero.currentLocationType);
         std::vector<NPC> emptyParty;
+        system("cls");
         CombatScreen combatScreen(hero, emptyParty, enemy, hero.timeSystem, npcGen, spellDB);
         combatScreen.startCombat(combat, playerInventory);
+        system("cls");
 
         if (hero.stats.hitpoints > 0 && enemy.stats.data.hitpoints <= 0) {
             enemyCtrl.enemyGoldExpDrop(hero, enemy);
@@ -2924,6 +2926,7 @@ class TravelSystem{
         TravelSystem(NPCGenerator& gen, bool debugAllDiscovered = false) : npcGen(gen), discovered(locationDB.getLocations().size(), debugAllDiscovered), marked(locationDB.getLocations().size(), false) {}
 
         void travel(Player& hero, EnemyController& enemyCtrl, CombatSystem& combat, PlayerInventory& playerInventory, PlayerController& heroStats, TimeSystem& timeSystem) {
+        system("cls");
         std::vector<string> lines = {
             "1. Venture into the unknown -- uncover new lands and dangers",
             "2. Follow safe routes -- travel to known, marked locations"
@@ -2931,10 +2934,12 @@ class TravelSystem{
             displayBorderedMenu(lines, "Choose an option: ");
             int choice = getNumberInput(1, 2);
 
-            if (choice == 1) {
-                exploreRandomLocation(hero, enemyCtrl, combat, playerInventory, heroStats, timeSystem);
-            } else {
-                const auto& locations = locationDB.getLocations();
+    if (choice == 1) {
+        system("cls");
+        exploreRandomLocation(hero, enemyCtrl, combat, playerInventory, heroStats, timeSystem);
+    } else {
+        system("cls");
+        const auto& locations = locationDB.getLocations();
                 std::vector<size_t> markedLocations;
                 for (size_t i = 0; i < locations.size(); ++i) {
                     if (marked[i]) {
@@ -2952,6 +2957,8 @@ class TravelSystem{
                 cout << "Choose a location: ";
                 int locChoice = getNumberInput(1, static_cast<int>(markedLocations.size()));
                 size_t idx = markedLocations[locChoice - 1];
+                hero.currentLocation = locations[idx].name;
+                hero.currentLocationType = locations[idx].type;
                 enterLocation(hero, enemyCtrl, combat, playerInventory, heroStats, timeSystem, idx, true);
             }
         }
@@ -2973,6 +2980,7 @@ class TravelSystem{
         heroStats.levelUpChecker();
         hero.discoveredLocations.insert(locations[idx].name);
         hero.hasNewDictionaryEntry = true;
+        
     }
     hero.currentLocation = locations[idx].name;
     hero.currentLocationType = locations[idx].type;
@@ -2990,6 +2998,8 @@ class TravelSystem{
         SpellDatabase spellDB;
         bool inLocation = true;
         while (inLocation) {
+        system("cls");
+
             cout << "\n=== " << location.name << " ===\n";
             cout << location.description << endl;
             cout << "1. Explore\n";
@@ -3646,8 +3656,6 @@ int main() {
     system("cls");
     narrate("\nYour origin was no grand event...");
     std::this_thread::sleep_for(std::chrono::milliseconds(900));
-    narrate(" only a quiet tragedy in a hollowed ruin.\n");
-    std::this_thread::sleep_for(std::chrono::milliseconds(900));
     system("cls");
     narrate("\nThe world did not rejoice.\n");
     std::this_thread::sleep_for(std::chrono::milliseconds(900));
@@ -3673,16 +3681,7 @@ int main() {
     std::this_thread::sleep_for(std::chrono::milliseconds(900));
     system("cls");
 
-
-    narrate("\nYou watched your kind cling to ghosts...");
-    std::this_thread::sleep_for(std::chrono::milliseconds(900));
-    narrate(" praying for salvation for this damned land.\n");
-    std::this_thread::sleep_for(std::chrono::milliseconds(900));
-    system("cls");
-
-    narrate("\nWhile were blinded by nostalgia");
-    std::this_thread::sleep_for(std::chrono::milliseconds(900));
-    narrate(" you sharpened your resolve...\n");
+    narrate(" You sharpened your resolve...\n");
     std::this_thread::sleep_for(std::chrono::milliseconds(900));
     system("cls");
     
@@ -3713,7 +3712,7 @@ int main() {
     const PlayerClassTemplate& chosenClass = classDb.templates[classIndex];
 
     cout << "\n[ SO BE IT ]" << endl;
-    cout << "Identity: " << name << ", a fragment of the " << chosenRace.name <<  " Race" << endl;
+    cout << "Identity: " << name << ", a of the " << chosenRace.name <<  " Race" << endl;
     cout << "Class: "<< chosenClass.name << endl;
     
     std::this_thread::sleep_for(std::chrono::milliseconds(1200));
@@ -3740,15 +3739,10 @@ int main() {
     system("cls");
 
   
-    narrate("\nIt is written in dust.");
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-    system("cls");
-    narrate("\nA soul born of " + chosenRace.name + "\n");
+    narrate("\nYour chosen race is: " + chosenRace.name + "\n");
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     narrate("\nThe " + chosenClass.name + " is your chosen class. \n");
     std::this_thread::sleep_for(std::chrono::milliseconds(900));
-    system("cls");
-    narrate("\nGo now. The Forgotten Land has been waiting a long time to claim you.\n");
     system("cls");
     cout << "\nPress Enter to step into the grey...\n";
     

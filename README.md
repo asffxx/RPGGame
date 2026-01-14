@@ -2,7 +2,15 @@
 A command-line based game written in C++
 
 ## Description
-My attempt at making an RPG Game at C++ with slight depth. 
+My attempt at making an RPG Game at C++ with slight depth.
+
+## Changelog
+
+### Version 1.1.0
+- **UI Improvements**: Added consistent screen clearing (`cls`) in the Travel System for all options to improve user experience.
+- **Start-up Screen**: Made the intro less cringe(I thought i was cooking), and made it little bit faster.
+- **Combat Enhancements**: Implemented screen clearing before and after combat screens for better readability.
+- **Bug Fixes**: Fixed an issue where traveling to a marked location did not update the player's current location in the main menu display.
 
 ## Features
 
@@ -25,10 +33,10 @@ You can obtain the code in one of two ways:
 1. **Clone the Repository**: If you have Git installed, clone the repository using:
 
    ```
-   git clone <repolink>
+   git clone <https://github.com/asffxx/RPGGame>
    ```
 
-2. Install the zip in the [releases page](repolink). Extract, and launch <b>rpg.exe<b>. 
+2. Install the zip in the [releases page](https://github.com/asffxx/RPGGame/releases). Extract, and launch <b>rpg.exe<b>. 
 <br><br>
 ### Building the Game
    
