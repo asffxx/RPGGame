@@ -1,0 +1,14 @@
+# Local developer documentation (not part of the shipped project)
+DEV.md
+progress.md
+
+# Build artifacts
+*.o
+*.obj
+rpg
+
+# CMake / build dirs
+build/
+__cmake_*/
+CMakeCache.txt
+CMakeFiles/
