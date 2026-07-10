@@ -1,6 +1,0 @@
-CompileFlags :
-  Add: [ "-IC:/Users/neil/Documents/GitHub/RPGGame/src" ]
-  Compiler: "D:/Dev Tools/MSys2/ucrt64/bin/g++.exe"
-
-Diagnostics:
-  Suppress: [ "incomplete_type", "incomplete_member_access", "unused-includes", "undeclared_var_use" ]

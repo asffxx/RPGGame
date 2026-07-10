@@ -1,17 +1,14 @@
-# Local developer documentation (not part of the shipped project)
-DEV.md
-progress.md
-notes/
-build.sh
+docs/
+scripts/
+scripts/build.sh
+scripts/checker.sh
+scripts/check_files.sh
 check.sh
-
-# Build artifacts
 *.o
 *.obj
-rpg
-
-# CMake / build dirs
+rpg.exe
 build/
 __cmake_*/
 CMakeCache.txt
 CMakeFiles/
+*.sh
