@@ -9,7 +9,6 @@ scripts/check_files.sh
 check.sh
 *.o
 *.obj
-rpg.exe
 build/
 __cmake_*/
 CMakeCache.txt

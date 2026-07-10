@@ -56,32 +56,22 @@ action as well.
 - A C++17-compatible compiler (the project is built with `g++` from MSYS2/MinGW-w64).
 - Windows (uses `system("cls")` for screen clearing).
 
-### Build
+### Build & Run
 
 The game is now split into modular translation units under `src/`. Compile all
 sources together (the entry point is `src/main.cpp`):
 
-```sh
-g++ -std=c++17 -O2 -I src \
-  src/main.cpp \
-  src/core/*.cpp src/db/*.cpp src/npc/*.cpp src/game/*.cpp src/world/*.cpp \
-  -o rpg.exe
-```
-
-A `CMakeLists.txt` is also provided:
+**Option A — CMake (recommended):**
 
 ```sh
-cmake -B build && cmake --build build
+cmake -B build -S .
+cmake --build build
+./build/rpg            # or rpg.exe on Windows
 ```
 
-> Note: `src/game/enemy_data.cpp` is intentionally `#include`d at the end of
-> `src/game/enemy.cpp` to populate the enemy template catalog; do not add it as a separate compilation unit.
+**Option B — RUN  rpg.exe.**
 
-### Run
-
-```sh
-rpg.exe
-```
+---
 
 At the opening prompt, type `Quick Start` to skip character creation and jump straight into
 the game with a default character.
@@ -124,20 +114,6 @@ Shrewd Diplomat, Travelling Merchant, Sheltered Noble, Prisoner.
 
 - A C++17-compatible compiler (built with `g++` from MSYS2/MinGW-w64).
 - Windows (uses `system("cls")` for screen clearing).
-
-### Build & Run
-
-**Option A — CMake (recommended):**
-
-```sh
-cmake -B build -S .
-cmake --build build
-./build/rpg            # or rpg.exe on Windows
-```
-
-**Option B — RUN  rpg.exe.**
-
----
 
 ## Disclaimer
 
