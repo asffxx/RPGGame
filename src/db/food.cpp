@@ -18,5 +18,6 @@ FoodandDrinksDatabase::FoodandDrinksDatabase() {
         {"Wine", "Drink", 0, 0, 0, 20, "A glass of wine that restores mana.", 0,0,3,0},
         {"Beer", "Drink", 0, 0, 0, 18, "A mug of beer that restores mana.", 0,0,2,50},
         {"Juice", "Drink", 0, 0, 0, 12, "Fruit juice that restores mana.", 0,0,1,50}
+
     };
 }

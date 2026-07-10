@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "game/entities/inventory.hpp"
+#include "game/systems/inventory.hpp"
 #include "game/entities/player.hpp"
 
 // Displays player stats and handles level-up progression.

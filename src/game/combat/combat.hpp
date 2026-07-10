@@ -5,10 +5,10 @@
 
 #include "core/types.hpp"
 #include "db/spell.hpp"
-#include "../entities/npc.hpp"
-#include "../entities/enemy.hpp"
-#include "../entities/inventory.hpp"
-#include "../entities/player.hpp"
+#include "game/entities/npc.hpp"
+#include "game/entities/enemy.hpp"
+#include "game/systems/inventory.hpp"
+#include "game/entities/player.hpp"
 
 // Abstract interface for anything that can fight in combat.
 class ICombatant {

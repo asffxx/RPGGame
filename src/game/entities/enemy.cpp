@@ -143,4 +143,4 @@ void EnemyController::enemyScaleLevel(Enemy& enemy, int difficultyLevel, Locatio
     enemy.stats.scaled = true;
 }
 
-#include "enemy_data.cpp"
+#include "db/enemy_data.cpp"
