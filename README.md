@@ -116,6 +116,29 @@ Shrewd Diplomat, Travelling Merchant, Sheltered Noble, Prisoner.
 
 > The codebase was refactored from a single file `main.cpp`. Behavior is preserved; only structure changed.
 
+---
+
+## Getting Started
+
+### Prerequisites
+
+- A C++17-compatible compiler (built with `g++` from MSYS2/MinGW-w64).
+- Windows (uses `system("cls")` for screen clearing).
+
+### Build & Run
+
+**Option A — CMake (recommended):**
+
+```sh
+cmake -B build -S .
+cmake --build build
+./build/rpg            # or rpg.exe on Windows
+```
+
+**Option B — RUN  rpg.exe.**
+
+---
+
 ## Disclaimer
 
 Certain classes such as `NPC`, `Player`, and `EnemyCombatant` were aided by AI. The `PlayerCombatant` class was AI-aided but integrated into the rest of the codebase. The combat damage formula is AI-aided since I can't think of a formula.
