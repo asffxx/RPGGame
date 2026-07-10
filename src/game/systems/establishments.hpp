@@ -8,7 +8,7 @@
 #include "db/potion.hpp"
 #include "db/spell.hpp"
 #include "game/entities/npc.hpp"
-#include "game/entities/inventory.hpp"
+#include "game/systems/inventory.hpp"
 #include "game/entities/player.hpp"
 
 // Tavern: sleep, buy food/drink, and hire party members.

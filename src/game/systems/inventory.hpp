@@ -9,7 +9,7 @@
 #include "db/food.hpp"
 #include "db/potion.hpp"
 #include "db/spell.hpp"
-#include "player.hpp"
+#include "game/entities/player.hpp"
 
 // Manages the player's items, equipment, and active buffs.
 class PlayerInventory {

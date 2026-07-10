@@ -2,7 +2,7 @@
 
 #include "game/combat/combat.hpp"
 #include "game/entities/enemy.hpp"
-#include "game/entities/inventory.hpp"
+#include "game/systems/inventory.hpp"
 #include "game/ui/player_controller.hpp"
 #include "game/entities/player.hpp"
 #include "game/entities/npc.hpp"

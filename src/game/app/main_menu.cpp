@@ -14,7 +14,7 @@
 #include "../entities/enemy.hpp"
 #include "game/systems/establishments.hpp"
 #include "../systems/event.hpp"
-#include "game/entities/inventory.hpp"
+#include "game/systems/inventory.hpp"
 #include "../ui/menu.hpp"
 #include "../systems/party.hpp"
 #include "../ui/player_controller.hpp"

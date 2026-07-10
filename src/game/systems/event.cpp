@@ -1,4 +1,4 @@
-#include "game/systems/event.hpp"
+#include "event.hpp"
 
 #include <iostream>
 #include <random>
