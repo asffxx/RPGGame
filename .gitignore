@@ -1,6 +1,9 @@
 # Local developer documentation (not part of the shipped project)
 DEV.md
 progress.md
+notes/
+build.sh
+check.sh
 
 # Build artifacts
 *.o
