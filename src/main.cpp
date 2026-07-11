@@ -1,5 +1,4 @@
 #include <iostream>
-#include <limits>
 #include <string>
 #include <vector>
 
@@ -11,51 +10,40 @@
 #include "app/display.hpp"
 
 int main() {
+    std::vector<std::string> titleOptions = {"Start", "Exit"};
+    displayBorderedMenu(titleOptions, "Choose an option: ");
+    int choice = getNumberInput(1, 2);
+    if (choice != 1) return 0;
+
+    system("cls");
+
     PlayerRaceDatabase raceDb;
     PlayerClassCollection classDb;
 
-    narrate("\n--- SELECT YOUR ANCESTRY ---\n");
     std::vector<std::string> raceNames;
     for (const auto& r : raceDb.templates) raceNames.push_back(r.name);
-
-    PagedSelector raceSelector(raceNames);
-    size_t raceIndex = raceSelector.select();
-    const PlayerRaceTemplate& chosenRace = raceDb.templates[raceIndex];
+    displayBorderedMenu(raceNames, "Choose your race: ");
+    int raceChoice = getNumberInput(1, static_cast<int>(raceNames.size()));
+    const PlayerRaceTemplate& chosenRace = raceDb.templates[raceChoice - 1];
     system("cls");
 
-    std::string name;
-    narrate("\nWhat is your name? : ");
-    std::getline(std::cin, name);
-    system("cls");
-
-    narrate(chosenRace.lore.description, 10);
-
-    display::acceptFatePrompt();
-    char confirm;
-    std::cin >> confirm;
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-    if (confirm == 'n' || confirm == 'N') {
-        narrate("Then perhaps it is better to remain in the nothingness.");
-        return 0;
-    }
-
-    system("cls");
-    narrate("\n--- CHOOSE YOUR CALLING ---\n");
     std::vector<std::string> classNames;
     for (const auto& c : classDb.templates) classNames.push_back(c.name);
+    displayBorderedMenu(classNames, "Choose your class: ");
+    int classChoice = getNumberInput(1, static_cast<int>(classNames.size()));
+    const PlayerClassTemplate& chosenClass = classDb.templates[classChoice - 1];
+    system("cls");
 
-    PagedSelector classSelector(classNames);
-    size_t classIndex = classSelector.select();
-    const PlayerClassTemplate& chosenClass = classDb.templates[classIndex];
+    std::cout << "Enter your name: ";
+    std::string name;
+    std::getline(std::cin, name);
+    system("cls");
 
     PlayerRace playerRace{ chosenRace.name, { chosenRace.lore.description } };
     Player hero(name, playerRace, chosenClass);
     hero.applyRaceBonus(chosenRace.statBonus);
 
-    std::cout << "\nCharacter created successfully!" << std::endl;
-    system("cls");
-    display::stepIntoGrey();
+    display::characterCreated();
     system("cls");
     mainMenu(hero);
     return 0;
