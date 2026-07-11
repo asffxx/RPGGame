@@ -231,7 +231,7 @@ EnemyDatabase::EnemyDatabase() {
       {"A seductive sea creature, luring sailors to their doom."},
       5, {"Freeze"}, 5, {Terrain} },
 
-    { "Troll Shaman",
+    { "Shammah",
       {{160, 160, 0.12f, 0.08f, 14, 12, 0, 0, 0.02f, 1.3f, 0.01f, 1.0f, 7, 125, Economy(0,1,0,0)}},
       {"A shaman troll wielding primal magic and brute strength."},
       7, {"Poison"}, 7, {Terrain, Dungeon} }
