@@ -3,7 +3,8 @@
 #include <cmath>
 #include <iostream>
 
-#include "game/entities/player.hpp"
+#include "entities/player.hpp"
+#include "app/display.hpp"
 
 void TimeSystem::advanceTime(Player& player) {
     currentTurn++;
@@ -26,7 +27,7 @@ void TimeSystem::advanceTime(Player& player) {
                 int penalty = static_cast<int>(std::round(player.stats.maxHitpoints * 0.05f));
                 player.stats.hitpoints -= penalty;
                 if (player.stats.hitpoints < 1) player.stats.hitpoints = 1;
-                std::cout << "[!] Your vision blurs. The shadows of 'The Lands Between' seem longer than usual." << std::endl;
+                display::sleepPenalty();
             }
 
             player.sleptToday = false;
