@@ -8,8 +8,8 @@
 #include "data/spell.hpp"
 
 NPCGenerator::NPCGenerator()
-    : firstNames({"Godfrey","Augustus","Edmund","Alfred","Theodore","Marcus","Julius","Lucius","Constantine","Benedict","Sebastian","Cornelius","Ambrose","Gregory","Leonard","Matthias","Philip","Alexander","Dominic","Victor","Hugh","Gerald","Roland","Bernard","Percival"}),
-      lastNames({"Janus","Godwin","Edwards","Aurelian","Constantinus","Benedictus","Marcellus","Valerian","Justinian","Hadrian","Maximus","Cassius","Severus","Flavian","Gratian","Laurentius","Paulinus","Victorinus","Dominicus","Magnus","Theodoric","Regulus","Claudius","Tiberius","Germanicus"}),
+    : firstNames({"Cedric","Rowan","Edmund","Alfred","Theodore","Marcus","Julius","Lucius","Gavin","Benedict","Sebastian","Cornelius","Ambrose","Gregory","Leonard","Matthias","Philip","Alexander","Dominic","Victor","Hugh","Gerald","Roland","Bernard","Percival"}),
+      lastNames({"Ashcroft","Godwin","Edwards","Aurelian","Valemont","Blackwood","Oakheart","Kingsley","Whitmore","Hadrian","Redwyne","Greystone","Briar","Solstice","Merrick","Laurentius","Quill","Sloane","Ravencrest","Magnus","Theodoric","Calloway","Sinclair","Thane","Quinn"}),
       specialCharacters({"Evelyn Chevalier", "Astra Yao", "Ye Shunguang ", "Burnice White","Jane Doe", "Belle"}) {}
 
 void NPCGenerator::lockName(const std::string& name) {
