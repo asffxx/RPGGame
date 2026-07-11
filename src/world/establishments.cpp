@@ -6,6 +6,7 @@
 #include <random>
 
 #include "core/ui.hpp"
+#include "app/display.hpp"
 
 void Tavern::openTavern(Player& player, TimeSystem& timeSystem) {
     bool inTavern = true;
@@ -17,7 +18,7 @@ void Tavern::openTavern(Player& player, TimeSystem& timeSystem) {
             "4. Exit"
         };
 
-        std::cout << "\n--- THE RATTLING FLAGON TAVERN ---" << std::endl;
+        display::tavernHeader();
         displayBorderedMenu(lines, "The Tavernkeeper wipes a mug. 'What'll it be?' ");
 
         int choice = getNumberInput(1, 4);
@@ -27,10 +28,9 @@ void Tavern::openTavern(Player& player, TimeSystem& timeSystem) {
                 player.stats.hitpoints = player.stats.maxHitpoints;
                 player.sleptToday = true;
                 timeSystem.advanceTime(player);
-                std::cout << "\nYou settle into a hay-stuffed mattress. The world fades to black...\n";
-                std::cout << "You wake up feeling refreshed! (HP Restored)\n";
+                display::tavernSlept();
             } else {
-                std::cout << "\n'No coin, no bed,' the Tavernkeeper grunts.\n";
+                display::tavernNoCoin();
             }
         }
         else if (choice == 2) {
@@ -40,7 +40,7 @@ void Tavern::openTavern(Player& player, TimeSystem& timeSystem) {
             hirePartyMember(player);
         }
         else if (choice == 4) {
-            std::cout << "You step back out into the cold air.\n";
+            display::tavernExit();
             inTavern = false;
         }
     }
@@ -63,15 +63,15 @@ void Tavern::buyFoodAndDrinks(Player& player) {
 
     if (player.economy.subtractCurrency(foods[index].pricePlatinum, foods[index].priceGold, foods[index].priceSilver, foods[index].priceCopper)) {
         inventory.addItem(PlayerInventory::ItemType::FoodAndDrink, index);
-        std::cout << "You purchased " << foods[index].name << ". It smells... edible.\n";
+        display::tavernFoodPurchased(foods[index].name);
     } else {
-        std::cout << "You don't have enough coin for that.\n";
+        display::tavernFoodTooExpensive();
     }
 }
 
 void Tavern::hirePartyMember(Player& player) {
     if (playerParty.size() >= 4) {
-        std::cout << "\n'Your group is too big already,' the Tavernkeeper remarks. (Max 4 members)\n";
+        display::tavernPartyTooBig();
         return;
     }
 
@@ -83,9 +83,7 @@ void Tavern::hirePartyMember(Player& player) {
     int statBonus = (newNPC.stats.attack + newNPC.stats.magicAttack + newNPC.stats.armor + newNPC.stats.magicArmor) / 10;
     int totalCost = baseCost + levelMultiplier + statBonus;
 
-    std::cout << "\nIn the corner, you see " << newNPC.name << ", a " << newNPC.race.name << " " << newNPC.playerClass.name << " (Lv " << newNPC.level << ").\n";
-    std::cout << "Hiring cost: " << totalCost << " Gold.\n";
-    std::cout << "Gear: " << (newNPC.equippedWeapon.empty() ? "Rags" : newNPC.equippedWeapon) << "\n";
+    display::tavernHireInfo(newNPC, totalCost);
 
     std::cout << "Confirm hire? (y/n): ";
     char confirm;
@@ -93,25 +91,26 @@ void Tavern::hirePartyMember(Player& player) {
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
     if (confirm != 'y' && confirm != 'Y') {
-        std::cout << "You decide not to hire them.\n";
+        display::tavernHireDeclined();
         return;
     }
 
     if (!player.economy.subtractCurrency(0, totalCost, 0, 0)) {
-        std::cout << "You realize you can't afford their services.\n";
+        display::tavernHireTooExpensive();
         return;
     }
 
     newNPC.wagePerWeek = totalCost / 10;
     playerParty.push_back(newNPC);
 
-    std::cout << "\n" << newNPC.name << " stands up and joins your cause!\n";
-
+    std::string hireLine;
     if (!newNPC.dialogues.empty()) {
         static std::mt19937 gen(std::random_device{}());
         std::uniform_int_distribution<size_t> dist(0, newNPC.dialogues.size() - 1);
-        std::cout << newNPC.name << " says: \"" << newNPC.dialogues[dist(gen)] << "\"\n" << std::endl;
+        const char quote = '"';
+        hireLine = newNPC.name + " says: " + quote + newNPC.dialogues[dist(gen)] + quote;
     }
+    display::tavernHireJoined(newNPC, hireLine);
 
 
     std::vector<std::string> specialNames = {"Evelyn Chevalier", "Astra Yao", "Ye Shunguang ", "Burnice White","Jane Doe", "Belle"};
@@ -124,12 +123,7 @@ void Tavern::hirePartyMember(Player& player) {
 void Store::openStore(Player& player) {
     bool shopping = true;
     while (shopping) {
-        std::cout << "\n=== STORE ===\n";
-        std::cout << "Currency: " << player.economy.platinum << "p " << player.economy.gold << "g " << player.economy.silver << "s " << player.economy.copper << "c" << std::endl;
-        std::cout << "1. Buy Potions\n";
-        std::cout << "2. Buy Equipment\n";
-        std::cout << "3. Exit Store\n";
-        std::cout << "Choose an option: ";
+        display::storeHeader(player);
 
         int choice = getNumberInput(1, 3);
 
@@ -159,9 +153,9 @@ void Store::buyPotions(Player& player) {
     size_t index = potionSelector.select();
     if (player.economy.subtractCurrency(0, 0, potions[index].priceSilver, potions[index].priceCopper)) {
         inventory.addItem(PlayerInventory::ItemType::Potion, index);
-        std::cout << "Bought " << potions[index].name << "!\n";
+        display::storeBoughtPotion(potions[index].name);
     } else {
-        std::cout << "Not enough currency!\n";
+        display::storeNotEnoughCurrency();
     }
 }
 
@@ -175,25 +169,20 @@ void Store::buyEquipment(Player& player) {
     size_t index = equipmentSelector.select();
     if (player.economy.subtractCurrency(0, 0, equipment[index].priceSilver, equipment[index].priceCopper)) {
         inventory.addItem(PlayerInventory::ItemType::Equipment, index);
-        std::cout << "Bought " << equipment[index].name << "!\n";
+        display::storeBoughtEquipment(equipment[index].name);
         if (equipment[index].type == "Weapon") {
             player.boughtWeapons.insert(equipment[index].name);
             player.hasNewDictionaryEntry = true;
         }
     } else {
-        std::cout << "Not enough currency!\n";
+        display::storeNotEnoughCurrency();
     }
 }
 
 void magicStore::openStore(Player& player) {
     bool shopping = true;
     while (shopping) {
-        std::cout << "\n=== MAGIC STORE ===\n";
-        std::cout << "Currency: " << player.economy.platinum << "p " << player.economy.gold << "g " << player.economy.silver << "s " << player.economy.copper << "c" << std::endl;
-        std::cout << "1. Buy Spells\n";
-        std::cout << "2. Enchant Item\n";
-        std::cout << "3. Exit Store\n";
-        std::cout << "Choose an option: ";
+        display::magicStoreHeader(player);
 
         int choice = getNumberInput(1, 3);
 
@@ -223,7 +212,7 @@ void magicStore::buySpells(Player& player) {
     }
 
     if (availableSpells.empty()) {
-        std::cout << "No spells available for your level.\n";
+        display::magicStoreNoSpells();
         return;
     }
 
@@ -240,12 +229,12 @@ void magicStore::buySpells(Player& player) {
 
         if (std::find(player.learnedSpells.begin(), player.learnedSpells.end(), spell.spellName) == player.learnedSpells.end()) {
             player.learnedSpells.push_back(spell.spellName);
-            std::cout << "Learned " << spell.spellName << "!\n";
+            display::magicStoreLearned(spell.spellName);
         } else {
-            std::cout << "You already know " << spell.spellName << "!\n";
+            display::magicStoreAlreadyKnown(spell.spellName);
         }
     } else {
-        std::cout << "Not enough currency!\n";
+        display::storeNotEnoughCurrency();
     }
 }
 
@@ -265,16 +254,17 @@ void magicStore::enchantItem(Player& player) {
     }
 
     if (enchantableIndices.empty()) {
-        std::cout << "No equipped enchantable items.\n";
+        display::magicStoreNoEnchantable();
         return;
     }
 
-    std::cout << "\n=== ENCHANTABLE ITEMS ===\n";
+    display::magicStoreEnchantItemHeader();
+    std::vector<std::string> enchantLines;
     for (size_t j = 0; j < enchantableIndices.size(); ++j) {
         size_t i = enchantableIndices[j];
-        std::cout << j + 1 << ". " << equipment[i].name << " (" << equipment[i].type << ")\n";
+        enchantLines.push_back(equipment[i].name + " (" + equipment[i].type + ")");
     }
-    std::cout << "Choose item to enchant (0 to cancel): ";
+    display::magicStoreEnchantChoice(enchantLines);
     int itemChoice = getNumberInput(0, static_cast<int>(enchantableIndices.size()));
     if (itemChoice == 0) return;
 
@@ -282,7 +272,7 @@ void magicStore::enchantItem(Player& player) {
     const auto& item = equipment[itemIndex];
 
     if (!player.economy.subtractCurrency(0, 100, 0, 0)) {
-        std::cout << "Not enough gold! Enchanting costs 100 gold.\n";
+        display::magicStoreNotEnoughGold();
         return;
     }
 
@@ -306,7 +296,7 @@ void magicStore::enchantItem(Player& player) {
             }
         }
 
-        std::cout << "Enchanted " << item.name << " with " << debuff.name << "!\n";
+        display::magicStoreEnchanted(item.name, debuff.name);
     } else if (item.type == "Staff") {
 
         const auto& spells = spellDB.getSpells();

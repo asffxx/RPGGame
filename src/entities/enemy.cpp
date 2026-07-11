@@ -5,6 +5,7 @@
 #include <random>
 
 #include "core/types.hpp"
+#include "app/display.hpp"
 
 void EnemyStats::scale(float multiplier) {
     data.maxHitpoints = static_cast<int>(std::round(data.maxHitpoints * multiplier));
@@ -68,7 +69,7 @@ Enemy EnemyController::encounterEnemy(int difficultyLevel, LocationType location
     Enemy enemy = enemyDB.getRandomEnemy(difficultyLevel, locationType);
     enemyScaleLevel(enemy, difficultyLevel, locationType);
 
-    std::cout << "A wild " << enemy.name << " has appeared!" << std::endl;
+    display::enemyAppeared(enemy);
     return enemy;
 }
 
@@ -87,10 +88,7 @@ void EnemyController::enemyGoldExpDrop(Player& player, const Enemy& enemy) {
     player.economy.addCurrency(enemy.stats.data.economy.platinum, enemy.stats.data.economy.gold, enemy.stats.data.economy.silver, enemy.stats.data.economy.copper);
     player.stats.expe += enemy.stats.data.expe;
 
-    std::cout << "You have defeated " << enemy.name
-         << ", you gained " << enemy.stats.data.economy.platinum << "p " << enemy.stats.data.economy.gold << "g " << enemy.stats.data.economy.silver << "s " << enemy.stats.data.economy.copper << "c"
-         << " and " << enemy.stats.data.expe
-         << " experience!" << std::endl;
+    display::enemyDefeated(enemy, player);
 
     if (player.defeatedEnemies.find(enemy.name) == player.defeatedEnemies.end()) {
         player.defeatedEnemies.insert(enemy.name);
@@ -143,4 +141,4 @@ void EnemyController::enemyScaleLevel(Enemy& enemy, int difficultyLevel, Locatio
     enemy.stats.scaled = true;
 }
 
-#include "db/enemy_data.cpp"
+#include "data/enemy_data.cpp"

@@ -5,6 +5,7 @@
 #include <limits>
 
 #include "core/ui.hpp"
+#include "app/display.hpp"
 
 void PlayerInventory::addItem(ItemType type, size_t dbIndex, int amount) {
     for (auto& item : inventory) {
@@ -18,8 +19,7 @@ void PlayerInventory::addItem(ItemType type, size_t dbIndex, int amount) {
 
 void PlayerInventory::showInventory(Player& player) {
     if (inventory.empty()) {
-        std::cout << "Inventory is empty.\n";
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        display::inventoryEmpty();
         return;
     }
 
@@ -56,7 +56,7 @@ void PlayerInventory::tickBuffs(Player& player) {
     activeBuff->remainingTurns--;
     if (activeBuff->remainingTurns <= 0) {
         removeBuff(player);
-        std::cout << activeBuff->name << " has worn off.\n";
+        display::buffWoreOff(activeBuff->name);
         activeBuff.reset();
     }
 }
@@ -94,22 +94,20 @@ void PlayerInventory::handleSelectedItem(Player& player, InventoryItem& item) {
 void PlayerInventory::usePotion(Player& player, InventoryItem& item) {
     const auto& potion = potionDB.getPotions()[item.dbIndex];
 
-    std::cout << "Use " << potion.name << "? (y/n): ";
-    char c; std::cin >> c; std::cin.ignore();
-    if (c != 'y') return;
+    if (!display::usePotionPrompt(potion.name)) return;
 
 
     if (potion.hpEffect > 0) {
         int heal = std::min(potion.hpEffect, player.stats.maxHitpoints - player.stats.hitpoints);
         player.stats.hitpoints += heal;
-        std::cout << "Recovered " << heal << " HP.\n";
+        display::potionRecoveredHp(heal);
     }
 
 
     if (potion.manaRestore > 0) {
         int restore = std::min(potion.manaRestore, player.stats.maxMana - player.stats.mana);
         player.stats.mana += restore;
-        std::cout << "Recovered " << restore << " Mana.\n";
+        display::potionRecoveredMana(restore);
     }
 
 
@@ -137,10 +135,10 @@ void PlayerInventory::usePotion(Player& player, InventoryItem& item) {
         if (potion.manaIncreaseMax > 0) {
             player.stats.maxMana += potion.manaIncreaseMax;
             player.stats.mana += potion.manaIncreaseMax;
-        }
+            }
 
-        std::cout << potion.effectDesc << std::endl;
-    }
+            display::potionEffect(potion.effectDesc);
+        }
 
     item.quantity--;
     cleanupInventory();
@@ -149,33 +147,31 @@ void PlayerInventory::usePotion(Player& player, InventoryItem& item) {
 void PlayerInventory::useFoodAndDrink(Player& player, InventoryItem& item) {
     const auto& food = foodDB.getFoodAndDrink()[item.dbIndex];
 
-    std::cout << "Use " << food.name << "? (y/n): ";
-    char c; std::cin >> c; std::cin.ignore();
-    if (c != 'y') return;
+    if (!display::useFoodPrompt(food.name)) return;
 
 
     if (food.healthRestoration > 0) {
         int heal = std::min(food.healthRestoration, player.stats.maxHitpoints - player.stats.hitpoints);
         player.stats.hitpoints += heal;
-        std::cout << "Recovered " << heal << " HP.\n";
+        display::foodRecoveredHp(heal);
     }
 
 
     if (food.manaRestoration > 0) {
         int restore = std::min(food.manaRestoration, player.stats.maxMana - player.stats.mana);
         player.stats.mana += restore;
-        std::cout << "Recovered " << restore << " Mana.\n";
+        display::foodRecoveredMana(restore);
     }
 
 
     if (food.maxHealthBuffBonus > 0) {
         player.stats.maxHitpoints += food.maxHealthBuffBonus;
-        std::cout << "Max HP increased by " << food.maxHealthBuffBonus << ".\n";
+        display::foodMaxHpIncrease(food.maxHealthBuffBonus);
     }
 
     if (food.maxManaBuffBonus > 0) {
         player.stats.maxMana += food.maxManaBuffBonus;
-        std::cout << "Max Mana increased by " << food.maxManaBuffBonus << ".\n";
+        display::foodMaxManaIncrease(food.maxManaBuffBonus);
     }
 
     item.quantity--;
@@ -189,21 +185,17 @@ void PlayerInventory::equipItem(Player& player, InventoryItem& item) {
     bool alreadyEquipped = isEquipped(item.dbIndex);
 
     if (alreadyEquipped) {
-        std::cout << "Unequip " << eq.name << "? (y/n): ";
-        char c; std::cin >> c; std::cin.ignore();
-        if (c != 'y') return;
+        if (!display::unequipPrompt(eq.name)) return;
 
         if (staff) unequipStaff(player);
         else if (weapon) unequipWeapon(player);
         else unequipArmor(player);
-        std::cout << eq.name << " unequipped.\n";
+        display::itemUnequipped(eq.name);
         return;
     }
 
 
-    std::cout << "Equip " << eq.name << "? (y/n): ";
-    char c; std::cin >> c; std::cin.ignore();
-    if (c != 'y') return;
+    if (!display::equipPrompt(eq.name)) return;
 
     if (staff) equipStaff(player, item.dbIndex);
     else if (weapon) equipWeapon(player, item.dbIndex);
@@ -213,7 +205,7 @@ void PlayerInventory::equipItem(Player& player, InventoryItem& item) {
     auto it = std::find_if(inventory.begin(), inventory.end(), [&](const InventoryItem& i){ return &i == &item; });
     if (it != inventory.end()) moveItemToTop(std::distance(inventory.begin(), it));
 
-    std::cout << eq.effectDesc << std::endl;
+    display::itemEffect(eq.effectDesc);
 }
 
 void PlayerInventory::cleanupInventory() {

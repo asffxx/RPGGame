@@ -4,11 +4,11 @@
 #include <vector>
 
 #include "core/types.hpp"
-#include "db/spell.hpp"
-#include "game/entities/npc.hpp"
-#include "game/entities/enemy.hpp"
-#include "game/systems/inventory.hpp"
-#include "game/entities/player.hpp"
+#include "data/spell.hpp"
+#include "entities/npc.hpp"
+#include "entities/enemy.hpp"
+#include "systems/inventory.hpp"
+#include "entities/player.hpp"
 
 // Abstract interface for anything that can fight in combat.
 class ICombatant {
@@ -126,5 +126,6 @@ private:
     void handlePlayerAttack(CombatSystem& combat);
     void handleCastSpell();
     void handleEnemyTurn(CombatSystem& combat);
+    void removeDeadPartyMembers();
     void displayCombatOutcome() const;
 };

@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "core/ui.hpp"
+#include "app/display.hpp"
 
 void Menu::displayAndExecute() {
     while (true) {
@@ -13,7 +14,7 @@ void Menu::displayAndExecute() {
             system("cls");
             break;
         } else {
-            std::cout << "Invalid choice!" << std::endl;
+            display::menuInvalidChoice();
         }
     }
 }

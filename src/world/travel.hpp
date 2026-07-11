@@ -3,13 +3,13 @@
 #include <vector>
 
 #include "core/types.hpp"
-#include "db/location.hpp"
-#include "game/combat/combat.hpp"
-#include "game/entities/enemy.hpp"
-#include "game/systems/inventory.hpp"
-#include "game/ui/player_controller.hpp"
-#include "game/entities/player.hpp"
-#include "game/entities/npc.hpp"
+#include "data/location.hpp"
+#include "combat/combat.hpp"
+#include "entities/enemy.hpp"
+#include "systems/inventory.hpp"
+#include "ui/player_controller.hpp"
+#include "entities/player.hpp"
+#include "entities/npc.hpp"
 
 // Handles exploration, random discovery, and entering locations.
 class TravelSystem {
