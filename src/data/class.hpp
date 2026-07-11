@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "game/entities/player.hpp"
+#include "entities/player.hpp"
 
 // Catalog of selectable player classes.
 class PlayerClassCollection {

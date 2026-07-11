@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "core/types.hpp"
-#include "game/entities/player.hpp"
+#include "entities/player.hpp"
 
 // Renders the categorized main menu and dispatches the chosen action.
 class Menu {

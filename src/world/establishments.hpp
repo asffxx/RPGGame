@@ -3,13 +3,13 @@
 #include <vector>
 
 #include "core/types.hpp"
-#include "db/debuff.hpp"
-#include "db/food.hpp"
-#include "db/potion.hpp"
-#include "db/spell.hpp"
-#include "game/entities/npc.hpp"
-#include "game/systems/inventory.hpp"
-#include "game/entities/player.hpp"
+#include "data/debuff.hpp"
+#include "data/food.hpp"
+#include "data/potion.hpp"
+#include "data/spell.hpp"
+#include "entities/npc.hpp"
+#include "systems/inventory.hpp"
+#include "entities/player.hpp"
 
 // Tavern: sleep, buy food/drink, and hire party members.
 class Tavern {

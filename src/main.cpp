@@ -4,10 +4,11 @@
 #include <vector>
 
 #include "core/ui.hpp"
-#include "db/class.hpp"
-#include "db/race.hpp"
-#include "game/app/main_menu.hpp"
-#include "game/entities/player.hpp"
+#include "data/class.hpp"
+#include "data/race.hpp"
+#include "app/main_menu.hpp"
+#include "entities/player.hpp"
+#include "app/display.hpp"
 
 int main() {
     PlayerRaceDatabase raceDb;
@@ -29,7 +30,7 @@ int main() {
 
     narrate(chosenRace.lore.description, 10);
 
-    std::cout << "\nAccept this fate? (y/n): ";
+    display::acceptFatePrompt();
     char confirm;
     std::cin >> confirm;
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -54,8 +55,7 @@ int main() {
 
     std::cout << "\nCharacter created successfully!" << std::endl;
     system("cls");
-    std::cout << "\nPress Enter to step into the grey...\n";
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    display::stepIntoGrey();
     system("cls");
     mainMenu(hero);
     return 0;

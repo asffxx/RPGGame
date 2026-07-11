@@ -7,18 +7,19 @@
 
 #include "core/types.hpp"
 #include "core/ui.hpp"
-#include "db/spell.hpp"
-#include "../entities/npc.hpp"
-#include "../combat/combat.hpp"
-#include "../systems/dictionary.hpp"
-#include "../entities/enemy.hpp"
-#include "game/systems/establishments.hpp"
-#include "../systems/event.hpp"
-#include "game/systems/inventory.hpp"
-#include "../ui/menu.hpp"
-#include "../systems/party.hpp"
-#include "../ui/player_controller.hpp"
+#include "data/spell.hpp"
+#include "entities/npc.hpp"
+#include "combat/combat.hpp"
+#include "systems/dictionary.hpp"
+#include "entities/enemy.hpp"
+#include "world/establishments.hpp"
+#include "systems/event.hpp"
+#include "systems/inventory.hpp"
+#include "ui/menu.hpp"
+#include "systems/party.hpp"
+#include "ui/player_controller.hpp"
 #include "world/travel.hpp"
+#include "app/display.hpp"
 
 void mainMenu(Player& hero, bool debugMode) {
     EnemyController enemyCtrl;
@@ -112,7 +113,7 @@ void mainMenu(Player& hero, bool debugMode) {
             actionCounter++;
             if (actionCounter % 4 == 0) {
                 hero.timeSystem.advanceTime(hero);
-                std::cout << "Time has passed.\n";
+                display::timePassed();
                 system("cls");
             }
         }});
@@ -122,24 +123,7 @@ void mainMenu(Player& hero, bool debugMode) {
         categories["System"] = {};
         items.push_back({"Basics", "Explain the game mechanics.", [&]() {
             system("cls");
-            std::cout << "\n=== GAME BASICS ===\n";
-            std::cout << "Time System:\n";
-            std::cout << "- 4 turns advance the state of the day (Morning -> Afternoon -> Evening -> Night).\n";
-            std::cout << "- After Night, a new day begins, and weeks accumulate.\n\n";
-            std::cout << "Currency System:\n";
-            std::cout << "- 100 Copper = 1 Silver\n";
-            std::cout << "- 100 Silver = 1 Gold\n";
-            std::cout << "- 100 Gold = 1 Platinum\n\n";
-            std::cout << "Sleep Mechanic:\n";
-            std::cout << "- If not slept, reduce health by ~5% at the start of each new day.\n";
-            std::cout << "- Sleep at the Tavern to restore HP and avoid the penalty.\n\n";
-            std::cout << "Other Mechanics:\n";
-            std::cout << "- Explore to fight enemies or encounter events.\n";
-            std::cout << "- Travel to discover new locations.\n";
-            std::cout << "- Manage your party, inventory, and stats.\n";
-            std::cout << "- Visit stores, taverns, and magic shops in towns.\n\n";
-            std::cout << "Press Enter to continue...";
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            display::gameBasics();
         }});
         categories["System"].push_back(items.size() - 1);
         items.push_back({"Exit", "Quit the game.", [&]() { running = false; }});

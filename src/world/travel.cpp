@@ -5,7 +5,8 @@
 #include <random>
 
 #include "core/ui.hpp"
-#include "game/systems/event.hpp"
+#include "systems/event.hpp"
+#include "app/display.hpp"
 
 void TravelSystem::travel(Player& hero, EnemyController& enemyCtrl, CombatSystem& combat, PlayerInventory& playerInventory, PlayerController& heroStats, TimeSystem& timeSystem) {
     system("cls");
@@ -29,14 +30,15 @@ void TravelSystem::travel(Player& hero, EnemyController& enemyCtrl, CombatSystem
             }
         }
         if (markedLocations.empty()) {
-            std::cout << "No marked locations.\n";
+            display::travelNoMarkedLocations();
             return;
         }
+        std::vector<std::string> locLines;
         for (size_t j = 0; j < markedLocations.size(); ++j) {
             size_t i = markedLocations[j];
-            std::cout << j + 1 << ". " << locations[i].name << std::endl;
+            locLines.push_back(std::to_string(j + 1) + ". " + locations[i].name);
         }
-        std::cout << "Choose a location: ";
+        display::travelLocationList(locLines);
         int locChoice = getNumberInput(1, static_cast<int>(markedLocations.size()));
         size_t idx = markedLocations[locChoice - 1];
         hero.currentLocation = locations[idx].name;
@@ -58,7 +60,7 @@ void TravelSystem::exploreRandomLocation(Player& hero, EnemyController& enemyCtr
     discovered[idx] = true;
     if (firstTime) {
         hero.stats.expe += 50.0f;
-        std::cout << "\nDiscovered new location: " << locations[idx].name << "! Gained 50 experience.\n";
+        display::travelDiscovered(locations[idx].name);
         heroStats.levelUpChecker();
         hero.discoveredLocations.insert(locations[idx].name);
         hero.hasNewDictionaryEntry = true;
@@ -76,12 +78,7 @@ void TravelSystem::enterLocation(Player& hero, EnemyController& enemyCtrl, Comba
     while (inLocation) {
         system("cls");
 
-        std::cout << "\n=== " << location.name << " ===\n";
-        std::cout << location.description << std::endl;
-        std::cout << "1. Explore\n";
-        std::cout << "2. Mark location\n";
-        std::cout << "3. Leave\n";
-        std::cout << "Choose an action: ";
+        display::travelLocationHeader(location.name, location.description);
         int action = getNumberInput(1, 3);
 
         switch (action) {
@@ -119,7 +116,7 @@ void TravelSystem::enterLocation(Player& hero, EnemyController& enemyCtrl, Comba
             }
             case 2:
                 marked[locationIndex] = true;
-                std::cout << "Location marked for safe travel.\n";
+                display::travelLocationMarked();
                 break;
             case 3:
                 inLocation = false;

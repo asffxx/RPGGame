@@ -2,8 +2,8 @@
 
 #include <iostream>
 
-#include "game/systems/inventory.hpp"
-#include "game/entities/player.hpp"
+#include "systems/inventory.hpp"
+#include "entities/player.hpp"
 
 // Displays player stats and handles level-up progression.
 class PlayerController {

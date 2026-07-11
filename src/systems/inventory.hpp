@@ -5,11 +5,11 @@
 #include <vector>
 
 #include "core/types.hpp"
-#include "db/equipment.hpp"
-#include "db/food.hpp"
-#include "db/potion.hpp"
-#include "db/spell.hpp"
-#include "game/entities/player.hpp"
+#include "data/equipment.hpp"
+#include "data/food.hpp"
+#include "data/potion.hpp"
+#include "data/spell.hpp"
+#include "entities/player.hpp"
 
 // Manages the player's items, equipment, and active buffs.
 class PlayerInventory {

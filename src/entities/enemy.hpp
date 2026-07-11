@@ -7,7 +7,7 @@
 #include "core/economy.hpp"
 #include "core/stats.hpp"
 #include "core/types.hpp"
-#include "game/entities/player.hpp"
+#include "entities/player.hpp"
 
 // Stat block for an enemy, wrapping a Stats instance plus scaling bookkeeping.
 struct EnemyStats {
