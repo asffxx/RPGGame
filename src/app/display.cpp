@@ -7,6 +7,7 @@
 
 namespace display {
 
+// --- Shared prompts (core/ui) ---
 void pressEnter() {
     std::cout << "\nPress Enter to continue...";
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -16,10 +17,12 @@ void invalidChoice() {
     std::cout << "Invalid choice!" << std::endl;
 }
 
+// --- Time system (core/timesystem) ---
 void sleepPenalty() {
     std::cout << "[!] Your vision blurs. The shadows of 'The Lands Between' seem longer than usual." << std::endl;
 }
 
+// --- Enemies (entities/enemy) ---
 void enemyAppeared(const Enemy& enemy) {
     std::cout << "A wild " << enemy.name << " has appeared!" << std::endl;
 }
@@ -31,6 +34,7 @@ void enemyDefeated(const Enemy& enemy, const Player& player) {
          << " experience!" << std::endl;
 }
 
+// --- Combat (combat/combat) ---
 void combatRunAway() {
     std::cout << "You ran away!" << std::endl;
 }
@@ -62,6 +66,7 @@ void combatDefeat(const std::string& playerName) {
     std::cout << "============================\n";
 }
 
+// --- Inventory (systems/inventory) ---
 void inventoryEmpty() {
     std::cout << "Inventory is empty.\n";
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -131,6 +136,7 @@ void itemEffect(const std::string& effectDesc) {
     std::cout << effectDesc << std::endl;
 }
 
+// --- Events (systems/event) ---
 void eventHeader(const std::string& name, const std::string& description) {
     std::cout << "\n=== EVENT: " << name << " ===" << std::endl;
     std::cout << description << std::endl;
@@ -185,6 +191,7 @@ void eventPressEnter() {
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
+// --- Party (systems/party) ---
 void wagesPaid(int total) {
     std::cout << "Paid " << total << " gold in wages to party members.\n";
 }
@@ -243,6 +250,7 @@ void partyStory(const std::string& name, const std::string& story) {
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
+// --- Dictionary (systems/dictionary) ---
 void dictionaryEmptyEnemies() {
     std::cout << "No defeated enemies yet.\n";
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -377,10 +385,12 @@ void dictionarySpecialCharacters(const std::vector<std::string>& names) {
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
+// --- Menu (ui/menu) ---
 void menuInvalidChoice() {
     std::cout << "Invalid choice!" << std::endl;
 }
 
+// --- Player controller (ui/player_controller) ---
 void showPlayerStats(const Player& player, float reqAmount, const std::optional<PlayerInventory::Buff>& activeBuff) {
     std::cout << "\n=== Player Stats ===" << std::endl;
     std::cout << "Hitpoints: " << player.stats.hitpoints << "/" << player.stats.maxHitpoints << std::endl;
@@ -413,6 +423,7 @@ void leveledUp() {
     std::cout << "Your stats have been increased by 10%." << std::endl;
 }
 
+// --- Establishments (world/establishments) ---
 void tavernHeader() {
     std::cout << "\n--- THE RATTLING FLAGON TAVERN ---" << std::endl;
 }
@@ -526,6 +537,7 @@ void magicStoreEnchanted(const std::string& itemName, const std::string& applied
     std::cout << "Enchanted " << itemName << " with " << applied << "!\n";
 }
 
+// --- Travel (world/travel) ---
 void travelNoMarkedLocations() {
     std::cout << "No marked locations.\n";
 }
@@ -554,6 +566,7 @@ void travelLocationMarked() {
     std::cout << "Location marked for safe travel.\n";
 }
 
+// --- Main menu / character creation (app) ---
 void timePassed() {
     std::cout << "Time has passed.\n";
 }
@@ -582,14 +595,4 @@ void gameBasics() {
 void characterCreated() {
     std::cout << "\nCharacter created successfully!" << std::endl;
 }
-
-void stepIntoGrey() {
-    std::cout << "\nPress Enter to step into the grey...\n";
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-}
-
-void acceptFatePrompt() {
-    std::cout << "\nAccept this fate? (y/n): ";
-}
-
 } // namespace display
