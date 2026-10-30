@@ -11,7 +11,7 @@ void Menu::displayAndExecute() {
         int choice = getNumberInput(1, static_cast<int>(items.size()));
         if (choice >= 1 && choice <= static_cast<int>(items.size())) {
             items[static_cast<size_t>(choice - 1)].action();
-            system("cls");
+            clearScreen();
             break;
         } else {
             display::menuInvalidChoice();

@@ -3,6 +3,10 @@
 #include <string>
 #include <vector>
 
+// Clears the terminal screen. Uses `cls` on Windows and `clear` elsewhere, so the
+// same source builds and runs on both without 28 separate #ifdefs.
+void clearScreen();
+
 // Prints a bordered, fixed-width menu of lines and prompts for input.
 void displayBorderedMenu(const std::vector<std::string>& lines, const std::string& prompt = "Choose an option: ");
 

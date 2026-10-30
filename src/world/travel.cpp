@@ -9,7 +9,7 @@
 #include "app/display.hpp"
 
 void TravelSystem::travel(Player& hero, EnemyController& enemyCtrl, CombatSystem& combat, PlayerInventory& playerInventory, PlayerController& heroStats, TimeSystem& timeSystem) {
-    system("cls");
+    clearScreen();
     std::vector<std::string> lines = {
         "1. Venture into the unknown -- uncover new lands and dangers",
         "2. Follow safe routes -- travel to known, marked locations"
@@ -18,10 +18,10 @@ void TravelSystem::travel(Player& hero, EnemyController& enemyCtrl, CombatSystem
     int choice = getNumberInput(1, 2);
 
     if (choice == 1) {
-        system("cls");
+        clearScreen();
         exploreRandomLocation(hero, enemyCtrl, combat, playerInventory, heroStats, timeSystem);
     } else {
-        system("cls");
+        clearScreen();
         const auto& locations = locationDB.getLocations();
         std::vector<size_t> markedLocations;
         for (size_t i = 0; i < locations.size(); ++i) {
@@ -76,7 +76,7 @@ void TravelSystem::enterLocation(Player& hero, EnemyController& enemyCtrl, Comba
     SpellDatabase spellDB;
     bool inLocation = true;
     while (inLocation) {
-        system("cls");
+        clearScreen();
 
         display::travelLocationHeader(location.name, location.description);
         int action = getNumberInput(1, 3);
