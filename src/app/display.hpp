@@ -143,9 +143,5 @@ void travelLocationMarked();
 void timePassed();
 void gameBasics();
 void characterCreated();
-void stepIntoGrey();
-
-// --- main.cpp ---
-void acceptFatePrompt();
 
 } // namespace display

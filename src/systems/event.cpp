@@ -79,10 +79,10 @@ void handleEvent(Player& hero, EnemyController& enemyCtrl, CombatSystem& combat,
         display::eventEnemyEncounter();
         Enemy enemy = enemyCtrl.getEnemyByName(event.enemyName, hero.stats.level, hero.currentLocationType);
         std::vector<NPC> emptyParty;
-        system("cls");
+        clearScreen();
         CombatScreen combatScreen(hero, emptyParty, enemy, hero.timeSystem, npcGen, spellDB);
         combatScreen.startCombat(combat, playerInventory);
-        system("cls");
+        clearScreen();
 
         if (hero.stats.hitpoints > 0 && enemy.stats.data.hitpoints <= 0) {
             enemyCtrl.enemyGoldExpDrop(hero, enemy);

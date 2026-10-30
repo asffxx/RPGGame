@@ -130,11 +130,11 @@ void Store::openStore(Player& player) {
         switch (choice) {
             case 1:
                 buyPotions(player);
-                system("cls");
+                clearScreen();
                 break;
             case 2:
                 buyEquipment(player);
-                system("cls");
+                clearScreen();
                 break;
             case 3:
                 shopping = false;
@@ -189,11 +189,11 @@ void magicStore::openStore(Player& player) {
         switch (choice) {
             case 1:
                 buySpells(player);
-                system("cls");
+                clearScreen();
                 break;
             case 2:
                 enchantItem(player);
-                system("cls");
+                clearScreen();
                 break;
             case 3:
                 shopping = false;

@@ -39,7 +39,7 @@ void mainMenu(Player& hero, bool debugMode) {
     bool running = true;
 
     while (running) {
-        system("cls");
+        clearScreen();
 
         if (hero.timeSystem.getTotalWeeks() > lastWeekPaid && !playerParty.empty()) {
             deductWeeklyWages(hero, playerParty);
@@ -114,7 +114,7 @@ void mainMenu(Player& hero, bool debugMode) {
             if (actionCounter % 4 == 0) {
                 hero.timeSystem.advanceTime(hero);
                 display::timePassed();
-                system("cls");
+                clearScreen();
             }
         }});
         categories["Actions"].push_back(items.size() - 1);
@@ -122,7 +122,7 @@ void mainMenu(Player& hero, bool debugMode) {
 
         categories["System"] = {};
         items.push_back({"Basics", "Explain the game mechanics.", [&]() {
-            system("cls");
+            clearScreen();
             display::gameBasics();
         }});
         categories["System"].push_back(items.size() - 1);
@@ -131,6 +131,6 @@ void mainMenu(Player& hero, bool debugMode) {
 
         Menu menu(items, categories, hero);
         menu.displayAndExecute();
-        system("cls");
+        clearScreen();
     }
 }

@@ -2,10 +2,19 @@
 
 #include <algorithm>
 #include <chrono>
+#include <cstdlib>
 #include <iostream>
 #include <limits>
 #include <string>
 #include <thread>
+
+void clearScreen() {
+#ifdef _WIN32
+    system("cls");
+#else
+    system("clear");
+#endif
+}
 
 void displayBorderedMenu(const std::vector<std::string>& lines, const std::string& prompt) {
     size_t maxWidth = 0;

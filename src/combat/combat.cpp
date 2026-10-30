@@ -117,7 +117,7 @@ void CombatScreen::startCombat(CombatSystem& combat, PlayerInventory& inventory)
     bool inCombat = true;
 
     while (inCombat && (player.stats.hitpoints > 0 || !party.empty()) && enemy.stats.data.hitpoints > 0) {
-        system("cls");
+        clearScreen();
         displayCombatScreen();
 
         auto action = static_cast<CombatAction>(getPlayerActionInput());
@@ -154,7 +154,7 @@ void CombatScreen::startCombat(CombatSystem& combat, PlayerInventory& inventory)
         }
 
         handleEnemyTurn(combat);
-        system("cls");
+        clearScreen();
         displayCombatScreen();
         waitForEnter();
 

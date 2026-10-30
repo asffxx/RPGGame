@@ -15,7 +15,7 @@ int main() {
     int choice = getNumberInput(1, 2);
     if (choice != 1) return 0;
 
-    system("cls");
+    clearScreen();
 
     PlayerRaceDatabase raceDb;
     PlayerClassCollection classDb;
@@ -25,26 +25,26 @@ int main() {
     displayBorderedMenu(raceNames, "Choose your race: ");
     int raceChoice = getNumberInput(1, static_cast<int>(raceNames.size()));
     const PlayerRaceTemplate& chosenRace = raceDb.templates[raceChoice - 1];
-    system("cls");
+    clearScreen();
 
     std::vector<std::string> classNames;
     for (const auto& c : classDb.templates) classNames.push_back(c.name);
     displayBorderedMenu(classNames, "Choose your class: ");
     int classChoice = getNumberInput(1, static_cast<int>(classNames.size()));
     const PlayerClassTemplate& chosenClass = classDb.templates[classChoice - 1];
-    system("cls");
+    clearScreen();
 
     std::cout << "Enter your name: ";
     std::string name;
     std::getline(std::cin, name);
-    system("cls");
+    clearScreen();
 
     PlayerRace playerRace{ chosenRace.name, { chosenRace.lore.description } };
     Player hero(name, playerRace, chosenClass);
     hero.applyRaceBonus(chosenRace.statBonus);
 
     display::characterCreated();
-    system("cls");
+    clearScreen();
     mainMenu(hero);
     return 0;
 }

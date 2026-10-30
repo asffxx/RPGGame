@@ -13,7 +13,7 @@ void showDictionary(Player& hero) {
     hero.hasNewDictionaryEntry = false;
     bool inDictionary = true;
     while (inDictionary) {
-        system("cls");
+        clearScreen();
         std::vector<std::string> sections = {"1. Enemies", "2. Weapons", "3. Locations", "4. Events", "5. Special Characters", "6. Exit"};
         displayBorderedMenu(sections, "Choose a section: ");
         int choice = getNumberInput(1, 6);
@@ -35,7 +35,7 @@ void showDictionary(Player& hero) {
                 if (tmpl.name == enemyName) {
                     bool inEnemy = true;
                     while (inEnemy) {
-                        system("cls");
+                        clearScreen();
                         display::dictionaryEnemyHeader(enemyName);
                         int subChoice = getNumberInput(1, 3);
                         if (subChoice == 1) {
@@ -63,7 +63,7 @@ void showDictionary(Player& hero) {
                 if (eq.name == weaponName) {
                     bool inWeapon = true;
                     while (inWeapon) {
-                        system("cls");
+                        clearScreen();
                         display::dictionaryWeaponHeader(weaponName);
                         int subChoice = getNumberInput(1, 3);
                         if (subChoice == 1) {
@@ -91,7 +91,7 @@ void showDictionary(Player& hero) {
                 if (loc.name == locationName) {
                     bool inLocation = true;
                     while (inLocation) {
-                        system("cls");
+                        clearScreen();
                         display::dictionaryLocationHeader(locationName);
                         int subChoice = getNumberInput(1, 3);
                         if (subChoice == 1) {
@@ -119,7 +119,7 @@ void showDictionary(Player& hero) {
                 if (ev.name == eventName) {
                     bool inEvent = true;
                     while (inEvent) {
-                        system("cls");
+                        clearScreen();
                         display::dictionaryEventHeader(eventName);
                         int subChoice = getNumberInput(1, 3);
                         if (subChoice == 1) {
@@ -138,7 +138,7 @@ void showDictionary(Player& hero) {
                 display::dictionaryEmptyCharacters();
                 continue;
             }
-            system("cls");
+            clearScreen();
             std::vector<std::string> names(hero.hiredSpecialCharacters.begin(), hero.hiredSpecialCharacters.end());
             display::dictionarySpecialCharacters(names);
         }
