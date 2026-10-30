@@ -1,0 +1,14 @@
+# clangd configuration for this project.
+#
+# CMake writes build/compile_commands.json (see CMAKE_EXPORT_COMPILE_COMMANDS in
+# CMakeLists.txt), which provides the real include paths and compiler flags.
+CompileFlags:
+  CompilationDatabase: build
+
+# src/data/enemy_data.cpp is a fragment textually included by enemy.cpp, so it
+# has no declarations of its own. Silence the false positive when it is opened
+# directly in the editor.
+If:
+  PathMatch: .*data/enemy_data\.cpp
+Diagnostics:
+  Suppress: undeclared_var_use
