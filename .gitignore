@@ -1,6 +1,3 @@
-# Local editor config (machine-specific include paths)
-.clangd
-
 docs/
 scripts/
 scripts/build.sh
