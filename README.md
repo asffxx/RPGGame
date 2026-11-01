@@ -2,7 +2,7 @@
 
 A command-line RPG written in C++.
 
-**Current source release: v3.2.1** · [Development log and version history](DEVLOG.md)
+**Current source release: v3.4.0** · [Development log and version history](DEVLOG.md)
 
 The original v1 game is preserved on the [`v1` branch](https://github.com/asffxx/RPGGame/tree/v1).
 Use `main` for the current game.
@@ -28,7 +28,8 @@ through a global scaling progression system.
 - **Actionable Rumors** — randomized tavern clues unlock city travel leads and offer local quest hints.
 - **NPC Generation** — randomly generated NPCs with dialogues, stories, and the ability to hire them at the tavern.
 - **Party Management** — up to 4 members, with weekly wages deducted from your gold.
-- **Stores** — potions, equipment, food, and drinks.
+- **Stores** — buy potions, equipment, food, and drinks; sell carried items for income.
+- **Crafting** — nine JSON-authored recipes at city forges, alchemy benches, and kitchens; eleven materials from enemies and commissions.
 - **Spells and Enchanting** — learn spells and enchant staffs/weapons.
 - **Debuffs and Buffs** — temporary effects that modify combat and stats, including stackable debuffs.
 - **Travel System** — random exploration to discover new locations (you might stumble into a high-level area early).
@@ -63,6 +64,9 @@ Enter a name during creation; some inventory prompts use `y`/`n`.
 - Saves include stats and progression, currency, spells, inventory and equipped
   items, enchantments and active buffs, companion details, dictionary discoveries,
   current location, discovered/marked routes, sleep, time, and wage timing.
+  Story flags, recorded choices, known recipes, and faction standing are saved
+  from format 4 onward. Inventory items carry stable ids checked against their
+  catalog positions. Renaming or reordering saved content requires a migration.
   Guild memberships, discovered jobs, active/completed objectives, commission
   completion counts, accepting guilds, city leads, and tavern rumor history are
   saved too.
@@ -70,10 +74,41 @@ Enter a name during creation; some inventory prompts use `y`/`n`.
   Random-number generator sequences are not saved; future random outcomes can differ.
 - Missing, damaged, or unsupported saves show an error and return to the title
   menu. Writes use a temporary file before replacing the previous slot.
-- New saves use `RPGGAME 3`. Existing versions 1 and 2 remain readable and start
-  with no new side quests/commissions discovered or accepted. Version 2 retains
-  guild and rumor progress; version 1 starts those systems empty. The next save
-  upgrades the file to version 3. Loading never replays rewards.
+- New saves use `RPGGAME 4`. Existing versions 1, 2, and 3 remain readable.
+  Version 3 keeps guild, rumor, and quest progress and gains item ids on load.
+  Version 2 keeps guild and rumor progress; version 1 starts those systems empty.
+  Older saves start with empty story state. The next save upgrades the file to
+  version 4. Loading never replays rewards.
+
+## Crafting, Backpack, and Selling
+
+- Cities offer **Local Establishments → Craft**. Guild halls also offer Craft.
+  Choose Forge, Alchemy Bench, or Kitchen. Recipes show ingredients and lock reasons.
+- Starter recipes are available immediately. Joining Ironward or Silverthread
+  unlocks another recipe; completing The Broken Waystone or The Navigator's Debt
+  unlocks potion recipes. Exploring Abandoned Castle finds the steel sword recipe.
+  NPC-taught recipes will use Phase 4's dialogue effects.
+- Enemy victories can drop materials in exploration, travel, events, and quest
+  fights. Drops roll independently; a stack that cannot fit is left behind.
+  Roadside Supplies awards 3 Iron Ore and 1 Rough Leather. Forest Samples awards
+  3 Wild Herbs. A full backpack blocks reward turn-in until there is room.
+- The backpack holds **50 weight**, including equipped gear. Above **37.5**,
+  basic attacks lose 10% physical and magic attack (rounded down), and dodge loses
+  10 percentage points, floored at zero. Stored stats are unchanged; dropping
+  below the threshold by selling, consuming, or crafting removes the penalty.
+  Fixed-damage spells and signature abilities retain their own rules.
+- Potions and food weigh 0.5 each; armor weighs 8, staves 5, other equipment 4.
+  Material weights and stack limits come from JSON (default stack limit: 999).
+  Pickups and purchases cannot exceed the hard cap. Crafting checks the final
+  weight after ingredients are consumed; failed crafts consume nothing.
+- **Store → Sell Items** pays half the shop price for equipment and consumables,
+  or the material's listed copper value. Unequip the last copy before selling it.
+  Existing saves above capacity still load; sell or consume items to make room.
+
+Recipes and materials load at startup from `content/recipes.json` and
+`content/materials.json`. Editing content needs a restart, not a rebuild. Syntax
+errors report file, line, and column; schema errors report file and field.
+Missing or invalid required files stop startup. See [data schemas](content/README.md).
 
 ## Combat
 
@@ -124,7 +159,8 @@ the next retaliation and never modify permanent stats.
 
 ### Prebuilt binaries
 
-Standalone builds for **v3.2.1** are in [`dist/`](dist/):
+Standalone builds for **v3.2.1** are in [`dist/`](dist/). Rebuild them for
+v3.4.0 at the release step:
 
 - `RPGGame-v3.2.1-windows-x64.exe` — Windows 10/11 x64 console executable.
 - `RPGGame-v3.2.1-linux-x86_64` — statically linked Linux x86_64 executable.
@@ -140,6 +176,11 @@ directory; saves go to `savegame.dat` in the current working directory. See
 - Windows, Linux, or macOS. Screen clearing uses `cls` on Windows and `clear` elsewhere.
 
 ### Build & Run
+
+Version 3.4.0 distributions must include `content/`. Run from the folder containing
+it, or set `RPG_DATA_DIR` to its absolute path. Lookup order: explicit environment
+override, working-directory `content/`, then the build-time source data directory.
+An invalid explicit override fails rather than falling back silently.
 
 **Linux / macOS:**
 
@@ -167,7 +208,7 @@ Without CMake, you can compile directly:
 g++ -std=c++17 -Isrc $(find src -name '*.cpp' ! -name 'enemy_data.cpp') -o rpg
 ```
 
-`src/data/enemy_data.cpp` must be excluded: it is `#include`d by
+`src/catalogs/enemy_data.cpp` must be excluded: it is `#include`d by
 `src/entities/enemy.cpp`, so compiling it separately causes duplicate symbols.
 
 ### Tests
@@ -407,17 +448,17 @@ Shrewd Diplomat, Travelling Merchant, Sheltered Noble, Prisoner.
 
 ### Guilds, rumors, and persistence
 
-- `src/data/guild.hpp/.cpp`: guild IDs, cities, introductions, and links to their
+- `src/catalogs/guild.hpp/.cpp`: guild IDs, cities, introductions, and links to their
   ordered storyline definitions.
-- `src/data/rumor.hpp/.cpp`: stable rumor IDs, city-local hints, and city clues.
-- `src/systems/guild_state.hpp`: persistent guild progress, city leads, and
+- `src/catalogs/rumor.hpp/.cpp`: stable rumor IDs, city-local hints, and city clues.
+- `src/gameplay/guild_state.hpp`: persistent guild progress, city leads, and
   per-tavern rumor history, owned by `GameSession`.
-- `src/systems/guild.cpp`: membership, guild halls, board entry points, and
+- `src/gameplay/guild.cpp`: membership, guild halls, board entry points, and
   validation of guild/rumor state.
-- `src/systems/rumor.cpp`: eligible rumor pools, random selection, repeat
+- `src/gameplay/rumor.cpp`: eligible rumor pools, random selection, repeat
   avoidance, and unlocking city leads.
 - `src/world/travel.cpp`: lead selection and once-only arrival/discovery credit.
-- `src/systems/save.cpp`: version-3 serialization, version-1/2 migration, and
+- `src/gameplay/save.cpp`: version-3 serialization, version-1/2 migration, and
   validation of guild/quest/rumor state.
 
 ### Shared quest handling (`src/world/`)
@@ -426,8 +467,8 @@ Shrewd Diplomat, Travelling Merchant, Sheltered Noble, Prisoner.
   and compatibility adapters for guild-stage progress.
 - `quest.hpp/.cpp`: main-story catalog (currently empty).
 - `sidequests.hpp/.cpp`: the 20 one-time side-quest definitions.
-- `comissions.hpp/.cpp`: the 20 repeatable commission definitions. The filename
-  deliberately uses the requested spelling `comissions`; menus use `Commissions`.
+- `commissions.hpp/.cpp`: the 20 repeatable commission definitions. The filename
+  deliberately uses the requested spelling `commissions`; menus use `Commissions`.
 - `quest_types.hpp`: common quest definitions, categories, and persistent job
   progress (`GameSession::quests`).
 - `quest_system.hpp/.cpp`: combined catalog, eligibility, acceptance, objective
@@ -438,14 +479,14 @@ retain their existing stage-based save representation behind that shared API.
 
 ### Class skills and store spells
 
-- `src/data/class_skill.hpp` / `class_skill.cpp`: `ClassSkillDatabase` holds
+- `src/catalogs/class_skill.hpp` / `class_skill.cpp`: `ClassSkillDatabase` holds
   class-skill names, descriptions, effect kinds, damage multipliers, costs,
   healing amounts, thresholds, and dodge/defense settings. Edit class-skill
   balance values here and keep their descriptions in sync.
 - `src/combat/abilities.hpp` / `abilities.cpp`: execute those effects and track
   once-per-encounter usage and temporary retaliation effects. Character previews
   and combat menus read the same class-skill catalog.
-- `src/data/spell.hpp` / `spell.cpp`: the separate `SpellDatabase` for store-bought
+- `src/catalogs/spell.hpp` / `spell.cpp`: the separate `SpellDatabase` for store-bought
   spells, including fixed damage, mana costs, prices, and enchantment settings.
   Spell casting is handled by `CombatScreen::handleCastSpell()`.
 
@@ -462,7 +503,7 @@ src/
   app/        main menu loop and all text output
   combat/     combatants, damage calculation, fight loop
   core/       stats, economy, time, UI primitives
-  data/       static catalogs (races, classes, skills, items, enemies, events, guilds, rumors)
+  content/       static catalogs (races, classes, skills, items, enemies, events, guilds, rumors)
   entities/   Player, Enemy, NPC and their generators
   systems/    inventory, events, party, dictionary, guilds, rumors, saves
   ui/         menu rendering and the player stat panel

@@ -6,6 +6,10 @@
 
 #include "core/types.hpp"
 #include "app/display.hpp"
+#include "catalogs/material.hpp"
+#include "gameplay/inventory.hpp"
+#include "catalogs/content.hpp"
+
 
 void EnemyStats::scale(float multiplier) {
     data.maxHitpoints = static_cast<int>(std::round(data.maxHitpoints * multiplier));
@@ -42,7 +46,7 @@ Enemy EnemyDatabase::getRandomEnemy(int difficultyLevel, LocationType locationTy
     std::uniform_int_distribution<size_t> dist(0, validEnemies.size() - 1);
     const EnemyTemplate* chosen = validEnemies[dist(gen)];
 
-    return Enemy{ chosen->name, chosen->stats, chosen->debuffs };
+    return Enemy{ chosen->name, chosen->stats, chosen->debuffs, chosen->id };
 }
 
 Enemy EnemyDatabase::getRandomEnemy(int difficultyLevel) {
@@ -62,7 +66,13 @@ Enemy EnemyDatabase::getRandomEnemy(int difficultyLevel) {
     std::uniform_int_distribution<size_t> dist(0, validEnemies.size() - 1);
     const EnemyTemplate* chosen = validEnemies[dist(gen)];
 
-    return Enemy{ chosen->name, chosen->stats, chosen->debuffs };
+    return Enemy{ chosen->name, chosen->stats, chosen->debuffs, chosen->id };
+}
+
+const EnemyDatabase::EnemyTemplate* EnemyDatabase::find(const std::string& id) const {
+    for (const auto& tmpl : templates)
+        if (tmpl.id == id) return &tmpl;
+    return nullptr;
 }
 
 bool EnemyController::hasEligibleEnemy(int difficultyLevel, LocationType locationType) const {
@@ -83,7 +93,7 @@ Enemy EnemyController::encounterEnemy(int difficultyLevel, LocationType location
 Enemy EnemyController::getEnemyByName(const std::string& name, int playerLevel, LocationType locationType) {
     for (const auto& tmpl : enemyDB.templates) {
         if (tmpl.name == name) {
-            Enemy enemy{ tmpl.name, tmpl.stats, tmpl.debuffs };
+            Enemy enemy{ tmpl.name, tmpl.stats, tmpl.debuffs, tmpl.id };
             enemyScaleLevel(enemy, playerLevel, locationType);
             return enemy;
         }
@@ -91,11 +101,24 @@ Enemy EnemyController::getEnemyByName(const std::string& name, int playerLevel, 
     throw std::runtime_error("Enemy not found: " + name);
 }
 
-void EnemyController::enemyGoldExpDrop(Player& player, const Enemy& enemy) {
+void EnemyController::enemyGoldExpDrop(Player& player, const Enemy& enemy, PlayerInventory* inventory) {
     player.economy.addCurrency(enemy.stats.data.economy.platinum, enemy.stats.data.economy.gold, enemy.stats.data.economy.silver, enemy.stats.data.economy.copper);
     player.stats.expe += enemy.stats.data.expe;
 
     display::enemyDefeated(enemy, player);
+
+    if (inventory && !enemy.id.empty()) {
+        static std::mt19937 gen(std::random_device{}());
+        for (const auto& gain : rollDrops(enemy.id, gen)) {
+            const int index = materialDatabase().indexOf(gain.materialId);
+            if (index < 0) continue;
+            const auto& material = materialDatabase().getMaterials()[static_cast<size_t>(index)];
+            if (inventory->tryAddItem(PlayerInventory::ItemType::Material, static_cast<size_t>(index), gain.quantity))
+                display::materialDropped(material.name, gain.quantity);
+            else
+                display::backpackFull(material.name);
+        }
+    }
 
     if (player.defeatedEnemies.find(enemy.name) == player.defeatedEnemies.end()) {
         player.defeatedEnemies.insert(enemy.name);
@@ -150,4 +173,7 @@ void EnemyController::enemyScaleLevel(Enemy& enemy, int difficultyLevel, Locatio
     enemy.stats.scaled = true;
 }
 
-#include "data/enemy_data.cpp"
+
+EnemyDatabase::EnemyDatabase()
+    : templates(content::catalog<EnemyTemplate>("world/enemies.json")) {}
+

@@ -9,9 +9,9 @@
 #include "app/session.hpp"
 #include "combat/abilities.hpp"
 #include "combat/combat.hpp"
-#include "data/class.hpp"
-#include "data/race.hpp"
-#include "systems/save.hpp"
+#include "catalogs/class.hpp"
+#include "catalogs/race.hpp"
+#include "gameplay/save.hpp"
 #include "world/encounters.hpp"
 #include "ui/player_controller.hpp"
 

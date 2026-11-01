@@ -5,7 +5,7 @@
 #include <random>
 
 #include "core/ui.hpp"
-#include "systems/event.hpp"
+#include "gameplay/event.hpp"
 #include "app/display.hpp"
 #include "encounters.hpp"
 #include "quest_system.hpp"
@@ -122,7 +122,7 @@ void TravelSystem::enterLocation(Player& hero, EnemyController& enemyCtrl, Comba
                     combatScreen.startCombat(combat, playerInventory);
 
                     if (hero.stats.hitpoints > 0 && enemy.stats.data.hitpoints <= 0) {
-                        enemyCtrl.enemyGoldExpDrop(hero, enemy);
+                        enemyCtrl.enemyGoldExpDrop(hero, enemy, &playerInventory);
                         heroStats.levelUpChecker();
                     }
                 } else {

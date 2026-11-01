@@ -3,15 +3,17 @@
 #include <vector>
 
 #include "core/types.hpp"
-#include "data/debuff.hpp"
-#include "data/food.hpp"
-#include "data/potion.hpp"
-#include "data/spell.hpp"
+#include "catalogs/debuff.hpp"
+#include "catalogs/food.hpp"
+#include "catalogs/potion.hpp"
+#include "catalogs/spell.hpp"
 #include "entities/npc.hpp"
-#include "systems/inventory.hpp"
+#include "gameplay/inventory.hpp"
 #include "entities/player.hpp"
 
 struct GameSession;
+// Sells a quantity atomically, retaining the last equipped copy.
+bool sellItem(Player& player, PlayerInventory& inventory, size_t slot, int quantity, std::string& error);
 
 // Tavern: sleep, buy food/drink, hire party members, and hear actionable rumors.
 class Tavern {
@@ -45,6 +47,7 @@ private:
 
     void buyPotions(Player& player);
     void buyEquipment(Player& player);
+    void sellItems(Player& player);
 };
 
 // Magic store: buy spells and enchant items.

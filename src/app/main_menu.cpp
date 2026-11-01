@@ -7,22 +7,23 @@
 
 #include "core/types.hpp"
 #include "core/ui.hpp"
-#include "data/spell.hpp"
+#include "catalogs/spell.hpp"
 #include "entities/npc.hpp"
 #include "combat/combat.hpp"
-#include "systems/dictionary.hpp"
+#include "gameplay/dictionary.hpp"
 #include "entities/enemy.hpp"
 #include "world/establishments.hpp"
-#include "systems/event.hpp"
-#include "systems/inventory.hpp"
+#include "gameplay/event.hpp"
+#include "gameplay/inventory.hpp"
 #include "ui/menu.hpp"
-#include "systems/party.hpp"
+#include "gameplay/party.hpp"
 #include "ui/player_controller.hpp"
 #include "world/travel.hpp"
 #include "app/display.hpp"
-#include "systems/save.hpp"
+#include "gameplay/save.hpp"
 #include "world/encounters.hpp"
-#include "systems/guild.hpp"
+#include "gameplay/guild.hpp"
+#include "world/crafting.hpp"
 
 void mainMenu(GameSession& session, bool debugMode) {
     auto& hero = session.hero;
@@ -89,10 +90,19 @@ void mainMenu(GameSession& session, bool debugMode) {
                 items.push_back({"Guild Hall", "Join the city's guild and undertake its quests.", [&]() { openGuildHall(session); }});
                 categories["Local Establishments"].push_back(items.size() - 1);
             }
+            if (isCity) {
+                items.push_back({"Craft", "Use the forge, alchemy bench, or kitchen.", [&]() { openCrafting(session); }});
+                categories["Local Establishments"].push_back(items.size() - 1);
+            }
         }
 
         categories["Actions"] = {};
         items.push_back({"Explore", "Venture out and face challenges.", [&]() {
+            if (hero.currentLocation == "Abandoned Castle" && !session.story.flag("smith_mastery")) {
+                session.story.flags.push_back({"smith_mastery", 1});
+                discoverRecipes(session);
+                display::message("In the abandoned forge you find a steel sword recipe. You copy the smith's notes.");
+            }
             static std::mt19937 gen(std::random_device{}());
             std::uniform_real_distribution<float> dist(0.0f, 1.0f);
 
@@ -104,7 +114,7 @@ void mainMenu(GameSession& session, bool debugMode) {
                 combatScreen.startCombat(combat, playerInventory);
 
                 if (hero.stats.hitpoints > 0 && enemy.stats.data.hitpoints <= 0) {
-                    enemyCtrl.enemyGoldExpDrop(hero, enemy);
+                    enemyCtrl.enemyGoldExpDrop(hero, enemy, &playerInventory);
                     heroStats.levelUpChecker();
                 }
             } else {

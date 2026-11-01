@@ -3,10 +3,10 @@
 #include <vector>
 
 #include "core/types.hpp"
-#include "data/location.hpp"
+#include "catalogs/location.hpp"
 #include "combat/combat.hpp"
 #include "entities/enemy.hpp"
-#include "systems/inventory.hpp"
+#include "gameplay/inventory.hpp"
 #include "ui/player_controller.hpp"
 #include "entities/player.hpp"
 #include "entities/npc.hpp"

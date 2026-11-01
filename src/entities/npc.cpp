@@ -2,10 +2,10 @@
 
 #include <algorithm>
 #include <random>
-#include "data/class.hpp"
-#include "data/equipment.hpp"
-#include "data/race.hpp"
-#include "data/spell.hpp"
+#include "catalogs/class.hpp"
+#include "catalogs/equipment.hpp"
+#include "catalogs/race.hpp"
+#include "catalogs/spell.hpp"
 
 NPCGenerator::NPCGenerator()
     : firstNames({"Cedric","Rowan","Edmund","Alfred","Theodore","Marcus","Julius","Lucius","Gavin","Benedict","Sebastian","Cornelius","Ambrose","Gregory","Leonard","Matthias","Philip","Alexander","Dominic","Victor","Hugh","Gerald","Roland","Bernard","Percival"}),

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "quest_types.hpp"
-#include "systems/guild_state.hpp"
+#include "gameplay/guild_state.hpp"
 
 struct GameSession;
 using GuildQuest = QuestDefinition;

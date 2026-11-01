@@ -4,14 +4,19 @@
 
 #include "core/ui.hpp"
 #include "core/version.hpp"
-#include "data/class.hpp"
-#include "data/race.hpp"
+#include "catalogs/class.hpp"
+#include "catalogs/race.hpp"
 #include "app/main_menu.hpp"
 #include "entities/player.hpp"
 #include "app/display.hpp"
-#include "systems/save.hpp"
+#include "gameplay/save.hpp"
+#include "world/crafting.hpp"
 
 int main() {
+    if (!materialDatabase().loaded() || !craftingDatabase().loaded()) {
+        std::cerr << "Content load failed: " << (!materialDatabase().loaded() ? materialDatabase().error() : craftingDatabase().error()) << '\n';
+        return 1;
+    }
     while (true) {
         displayBorderedMenu({std::string("[ RPGGame / v") + gameVersion + " ]",
             "Explore. Join a guild. Leave your mark.", "",

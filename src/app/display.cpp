@@ -4,7 +4,7 @@
 #include <limits>
 
 #include "core/ui.hpp"
-#include "data/class_skill.hpp"
+#include "catalogs/class_skill.hpp"
 
 namespace display {
 
@@ -33,6 +33,14 @@ void enemyDefeated(const Enemy& enemy, const Player& player) {
          << ", you gained " << enemy.stats.data.economy.platinum << "p " << enemy.stats.data.economy.gold << "g " << enemy.stats.data.economy.silver << "s " << enemy.stats.data.economy.copper << "c"
          << " and " << enemy.stats.data.expe
          << " experience!" << std::endl;
+}
+
+void materialDropped(const std::string& name, int quantity) {
+    std::cout << "Picked up " << name << " x" << quantity << ".\n";
+}
+
+void backpackFull(const std::string& name) {
+    std::cout << "Backpack full: left " << name << " behind.\n";
 }
 
 // --- Combat (combat/combat) ---
@@ -479,7 +487,8 @@ void storeHeader(const Player& player) {
     std::cout << "Currency: " << player.economy.platinum << "p " << player.economy.gold << "g " << player.economy.silver << "s " << player.economy.copper << "c" << std::endl;
     std::cout << "1. Buy Potions\n";
     std::cout << "2. Buy Equipment\n";
-    std::cout << "3. Exit Store\n";
+    std::cout << "3. Sell Items\n";
+    std::cout << "4. Exit Store\n";
     std::cout << "Choose an option: ";
 }
 
@@ -489,6 +498,14 @@ void storeBoughtPotion(const std::string& name) {
 
 void storeBoughtEquipment(const std::string& name) {
     std::cout << "Bought " << name << "!\n";
+}
+
+void storeSold(const std::string& name, int quantity, long long copper) {
+    std::cout << "Sold " << name << " x" << quantity << " for " << copper << " copper.\n";
+}
+
+void storeNothingToSell() {
+    std::cout << "You have nothing to sell.\n";
 }
 
 void storeNotEnoughCurrency() {

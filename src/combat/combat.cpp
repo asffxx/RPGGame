@@ -108,6 +108,7 @@ int CombatSystem::calculateDamage(int attack, float defense) {
 }
 
 void CombatScreen::startCombat(CombatSystem& combat, PlayerInventory& inventory) {
+    playerC.setInventory(inventory);
     bool inCombat = true;
     abilityState = {};
 

@@ -7,7 +7,7 @@
 
 #include "core/ui.hpp"
 #include "app/display.hpp"
-#include "systems/rumor.hpp"
+#include "gameplay/rumor.hpp"
 
 void Tavern::openTavern(Player& player, TimeSystem& timeSystem) {
     bool inTavern = true;
@@ -67,6 +67,10 @@ void Tavern::buyFoodAndDrinks(Player& player) {
 
     if (index == -1) return;
 
+    if (!inventory.canAdd(PlayerInventory::ItemType::FoodAndDrink, index)) {
+        display::message("Backpack full. Purchase cancelled.");
+        return;
+    }
     if (player.economy.subtractCurrency(foods[index].pricePlatinum, foods[index].priceGold, foods[index].priceSilver, foods[index].priceCopper)) {
         inventory.addItem(PlayerInventory::ItemType::FoodAndDrink, index);
         display::tavernFoodPurchased(foods[index].name);
@@ -131,7 +135,7 @@ void Store::openStore(Player& player) {
     while (shopping) {
         display::storeHeader(player);
 
-        int choice = getNumberInput(1, 3);
+        int choice = getNumberInput(1, 4);
 
         switch (choice) {
             case 1:
@@ -143,6 +147,9 @@ void Store::openStore(Player& player) {
                 clearScreen();
                 break;
             case 3:
+                sellItems(player);
+                break;
+            case 4:
                 shopping = false;
                 break;
         }
@@ -156,7 +163,12 @@ void Store::buyPotions(Player& player) {
         potionNames.push_back(potion.name + " - " + std::to_string(potion.priceSilver) + "s " + std::to_string(potion.priceCopper) + "c");
     }
     PagedSelector potionSelector(potionNames);
-    size_t index = potionSelector.select();
+    int index = potionSelector.select();
+    if (index < 0) return;
+    if (!inventory.canAdd(PlayerInventory::ItemType::Potion, index)) {
+        display::message("Backpack full. Purchase cancelled.");
+        return;
+    }
     if (player.economy.subtractCurrency(0, 0, potions[index].priceSilver, potions[index].priceCopper)) {
         inventory.addItem(PlayerInventory::ItemType::Potion, index);
         display::storeBoughtPotion(potions[index].name);
@@ -172,7 +184,12 @@ void Store::buyEquipment(Player& player) {
         equipmentNames.push_back(eq.name + " - " + std::to_string(eq.priceSilver) + "s " + std::to_string(eq.priceCopper) + "c");
     }
     PagedSelector equipmentSelector(equipmentNames);
-    size_t index = equipmentSelector.select();
+    int index = equipmentSelector.select();
+    if (index < 0) return;
+    if (!inventory.canAdd(PlayerInventory::ItemType::Equipment, index)) {
+        display::message("Backpack full. Purchase cancelled.");
+        return;
+    }
     if (player.economy.subtractCurrency(0, 0, equipment[index].priceSilver, equipment[index].priceCopper)) {
         inventory.addItem(PlayerInventory::ItemType::Equipment, index);
         display::storeBoughtEquipment(equipment[index].name);
@@ -183,6 +200,51 @@ void Store::buyEquipment(Player& player) {
     } else {
         display::storeNotEnoughCurrency();
     }
+}
+
+bool sellItem(Player& player, PlayerInventory& inventory, size_t slot, int quantity, std::string& error) {
+    error.clear();
+    if (slot >= inventory.inventory.size() || quantity <= 0) {
+        error = "Invalid sale quantity.";
+        return false;
+    }
+    const auto item = inventory.inventory[slot];
+    long long value = inventory.sellValueOf(item.type, item.dbIndex) * quantity;
+    if (value <= 0 || quantity > item.quantity || value / 1000000 > 1000000) {
+        error = "Cannot sell that quantity.";
+        return false;
+    }
+    if (!inventory.removeItem(item.type, item.dbIndex, quantity)) {
+        error = "Unequip the last copy before selling it.";
+        return false;
+    }
+    player.economy.addCurrency(static_cast<int>(value / 1000000), static_cast<int>(value / 10000 % 100),
+                              static_cast<int>(value / 100 % 100), static_cast<int>(value % 100));
+    return true;
+}
+
+void Store::sellItems(Player& player) {
+    while (!inventory.inventory.empty()) {
+        std::vector<std::string> lines = {"Sell items (shop goods: half price; materials: listed value)."};
+        for (size_t i = 0; i < inventory.inventory.size(); ++i) {
+            const auto& item = inventory.inventory[i];
+            lines.push_back(std::to_string(i + 1) + ". " + inventory.itemName(item.type, item.dbIndex) +
+                " x" + std::to_string(item.quantity) + " - " + std::to_string(inventory.sellValueOf(item.type, item.dbIndex)) + " copper each");
+        }
+        lines.push_back("0. Back");
+        displayBorderedMenu(lines, "Choose an item: ");
+        int choice = getNumberInput(0, static_cast<int>(inventory.inventory.size()));
+        if (!choice) return;
+        const auto item = inventory.inventory[choice - 1];
+        displayBorderedMenu({"0. Cancel"}, "Quantity to sell: ");
+        int quantity = getNumberInput(0, item.quantity);
+        if (!quantity) continue;
+        std::string error;
+        if (sellItem(player, inventory, choice - 1, quantity, error))
+            display::storeSold(inventory.itemName(item.type, item.dbIndex), quantity, inventory.sellValueOf(item.type, item.dbIndex) * quantity);
+        else display::message(error);
+    }
+    display::storeNothingToSell();
 }
 
 void magicStore::openStore(Player& player) {

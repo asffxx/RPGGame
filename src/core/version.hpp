@@ -1,3 +1,3 @@
 #pragma once
 
-inline constexpr const char* gameVersion = "3.2.1";
+inline constexpr const char* gameVersion = "3.4.0";

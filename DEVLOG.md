@@ -3,6 +3,52 @@
 RPGGame's development history, newest milestone first. Entries describe shipped
 source changes and link to the commits behind earlier milestones.
 
+## v3.4.0 — Crafting, material drops, backpack, and selling
+
+**Date:** 2026-11-01 — source changes, uncommitted; no release artifacts rebuilt.
+
+- Added eleven materials and nine recipes in `data/materials.json` and
+  `data/recipes.json`, with validated item, enemy, quest, guild, and station references.
+- Added city/guild-hall forge, alchemy, and kitchen menus. Crafts are atomic and
+  account for consumed ingredient weight before checking the output capacity.
+- Recipes unlock through starter availability, guild membership, quest completion,
+  or an exploration flag. Known recipes persist; NPC instruction follows in Phase 4.
+- Added independently rolled enemy materials to all four victory reward paths.
+  Two commissions supply materials; insufficient space leaves their rewards unclaimed.
+- Added a 50-weight backpack. Above 37.5, basic attack stats lose 10% and dodge
+  loses 10 percentage points. Full packs block purchases and material pickups.
+  Legacy overweight inventories remain loadable.
+- Stores buy items at half their shop price; materials use their JSON sell value.
+  Selling or crafting cannot remove the final equipped copy.
+- Save format remains 4, including material ids and known recipes. Runtime data
+  files are now required alongside future distributions.
+- Added five crafting test groups: catalog validation, atomic transactions,
+  backpack penalties, drops/rewards/save roundtrip, and interactive menu flows.
+- Verified 23/23 CTest cases, plus a real-binary Continue → craft → save → reload
+  → sell → save flow and the missing-data startup error.
+
+## v3.3.0 — Content ids, JSON reader, save format 4
+
+**Date:** 2026-11-01
+
+- Added stable snake_case ids to every catalog record: equipment, potions, food,
+  locations, enemies, classes, races, spells, guilds, and quests. Lookups by id
+  and by table position both work; duplicate display names get `_2` suffixes.
+- Added `src/gameplay/datafile.cpp`, a strict reader for the JSON subset shared
+  with the future pixel engine. Comments, trailing commas, duplicate keys, lone
+  surrogates, and non-finite numbers are rejected. Errors name file, line, and
+  column.
+- Added `data/README.md` describing the format, id rules, cross-reference rules,
+  and the files that each later phase will add.
+- Save format 4 adds story flags, recorded choices, known recipes, and faction
+  standing, plus stable item ids. Versions 1, 2, and 3 stay readable and gain
+  item ids on load. Unknown or mismatched ids are hard errors.
+- Inventory items now carry their catalog id, and `PlayerInventory` resolves
+  ids to catalog indices.
+- Test count rises from 15 to 18: `catalog_ids`, `json_reader`, and `story_save`.
+- Source release only. Prebuilt binaries remain at v3.2.1 until the release
+  step rebuilds and checksums them.
+
 ## v3.2.1 — Standalone Windows and Linux builds
 
 **Date:** 2026-11-01
@@ -106,7 +152,7 @@ guild storylines, discoverable jobs, and more distinct character choices.
 ### Internal structure and verification
 
 - Added shared quest definitions, progress, and handling in `src/world/`.
-- Split content into `guild_quest.*`, `quest.*`, `sidequests.*`, and `comissions.*`.
+- Split content into `guild_quest.*`, `quest.*`, `sidequests.*`, and `commissions.*`.
   The main-story catalog in `quest.*` is reserved for future content and is empty.
 - Added persistent `GameSession` state and reusable combat ability handling.
 - Expanded CMake/CTest coverage to 14 tests, including save migration, unlock
@@ -176,3 +222,16 @@ Future releases follow semantic versioning: incompatible supported-interface or
 save-compatibility changes increment MAJOR, backward-compatible features increment
 MINOR, and backward-compatible fixes increment PATCH. Save-format numbers are
 separate from game release versions. Add each release entry at the top of this log.
+
+## v3.4.1 — Project structure refactor
+
+**Date:** 2026-11-01 — Refactored directory structure.
+
+- Renamed root  to  and reorganized JSON files into subdirectories (, , , , ).
+- Renamed  to  and  to .
+- Renamed  to .
+- Moved  to .
+- Updated all C++ include paths, CMake configurations, and JSON loader paths in source and tests to reflect these changes.
+- Updated path resolution to use  instead of .
+- Verified build and 23/23 tests pass.
+- Verified catalog snapshot consistency.

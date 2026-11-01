@@ -9,6 +9,8 @@
 #include "core/types.hpp"
 #include "entities/player.hpp"
 
+class PlayerInventory;
+
 // Stat block for an enemy, wrapping a Stats instance plus scaling bookkeeping.
 struct EnemyStats {
     struct StatsData {
@@ -43,6 +45,7 @@ struct Enemy {
     std::string name;
     EnemyStats stats;
     std::vector<std::string> debuffs;
+    std::string id;
 };
 
 // Catalog of enemy templates plus random selection.
@@ -55,6 +58,7 @@ struct EnemyDatabase {
         std::vector<std::string> debuffs;
         int difficultyLevel;
         std::vector<LocationType> allowedLocations;
+        std::string id{};
     };
 
     std::vector<EnemyTemplate> templates;
@@ -63,6 +67,7 @@ struct EnemyDatabase {
 
     Enemy getRandomEnemy(int difficultyLevel, LocationType locationType);
     Enemy getRandomEnemy(int difficultyLevel);
+    const EnemyTemplate* find(const std::string& id) const;
 };
 
 // Spawns and scales enemies for encounters.
@@ -72,7 +77,9 @@ public:
     bool hasEligibleEnemy(int difficultyLevel, LocationType locationType) const;
     Enemy getEnemyByName(const std::string& name, int playerLevel, LocationType locationType = Terrain);
 
-    void enemyGoldExpDrop(Player& player, const Enemy& enemy);
+    // Awards currency, experience, and material drops. Drops need a backpack;
+    // pass nullptr in tests that only care about currency and experience.
+    void enemyGoldExpDrop(Player& player, const Enemy& enemy, PlayerInventory* inventory = nullptr);
 
 private:
     EnemyDatabase enemyDB;

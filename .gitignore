@@ -1,16 +1,33 @@
-docs/
-scripts/
-scripts/build.sh
-scripts/checker.sh
-scripts/check_files.sh
-check.sh
+
+# CMake build directories
+/build/
+/cmake-build-*/
+/out/
+
+# CMake generated files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+compile_commands.json
+CTestTestfile.cmake
+Testing/
+
+# Compiled files
 *.o
 *.obj
-build/
-__cmake_*/
-CMakeCache.txt
-CMakeFiles/
-*.sh
-savegame.dat
-savegame.dat.tmp
-/rpg.exe
+*.a
+*.so
+*.dll
+*.exe
+
+# Temporary files
+*.tmp
+*.swp
+*~
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+.cache/

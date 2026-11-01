@@ -3,7 +3,7 @@
 #include "entities/player.hpp"
 #include "entities/npc.hpp"
 #include "entities/enemy.hpp"
-#include "data/class_skill.hpp"
+#include "catalogs/class_skill.hpp"
 
 struct AbilityState {
     bool used = false;

@@ -2,8 +2,8 @@
 
 #include <map>
 #include "app/session.hpp"
-#include "data/guild.hpp"
-#include "systems/guild.hpp"
+#include "catalogs/guild.hpp"
+#include "gameplay/guild.hpp"
 #include "quest_system.hpp"
 
 std::vector<GuildQuest> guildQuests(const std::string& guildId) {

@@ -22,6 +22,7 @@ struct PlayerRaceTemplate {
     std::string name;
     Stats statBonus;
     RaceLore lore;
+    std::string id{};
 };
 
 // Template describing a selectable class (base stats + lore).
@@ -29,6 +30,7 @@ struct PlayerClassTemplate {
     std::string name;
     Stats stats;
     Lore lore;
+    std::string id{};
 };
 
 // The player character and all of their mutable state.

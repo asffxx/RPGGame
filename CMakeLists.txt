@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(RPGGame VERSION 3.2.1 LANGUAGES CXX)
+project(RPGGame VERSION 3.4.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -14,7 +14,7 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
 endif()
 
-# NOTE: src/data/enemy_data.cpp is deliberately NOT listed here.
+# NOTE: src/catalogs/enemy_data.cpp is deliberately NOT listed here.
 # It is textually #include'd by src/entities/enemy.cpp, so compiling it as a
 # separate translation unit produces duplicate-symbol link errors.
 add_library(rpg_core
@@ -25,49 +25,55 @@ add_library(rpg_core
     src/combat/abilities.cpp
 
     src/core/economy.cpp
+    src/core/ids.cpp
+    src/core/paths.cpp
     src/core/stats.cpp
     src/core/timesystem.cpp
     src/core/ui.cpp
 
-    src/data/class.cpp
-    src/data/class_skill.cpp
-    src/data/guild.cpp
-    src/data/rumor.cpp
-    src/data/debuff.cpp
-    src/data/equipment.cpp
-    src/data/event.cpp
-    src/data/food.cpp
-    src/data/location.cpp
-    src/data/potion.cpp
-    src/data/race.cpp
-    src/data/spell.cpp
+    src/catalogs/class.cpp
+    src/catalogs/class_skill.cpp
+    src/catalogs/guild.cpp
+    src/catalogs/rumor.cpp
+    src/catalogs/debuff.cpp
+    src/catalogs/equipment.cpp
+    src/catalogs/event.cpp
+    src/catalogs/food.cpp
+    src/catalogs/location.cpp
+    src/catalogs/material.cpp
+    src/catalogs/potion.cpp
+    src/catalogs/race.cpp
+    src/catalogs/spell.cpp
 
     src/entities/enemy.cpp
     src/entities/npc.cpp
     src/entities/player.cpp
 
-    src/systems/dictionary.cpp
-    src/systems/event.cpp
-    src/systems/inventory.cpp
-    src/systems/party.cpp
-    src/systems/save.cpp
-    src/systems/guild.cpp
-    src/systems/rumor.cpp
+    src/gameplay/datafile.cpp
+    src/gameplay/dictionary.cpp
+    src/gameplay/event.cpp
+    src/gameplay/inventory.cpp
+    src/gameplay/party.cpp
+    src/gameplay/save.cpp
+    src/gameplay/guild.cpp
+    src/gameplay/rumor.cpp
 
     src/ui/menu.cpp
     src/ui/player_controller.cpp
 
     src/world/establishments.cpp
+    src/world/crafting.cpp
     src/world/travel.cpp
     src/world/encounters.cpp
     src/world/guild_quest.cpp
     src/world/quest.cpp
     src/world/sidequests.cpp
-    src/world/comissions.cpp
+    src/world/commissions.cpp
     src/world/quest_system.cpp
 )
 
 target_include_directories(rpg_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
+target_compile_definitions(rpg_core PRIVATE RPG_CONTENT_DIR="${CMAKE_CURRENT_SOURCE_DIR}/content")
 add_executable(rpg src/main.cpp)
 target_link_libraries(rpg PRIVATE rpg_core)
 
@@ -81,6 +87,14 @@ endif()
 
 include(CTest)
 if(BUILD_TESTING)
+    add_executable(rpg_catalog_snapshot tests/catalog_snapshot.cpp)
+    target_link_libraries(rpg_catalog_snapshot PRIVATE rpg_core)
+    add_executable(rpg_crafting_tests tests/crafting_tests.cpp)
+    target_link_libraries(rpg_crafting_tests PRIVATE rpg_core)
+    foreach(group catalogs transactions backpack rewards menus)
+        add_test(NAME crafting_${group} COMMAND rpg_crafting_tests ${group} ${CMAKE_CURRENT_BINARY_DIR}/crafting-tests/${group})
+        set_tests_properties(crafting_${group} PROPERTIES ENVIRONMENT "TERM=dumb" TIMEOUT 15)
+    endforeach()
     add_executable(rpg_tests tests/game_tests.cpp)
     target_link_libraries(rpg_tests PRIVATE rpg_core)
     add_test(NAME save_roundtrip COMMAND rpg_tests save ${CMAKE_CURRENT_BINARY_DIR})
@@ -103,6 +117,11 @@ if(BUILD_TESTING)
     add_test(NAME quest_save_migration COMMAND rpg_quest_tests save ${CMAKE_CURRENT_BINARY_DIR})
     add_test(NAME quest_menu_flows COMMAND rpg_quest_tests menus)
     set_tests_properties(quest_menu_flows PROPERTIES ENVIRONMENT "TERM=dumb" TIMEOUT 20)
+    add_executable(rpg_data_tests tests/data_tests.cpp)
+    target_link_libraries(rpg_data_tests PRIVATE rpg_core)
+    add_test(NAME catalog_ids COMMAND rpg_data_tests ids)
+    add_test(NAME json_reader COMMAND rpg_data_tests json ${CMAKE_CURRENT_BINARY_DIR}/data-tests)
+    add_test(NAME story_save COMMAND rpg_data_tests save ${CMAKE_CURRENT_BINARY_DIR}/data-tests)
     add_executable(rpg_ui_tests tests/ui_tests.cpp)
     target_link_libraries(rpg_ui_tests PRIVATE rpg_core)
     add_test(NAME terminal_ui COMMAND rpg_ui_tests)

@@ -1,4 +1,5 @@
 #include "quest_system.hpp"
+#include "world/crafting.hpp"
 
 #include <algorithm>
 #include <stdexcept>
@@ -6,10 +7,10 @@
 #include "app/session.hpp"
 #include "combat/combat.hpp"
 #include "core/ui.hpp"
-#include "data/guild.hpp"
-#include "systems/guild.hpp"
+#include "catalogs/guild.hpp"
+#include "gameplay/guild.hpp"
 #include "ui/player_controller.hpp"
-#include "comissions.hpp"
+#include "commissions.hpp"
 #include "encounters.hpp"
 #include "guild_quest.hpp"
 #include "quest.hpp"
@@ -176,6 +177,15 @@ bool claimQuestReward(GameSession& session, const std::string& id) {
         (!quest->offeringGuild.empty() && quest->offeringGuild != guild->id)) return false;
     auto progress = questProgress(session, id);
     if (!progress.active || !progress.objectiveComplete || progress.completions >= maxCompletions) return false;
+    auto rewardedInventory = session.inventory;
+    const auto& materials = materialDatabase().getMaterials();
+    for (size_t i = 0; i < materials.size(); ++i) {
+        for (const auto& reward : materials[i].questRewards) {
+            if (reward.first == id && !rewardedInventory.tryAddItem(PlayerInventory::ItemType::Material, i, reward.second))
+                return false;
+        }
+    }
+    session.inventory = std::move(rewardedInventory);
     if (quest->category == QuestCategory::Guild) {
         auto& state = discoverGuild(session.guilds, guild->id);
         state.active = state.objectiveComplete = false;
@@ -187,6 +197,7 @@ bool claimQuestReward(GameSession& session, const std::string& id) {
     }
     session.hero.economy.addCurrency(0, 0, quest->rewardSilver, 0);
     session.hero.stats.expe += quest->rewardExperience;
+    discoverRecipes(session);
     PlayerController(session.hero, session.inventory).levelUpChecker();
     return true;
 }
@@ -242,6 +253,9 @@ void openQuestBoard(GameSession& session, QuestCategory category) {
         lines = {quest.title, quest.briefing, returnInstructions(quest),
             "Reward: " + std::to_string(quest.rewardSilver) + " silver, " + std::to_string(quest.rewardExperience) + " XP.",
             "Status: " + statusLabel(session, quest)};
+        for (const auto& material : materialDatabase().getMaterials())
+            for (const auto& reward : material.questRewards)
+                if (reward.first == quest.id) lines.push_back("Material reward: " + material.name + " x" + std::to_string(reward.second));
         bool canAccept = !progress.active && (!progress.completions || category == QuestCategory::Commission) && questLockReason(session, quest).empty();
         if (canAccept || progress.objectiveComplete) {
             lines.push_back(progress.objectiveComplete ? "1. Turn in quest" : "1. Accept quest");
@@ -249,7 +263,7 @@ void openQuestBoard(GameSession& session, QuestCategory category) {
             displayBorderedMenu(lines, "Choose an option: ");
             if (getNumberInput(1, 2) == 2) continue;
             bool changed = progress.objectiveComplete ? claimQuestReward(session, quest.id) : acceptQuest(session, quest.id);
-            display::message(changed ? (progress.objectiveComplete ? "Quest turned in. Reward received." : "Quest accepted. Use Travel -> Follow a lead.") : "You cannot do that right now.");
+            display::message(changed ? (progress.objectiveComplete ? "Quest turned in. Reward received." : "Quest accepted. Use Travel -> Follow a lead.") : "You cannot do that right now. Check backpack space before claiming materials.");
         } else display::message(lines);
     }
 }
@@ -306,7 +320,7 @@ void performQuestAction(GameSession& session, EnemyController& enemies, CombatSy
         screen.startCombat(combat, session.inventory);
         victorious = session.hero.stats.hitpoints > 0 && enemy.stats.data.hitpoints <= 0;
         if (victorious) {
-            enemies.enemyGoldExpDrop(session.hero, enemy);
+            enemies.enemyGoldExpDrop(session.hero, enemy, &session.inventory);
             PlayerController(session.hero, session.inventory).levelUpChecker();
         }
     }

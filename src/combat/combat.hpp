@@ -4,10 +4,10 @@
 #include <vector>
 
 #include "core/types.hpp"
-#include "data/spell.hpp"
+#include "catalogs/spell.hpp"
 #include "entities/npc.hpp"
 #include "entities/enemy.hpp"
-#include "systems/inventory.hpp"
+#include "gameplay/inventory.hpp"
 #include "entities/player.hpp"
 #include "abilities.hpp"
 
@@ -54,14 +54,18 @@ private:
 class PlayerCombatant : public ICombatant {
 public:
     PlayerCombatant(Player& p) : player(p) {}
+    void setInventory(const PlayerInventory& value) { inventory = &value; }
     std::string getName() const override { return player.name; }
-    int getPhysicalAttack() const override { return player.stats.attack; }
-    int getMagicAttack() const override { return player.stats.magicAttack; }
+    int getPhysicalAttack() const override { return burdened() ? player.stats.attack * 9 / 10 : player.stats.attack; }
+    int getMagicAttack() const override { return burdened() ? player.stats.magicAttack * 9 / 10 : player.stats.magicAttack; }
     float getArmor() const override { return player.stats.armor; }
     float getMagicArmor() const override { return player.stats.magicArmor; }
     float getCritRate() const override { return player.stats.critRate; }
     float getCritDamage() const override { return player.stats.critDamage; }
-    float getDodgeRate() const override { return player.stats.dodgeRate; }
+    float getDodgeRate() const override {
+        float rate = player.stats.dodgeRate - (burdened() ? 0.10f : 0.0f);
+        return rate < 0.0f ? 0.0f : rate;
+    }
     bool isPlayer() const override { return true; }
     void takeDamage(int amount) override { player.stats.hitpoints -= amount; }
     const std::vector<std::string>& getDebuffs() const override { return player.debuffs; }
@@ -71,6 +75,8 @@ public:
 
 private:
     Player& player;
+    const PlayerInventory* inventory = nullptr;
+    bool burdened() const { return inventory && inventory->encumbered(); }
 };
 
 // Combatant adapter for an enemy.

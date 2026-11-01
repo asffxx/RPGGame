@@ -4,13 +4,13 @@
 #include <vector>
 
 #include "core/types.hpp"
-#include "data/equipment.hpp"
-#include "data/event.hpp"
-#include "data/location.hpp"
+#include "catalogs/equipment.hpp"
+#include "catalogs/event.hpp"
+#include "catalogs/location.hpp"
 #include "entities/enemy.hpp"
 #include "entities/npc.hpp"
 #include "entities/player.hpp"
-#include "systems/inventory.hpp"
+#include "gameplay/inventory.hpp"
 
 // Centralized presentation layer. Every std::cout in the project lives here so
 // the gameplay/logic modules stay free of output concerns. Functions are grouped
@@ -28,6 +28,8 @@ void sleepPenalty();
 // --- entities/enemy ---
 void enemyAppeared(const Enemy& enemy);
 void enemyDefeated(const Enemy& enemy, const Player& player);
+void materialDropped(const std::string& name, int quantity);
+void backpackFull(const std::string& name);
 
 // --- combat ---
 void combatRunAway();
@@ -122,6 +124,8 @@ void storeHeader(const Player& player);
 void storeBoughtPotion(const std::string& name);
 void storeBoughtEquipment(const std::string& name);
 void storeNotEnoughCurrency();
+void storeSold(const std::string& name, int quantity, long long copper);
+void storeNothingToSell();
 void magicStoreHeader(const Player& player);
 void magicStoreNoSpells();
 void magicStoreLearned(const std::string& name);

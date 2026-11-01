@@ -5,7 +5,7 @@
 CompileFlags:
   CompilationDatabase: build
 
-# src/data/enemy_data.cpp is a fragment textually included by enemy.cpp, so it
+# src/catalogs/enemy_data.cpp is a fragment textually included by enemy.cpp, so it
 # has no declarations of its own. Silence the false positive when it is opened
 # directly in the editor.
 If:
