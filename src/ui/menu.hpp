@@ -20,5 +20,8 @@ private:
     std::map<std::string, std::vector<size_t>> categories;
     Player& hero;
 
-    void display();
+    std::vector<std::string> visibleCategories() const;
+    std::vector<std::string> statusLines() const;
+    void displayOverview(const std::vector<std::string>& order);
+    void displayCategory(const std::string& category);
 };

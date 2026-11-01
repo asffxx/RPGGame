@@ -2,7 +2,7 @@
 
 A command-line RPG written in C++.
 
-**Current source release: v3.1.0** · [Development log and version history](DEVLOG.md)
+**Current source release: v3.2.0** · [Development log and version history](DEVLOG.md)
 
 The original v1 game is preserved on the [`v1` branch](https://github.com/asffxx/RPGGame/tree/v1).
 Use `main` for the current game.
@@ -53,7 +53,7 @@ Enter a name during creation; some inventory prompts use `y`/`n`.
 
 ## Saving and Continuing
 
-- Select **Save Game** in the main menu to write `savegame.dat` in the current
+- Select **System → Save Game** in the main menu to write `savegame.dat` in the current
   working directory. Saving takes no game time and overwrites the single slot.
 - Choose **Continue** on the title screen to resume. Run from the same directory
   to find the same save. For example, `./build/rpg` run from the repository root
@@ -187,30 +187,34 @@ building with `--config Release`.
   Start previews race and class choices before confirmation; Continue loads the
   manual save slot.
 - The main menu shows your character, class, level, HP and mana bars, location,
-  time, and currency above the available actions.
+  time, and currency, followed by four category choices. Pick a category, then
+  an action. Choose `0. Back` to return to the categories.
+- Categories adapt to your location: **Local Establishments** appears only where
+  services exist.
 - Shared panels wrap long text to the terminal width (up to 92 columns).
   Combat, travel, quest boards, and the journal use the same panel renderer.
 - Colors activate in supported interactive terminals. Set `NO_COLOR=1` to
   disable them. `TERM=dumb` and redirected output use plain text; redirected
   output also skips screen clearing and uses an 80-column layout.
-- To save, select **Save Game** in the main menu's **System** section.
-  Saving remains manual; use **Continue** on your next launch.
+- To save, open **System**, then select **Save Game**. Saving remains manual;
+  use **Continue** on your next launch.
 
 ### Adventure loop
 
-The main menu is grouped into **Character**, **Local Establishments**,
-**Actions**, and **System**.
+The main menu offers category menus for **Character**, **Local Establishments**,
+**Actions**, and **System**. Choosing a category shows only its actions, keeping
+the top-level menu short.
 
-1. **Character** — view stats, open your inventory, manage the party, browse the dictionary, or read the Quest Journal.
-2. **Explore** — use the current area's difficulty and terrain for encounters:
-   village 20%, town 30%, terrain 60%, dungeon 80%, spell store 50% chance of
-   a regular enemy encounter; otherwise a random event occurs. Some events
-   have their own named enemies. Peaceful cities offer only noncombat events.
-   The Abandoned Cell starts at difficulty 1.
-3. **Travel** — venture into the unknown, follow marked safe routes, or follow rumor and quest leads.
-4. **Visit establishments** — Stores (villages, towns, cities), Taverns (towns and cities), and Magic Stores (spell stores and cities) offer shopping, hiring, resting, rumors, and spell learning. Each city also has a Guild Hall.
-5. **Manage** — keep your inventory, equipment, party, and dictionary in order.
-6. **Progress** — defeat enemies for gold and experience, level up, and watch the world scale with you.
+- **Character** — view stats, open your inventory, manage the party, browse the dictionary, or read the Quest Journal.
+- **Actions → Explore** — use the current area's difficulty and terrain for
+  encounters: village 20%, town 30%, terrain 60%, dungeon 80%, spell store 50%
+  chance of a regular enemy encounter; otherwise a random event occurs. Some
+  events have their own named enemies. Peaceful cities offer only noncombat
+  events. The Abandoned Cell starts at difficulty 1.
+- **Actions → Travel** — venture into the unknown, follow marked safe routes, or follow rumor and quest leads.
+- **Local Establishments** — Stores (villages, towns, cities), Taverns (towns and cities), and Magic Stores (spell stores and cities) offer shopping, hiring, resting, rumors, and spell learning. Each city also has a Guild Hall.
+- **Manage** — keep your inventory, equipment, party, and dictionary in order.
+- **Progress** — defeat enemies for gold and experience, level up, and watch the world scale with you.
 
 Main-menu and travel exploration use the same encounter rules, and companions
 join regular and event fights in both. Higher-difficulty locations remain
@@ -263,7 +267,7 @@ leads and whether you have visited them.
   is nonexclusive: you can join all five guilds and have one active quest per guild.
 - Accepting a quest makes its objective location available under **Follow a lead**.
   Visiting the guild hall also supplies a return route to its home city.
-- At the target location, choose **Quest Action** from the main menu or option 4
+- At the target location, choose **Actions → Quest Action** or option 4
   in the travel location submenu. The first quest is a short investigation or
   retrieval scene; the second is a named-enemy confrontation with your party.
 - Return to the originating guild to claim the listed silver and XP reward,
