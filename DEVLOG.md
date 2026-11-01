@@ -3,6 +3,25 @@
 RPGGame's development history, newest milestone first. Entries describe shipped
 source changes and link to the commits behind earlier milestones.
 
+## v3.2.0 — Shorter, category-based main menu
+
+**Date:** 2026-11-01
+
+- Replaced the flat main menu with **Character**, **Local Establishments**,
+  **Actions**, and **System** categories.
+- The top level now shows four choices (three outside settlements) instead of up
+  to eleven actions. Selecting a category opens only its actions; `0. Back`
+  returns without running anything.
+- Establishments remain location-aware and appear only where stores, taverns,
+  magic stores, or guild halls exist.
+- Kept the character/status dashboard and numbered controls. Actions still refresh
+  the menu after returning.
+- Updated gameplay Basics text, README usage instructions, and CLI flows for the
+  new navigation. All 15 tests pass.
+
+Backward-compatible interface change: game version advances from 3.1.0 to
+3.2.0. Save format remains 3.
+
 ## v3.1.0 — Terminal interface refresh
 
 **Date:** 2026-11-01

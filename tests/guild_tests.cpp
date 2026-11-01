@@ -253,7 +253,7 @@ void menus() {
     }
     check(session.hero.currentLocation == destination && session.travel.discovered.count(destination), "Following rumor did not arrive in city");
     {
-        MenuIO io("10\n\n15\n");
+        MenuIO io("2\n0\n4\n3\n");
         mainMenu(session);
         check(io.text().find("Guild Hall") != std::string::npos && io.text().find("Magic Store") != std::string::npos, "City services missing");
         check(io.text().find("Your Party:") == std::string::npos, "City Explore started combat");

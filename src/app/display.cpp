@@ -587,6 +587,7 @@ void gameBasics() {
     std::cout << "- If not slept, reduce health by ~5% at the start of each new day.\n";
     std::cout << "- Sleep at the Tavern to restore HP and avoid the penalty.\n\n";
     std::cout << "Other Mechanics:\n";
+    std::cout << "- The main menu groups actions by category; choose one, then an action (0 to go back).\n";
     std::cout << "- Save Game writes savegame.dat in the working directory; Continue loads it.\n";
     std::cout << "- Saving is manual, free, and overwrites the slot. Exit does not save.\n";
     std::cout << "- Each class has a signature ability usable once per encounter (action 4).\n";
