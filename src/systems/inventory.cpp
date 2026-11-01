@@ -219,6 +219,8 @@ void PlayerInventory::removeBuff(Player& player) {
     if (!activeBuff) return;
     player.stats.attack -= activeBuff->attackBonus;
     player.stats.armor -= static_cast<float>(activeBuff->defenseBonus);
+    player.stats.magicAttack -= activeBuff->magicAttackBonus;
+    player.stats.magicArmor -= static_cast<float>(activeBuff->magicDefenseBonus);
     player.stats.maxMana -= activeBuff->maxManaBonus;
     player.stats.critRate -= activeBuff->critRateBonus;
     player.stats.critDamage -= activeBuff->critDamageBonus;

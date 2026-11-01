@@ -1,0 +1,47 @@
+#include "comissions.hpp"
+
+const std::vector<QuestDefinition>& commissions() {
+    static const std::vector<QuestDefinition> quests = {
+        {"commission_supplies", "Roadside Supplies", "Collect a fresh supply bundle from the caravan cache in Barren Plains.", "Barren Plains", "",
+         "You check the bundle against the current shipping list and secure it for the return journey.", 15, 8, QuestCategory::Commission, 1, "", ""},
+        {"commission_samples", "Forest Samples", "Collect this week's marked herb samples in Enchanted Forest.", "Enchanted Forest", "",
+         "You seal fresh leaves and soil in labeled jars, recording where each sample was gathered.", 20, 12, QuestCategory::Commission, 2, "", ""},
+        {"commission_rats", "Rat-Clearing Contract", "Remove a Rat Swarm from the storehouses of Ghost Town.", "Ghost Town", "Rat Swarm",
+         "The storehouse is clear for now. You mark the inspected entrance on the contract.", 18, 10, QuestCategory::Commission, 1, "", ""},
+        {"commission_swamp", "Swamp Survey", "Measure water levels and inspect the survey stakes in Murky Swamp.", "Murky Swamp", "",
+         "You replace two sinking stakes and record the changed waterline for the surveyors.", 28, 15, QuestCategory::Commission, 3, "", ""},
+        {"commission_wolf", "Wolf Bounty", "Defeat a Direwolf threatening travelers in Shadowed Grove.", "Shadowed Grove", "Direwolf",
+         "The wolf no longer blocks the trail. Your report identifies the crossing that needs another patrol.", 25, 14, QuestCategory::Commission, 2, "", ""},
+        {"commission_ironward_patrol", "Ironward Patrol", "Intercept a Goblin Scout in Eldritch Forest on the Company's behalf.", "Eldritch Forest", "Goblin Scout",
+         "You recover the scout's latest trail markings and make the patrol route safe to use again.", 30, 18, QuestCategory::Commission, 2, "ironward", "ironward_scout"},
+        {"commission_archive", "Archive Maintenance", "Gather loose catalog pages from Enchanted Library.", "Enchanted Library", "",
+         "You sort the scattered catalog slips into their numbered cases for the archivists.", 25, 15, QuestCategory::Commission, 2, "lantern", "lantern_pages"},
+        {"commission_cargo", "Cargo Recovery", "Retrieve the newly reported cargo crate at Bandit Hideout.", "Bandit Hideout", "",
+         "The crate's serial number matches the current contract. You prepare it for its rightful owner.", 35, 20, QuestCategory::Commission, 3, "silverthread", "silverthread_outlaw"},
+        {"commission_crown_watch", "Crown Road Watch", "Defeat a Goblin Marauder on the road through Whispering Woods.", "Whispering Woods", "Goblin Marauder",
+         "The road is clear. You log the attack site for the next escort leaving The Royal Capital.", 35, 20, QuestCategory::Commission, 3, "crownward", "crownward_dispatch"},
+        {"commission_salvage", "Cavern Salvage", "Collect marked expedition salvage from Crystal Caverns.", "Crystal Caverns", "",
+         "You gather the numbered salvage pieces and leave unstable debris for a better-equipped team.", 40, 22, QuestCategory::Commission, 4, "tidebound", "tidebound_relic"},
+        {"commission_mileposts", "Milepost Inspection", "Inspect the road markers in Barren Plains and note damaged signs.", "Barren Plains", "",
+         "Your inspection sheet lists two leaning posts and a missing distance plate for the road crew.", 12, 8, QuestCategory::Commission, 1, "", ""},
+        {"commission_well", "Oasis Well Check", "Test the well and clean its collection basin at Desert Oasis.", "Desert Oasis", "",
+         "The basin runs clear again. You bottle a water sample for the guild's examiner.", 22, 12, QuestCategory::Commission, 2, "", ""},
+        {"commission_viper", "Viper Removal", "Defeat a Viper nesting along the paths in Murky Swamp.", "Murky Swamp", "Viper",
+         "The nest is cleared and marked. Collectors can use the narrow path again.", 28, 15, QuestCategory::Commission, 3, "", ""},
+        {"commission_frost", "Frost Readings", "Record ice depth at the marked station in Frozen Tundra.", "Frozen Tundra", "",
+         "You record the latest ice readings and reset the station's wind-battered measuring pole.", 30, 16, QuestCategory::Commission, 3, "", ""},
+        {"commission_bats", "Belfry Clearance", "Defeat Blood Bats roosting in the tower of Abandoned Castle.", "Abandoned Castle", "Blood Bats",
+         "The belfry is clear. You flag the broken window through which the next swarm might enter.", 35, 20, QuestCategory::Commission, 4, "", ""},
+        {"commission_watch_rations", "Watchpost Rations", "Collect a fresh ration delivery at Barren Plains for the Ironward watch.", "Barren Plains", "",
+         "You tally the rations and sign the latest delivery sheet for the watchpost quartermaster.", 18, 10, QuestCategory::Commission, 1, "ironward", ""},
+        {"commission_ink", "Botanical Ink", "Gather marked ink-producing plants from Enchanted Forest for the scholars.", "Enchanted Forest", "",
+         "The fresh stems are bundled separately so their dyes will not mix before the scribes prepare them.", 20, 12, QuestCategory::Commission, 1, "lantern", ""},
+        {"commission_market_audit", "Caravan Audit", "Check the stored merchant seals at Desert Oasis against the Consortium's register.", "Desert Oasis", "",
+         "You compare each seal with the register and record discrepancies for the next caravan master.", 25, 14, QuestCategory::Commission, 2, "silverthread", ""},
+        {"commission_dispatch_cache", "Dispatch Cache Check", "Inspect the Crownward dispatch cache in Whispering Woods.", "Whispering Woods", "",
+         "The cache is dry and its locks hold. You replace the weathered route notice with a fresh copy.", 28, 16, QuestCategory::Commission, 2, "crownward", ""},
+        {"commission_tide_chart", "Tidal Marker Survey", "Read the tide markers in Pirate Cove for the Tidebound chartmakers.", "Pirate Cove", "",
+         "You note the new high-water line and sketch the shifting sandbar beside the cove entrance.", 35, 20, QuestCategory::Commission, 3, "tidebound", ""}
+    };
+    return quests;
+}

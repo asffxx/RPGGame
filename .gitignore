@@ -11,3 +11,5 @@ __cmake_*/
 CMakeCache.txt
 CMakeFiles/
 *.sh
+savegame.dat
+savegame.dat.tmp

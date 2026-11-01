@@ -136,12 +136,17 @@ void magicStoreEnchanted(const std::string& itemName, const std::string& applied
 void travelNoMarkedLocations();
 void travelLocationList(const std::vector<std::string>& lines);
 void travelDiscovered(const std::string& name);
-void travelLocationHeader(const std::string& name, const std::string& description);
+void travelLocationHeader(const std::string& name, const std::string& description, bool hasQuest = false);
 void travelLocationMarked();
 
 // --- app/main_menu ---
 void timePassed();
 void gameBasics();
 void characterCreated();
+void message(const std::string& text);
+void message(const std::vector<std::string>& lines);
+void racePreview(const PlayerRaceTemplate& race);
+void classPreview(const PlayerClassTemplate& playerClass, const PlayerRaceTemplate& race);
+std::string characterName();
 
 } // namespace display

@@ -69,6 +69,7 @@ struct EnemyDatabase {
 class EnemyController {
 public:
     Enemy encounterEnemy(int difficultyLevel, LocationType locationType = Terrain);
+    bool hasEligibleEnemy(int difficultyLevel, LocationType locationType) const;
     Enemy getEnemyByName(const std::string& name, int playerLevel, LocationType locationType = Terrain);
 
     void enemyGoldExpDrop(Player& player, const Enemy& enemy);

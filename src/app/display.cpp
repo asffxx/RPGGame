@@ -4,6 +4,7 @@
 #include <limits>
 
 #include "core/ui.hpp"
+#include "data/class_skill.hpp"
 
 namespace display {
 
@@ -340,6 +341,7 @@ void dictionaryLocationStats(const locationDatabase::locationProperties& loc) {
         case Dungeon: typeStr = "Dungeon"; break;
         case Terrain: typeStr = "Terrain"; break;
         case SpellStore: typeStr = "Spell Store"; break;
+        case PeacefulCity: typeStr = "Peaceful City"; break;
     }
     std::cout << "Type: " << typeStr << "\n";
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -553,12 +555,13 @@ void travelDiscovered(const std::string& name) {
     std::cout << "\nDiscovered new location: " << name << "! Gained 50 experience.\n";
 }
 
-void travelLocationHeader(const std::string& name, const std::string& description) {
+void travelLocationHeader(const std::string& name, const std::string& description, bool hasQuest) {
     std::cout << "\n=== " << name << " ===\n";
     std::cout << description << std::endl;
     std::cout << "1. Explore\n";
     std::cout << "2. Mark location\n";
     std::cout << "3. Leave\n";
+    if (hasQuest) std::cout << "4. Quest Action (explicit quest fights can occur on safe routes)\n";
     std::cout << "Choose an action: ";
 }
 
@@ -584,6 +587,18 @@ void gameBasics() {
     std::cout << "- If not slept, reduce health by ~5% at the start of each new day.\n";
     std::cout << "- Sleep at the Tavern to restore HP and avoid the penalty.\n\n";
     std::cout << "Other Mechanics:\n";
+    std::cout << "- Save Game writes savegame.dat in the working directory; Continue loads it.\n";
+    std::cout << "- Saving is manual, free, and overwrites the slot. Exit does not save.\n";
+    std::cout << "- Each class has a signature ability usable once per encounter (action 4).\n";
+    std::cout << "- Encounters use your area's difficulty/type; marked routes avoid combat.\n";
+    std::cout << "- Peaceful cities have stores, taverns, magic stores, and a Guild Hall.\n";
+    std::cout << "- Ask a tavern for Rumors, then use Travel -> Follow a lead to find cities.\n";
+    std::cout << "- Join all five guilds if you like; each offers two sequential quests.\n";
+    std::cout << "- Guild Hall options 3/4 offer Side Quests and Commissions, including after its storyline.\n";
+    std::cout << "- Boards explain level, membership, and guild-quest turn-in requirements.\n";
+    std::cout << "- Side quests are one-time; commissions require accepting a fresh run after each turn-in.\n";
+    std::cout << "- Read your Quest Journal, perform Quest Actions at their targets, then return for rewards.\n";
+    std::cout << "- Explicit Quest Actions can start fights even on marked safe routes.\n";
     std::cout << "- Explore to fight enemies or encounter events.\n";
     std::cout << "- Travel to discover new locations.\n";
     std::cout << "- Manage your party, inventory, and stats.\n";
@@ -594,5 +609,55 @@ void gameBasics() {
 
 void characterCreated() {
     std::cout << "\nCharacter created successfully!" << std::endl;
+}
+
+void message(const std::string& text) {
+    std::cout << text << '\n';
+    pressEnter();
+}
+
+void message(const std::vector<std::string>& lines) {
+    displayBorderedMenu(lines, "");
+    pressEnter();
+}
+
+namespace {
+void creationStats(const Stats& stats) {
+    std::cout << "HP: " << stats.hitpoints << '/' << stats.maxHitpoints
+              << "   Mana: " << stats.mana << '/' << stats.maxMana
+              << "\nAttack: " << stats.attack << "   Magic attack: " << stats.magicAttack
+              << "\nArmor: " << stats.armor * 100 << "%   Magic armor: " << stats.magicArmor * 100
+              << "%\nCritical chance: " << stats.critRate * 100 << "%   Critical multiplier: " << stats.critDamage
+              << "\nDodge: " << stats.dodgeRate * 100 << "%   Magic amplifier: " << stats.magicAmplifierRate << '\n';
+}
+}
+
+void racePreview(const PlayerRaceTemplate& race) {
+    std::cout << "\n=== " << race.name << " ===\n" << race.lore.description << "\nStat bonuses (added to class):\n";
+    const auto& s = race.statBonus;
+    std::cout << "HP: +" << s.maxHitpoints << "   Mana: +" << s.maxMana
+              << "\nAttack: +" << s.attack << "   Magic attack: +" << s.magicAttack
+              << "\nArmor: +" << s.armor * 100 << "%   Magic armor: +" << s.magicArmor * 100 << "%\n";
+}
+
+void classPreview(const PlayerClassTemplate& playerClass, const PlayerRaceTemplate& race) {
+    std::cout << "\n=== " << playerClass.name << " ===\n" << playerClass.lore.description << "\nBase stats:\n";
+    creationStats(playerClass.stats);
+    Player preview("", {race.name, {race.lore.description}}, playerClass);
+    preview.applyRaceBonus(race.statBonus);
+    std::cout << "\nStarting stats with " << race.name << ":\n";
+    creationStats(preview.stats);
+    const auto& ability = signatureAbility(playerClass.name);
+    std::cout << "\nSignature: " << ability.name << "\n" << ability.description
+              << "\nAvailable from level 1, once per encounter; uses your turn.\n";
+}
+
+std::string characterName() {
+    std::string name;
+    do {
+        std::cout << "Enter your name: ";
+        if (!std::getline(std::cin, name)) return "Adventurer";
+    } while (name.find_first_not_of(" \t\r") == std::string::npos);
+    return name;
 }
 } // namespace display
