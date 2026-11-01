@@ -2,7 +2,10 @@
 
 A command-line RPG written in C++.
 
-**Current source release: v3.0.0** · [Development log and version history](DEVLOG.md)
+**Current source release: v3.1.0** · [Development log and version history](DEVLOG.md)
+
+The original v1 game is preserved on the [`v1` branch](https://github.com/asffxx/RPGGame/tree/v1).
+Use `main` for the current game.
 
 ## Description
 
@@ -14,6 +17,7 @@ through a global scaling progression system.
 
 - **Race and Class Selection** — 9 races and 13 classes, each with its own stat spread.
 - **Selection Previews** — read lore, compare stats, and confirm or go back before creating a character.
+- **Terminal Interface** — consistent wrapped panels, optional colors, and an at-a-glance character, HP, mana, location, and time display.
 - **Save / Continue** — one manual save slot preserves your character, inventory, companions, routes, and time.
 - **Class Abilities** — each class has a signature combat action available from level 1, once per encounter.
 - **Progression with Global Scaling** — level up and scale stats globally, including enemies.
@@ -167,12 +171,32 @@ Tests cover full session round trips and invalid saves, class abilities,
 location eligibility, combat menus, all guild quest transitions, rumor discovery,
 version-1/2 save migration, all 40 new job definitions, unlock requirements,
 repeat cycles, one-time payouts, and interactive guild/board/tavern/travel flows.
-If Python 3 is available at configure time, CTest also exercises character reselection, Save/Continue across process
-restarts, and load errors. Python is not required to build or play the game.
+The 15-test suite includes terminal rendering and character reselection,
+Save/Continue across process restarts, and load errors. CLI checks use a CMake
+script; no Python scripts or Python dependency are required.
 For multi-configuration Windows builds, pass `-C Release` to CTest after
 building with `--config Release`.
 
 ## Gameplay Loop
+
+### Controls and terminal display
+
+- Type the displayed option number and press **Enter**. Numbers remain the
+  controls throughout the game; menu options depend on your current location.
+- On the title screen, choose **1. Start**, **2. Continue**, or **3. Exit**.
+  Start previews race and class choices before confirmation; Continue loads the
+  manual save slot.
+- The main menu shows your character, class, level, HP and mana bars, location,
+  time, and currency above the available actions.
+- Shared panels wrap long text to the terminal width (up to 92 columns).
+  Combat, travel, quest boards, and the journal use the same panel renderer.
+- Colors activate in supported interactive terminals. Set `NO_COLOR=1` to
+  disable them. `TERM=dumb` and redirected output use plain text; redirected
+  output also skips screen clearing and uses an 80-column layout.
+- To save, select **Save Game** in the main menu's **System** section.
+  Saving remains manual; use **Continue** on your next launch.
+
+### Adventure loop
 
 The main menu is grouped into **Character**, **Local Establishments**,
 **Actions**, and **System**.

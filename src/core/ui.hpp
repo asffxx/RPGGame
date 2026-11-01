@@ -10,6 +10,9 @@ void clearScreen();
 // Prints a bordered, fixed-width menu of lines and prompts for input.
 void displayBorderedMenu(const std::vector<std::string>& lines, const std::string& prompt = "Choose an option: ");
 
+// Shared resource display, with clamped fill and exact numeric values.
+std::string resourceBar(const std::string& label, int current, int maximum);
+
 // Scrollable numbered selector over a list of items.
 class PagedSelector {
 public:

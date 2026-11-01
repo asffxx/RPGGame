@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "core/ui.hpp"
+#include "core/version.hpp"
 #include "data/class.hpp"
 #include "data/race.hpp"
 #include "app/main_menu.hpp"
@@ -12,7 +13,10 @@
 
 int main() {
     while (true) {
-        displayBorderedMenu({"1. Start", "2. Continue", "3. Exit"}, "Choose an option: ");
+        displayBorderedMenu({std::string("[ RPGGame / v") + gameVersion + " ]",
+            "Explore. Join a guild. Leave your mark.", "",
+            "1. Start", "2. Continue", "3. Exit", "",
+            "Enter an option number, then press Enter."}, "Choose an option: ");
         int choice = getNumberInput(1, 3);
         if (choice == 3) return 0;
         if (choice == 1) break;
