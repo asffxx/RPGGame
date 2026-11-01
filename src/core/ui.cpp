@@ -7,8 +7,92 @@
 #include <limits>
 #include <string>
 #include <thread>
+#include <sstream>
+#ifdef _WIN32
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#include <windows.h>
+#include <io.h>
+#else
+#include <sys/ioctl.h>
+#include <unistd.h>
+#endif
+
+namespace {
+bool interactiveOutput() {
+#ifdef _WIN32
+    return _isatty(_fileno(stdout)) != 0;
+#else
+    return isatty(STDOUT_FILENO) != 0;
+#endif
+}
+
+bool styledOutput() {
+    const char* term = std::getenv("TERM");
+    if (!interactiveOutput() || std::getenv("NO_COLOR") || (term && std::string(term) == "dumb")) return false;
+#ifdef _WIN32
+    HANDLE output = GetStdHandle(STD_OUTPUT_HANDLE);
+    DWORD mode;
+    return GetConsoleMode(output, &mode) && SetConsoleMode(output, mode | ENABLE_VIRTUAL_TERMINAL_PROCESSING);
+#else
+    return true;
+#endif
+}
+
+size_t panelWidth() {
+    int columns = 80;
+#ifdef _WIN32
+    CONSOLE_SCREEN_BUFFER_INFO info;
+    if (interactiveOutput() && GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &info))
+        columns = info.srWindow.Right - info.srWindow.Left + 1;
+#else
+    winsize size{};
+    if (interactiveOutput() && ioctl(STDOUT_FILENO, TIOCGWINSZ, &size) == 0 && size.ws_col)
+        columns = size.ws_col;
+#endif
+    return static_cast<size_t>(std::clamp(columns - 2, 20, 92));
+}
+
+// Count UTF-8 code points so wrapping never cuts a multibyte character in half.
+size_t textWidth(const std::string& text) {
+    return std::count_if(text.begin(), text.end(), [](unsigned char c) { return (c & 0xc0) != 0x80; });
+}
+
+std::vector<std::string> wrapLine(const std::string& text, size_t width) {
+    std::vector<std::string> result;
+    std::istringstream paragraphs(text);
+    std::string paragraph;
+    while (std::getline(paragraphs, paragraph)) {
+        std::istringstream words(paragraph);
+        std::string word, row;
+        while (words >> word) {
+            if (!row.empty() && textWidth(row) + 1 + textWidth(word) > width) {
+                result.push_back(row);
+                row.clear();
+            }
+            while (textWidth(word) > width) {
+                size_t end = 0, count = 0;
+                while (end < word.size()) {
+                    if ((static_cast<unsigned char>(word[end]) & 0xc0) != 0x80 && count++ == width) break;
+                    ++end;
+                }
+                result.push_back(word.substr(0, end));
+                word.erase(0, end);
+            }
+            if (!row.empty()) row += ' ';
+            row += word;
+        }
+        result.push_back(row);
+    }
+    if (result.empty()) result.push_back("");
+    return result;
+}
+}
 
 void clearScreen() {
+    const char* term = std::getenv("TERM");
+    if (!interactiveOutput() || (term && std::string(term) == "dumb")) return;
 #ifdef _WIN32
     system("cls");
 #else
@@ -17,17 +101,37 @@ void clearScreen() {
 }
 
 void displayBorderedMenu(const std::vector<std::string>& lines, const std::string& prompt) {
-    size_t maxWidth = 0;
+    const size_t width = panelWidth() - 4;
+    const bool color = styledOutput();
+    const std::string border = "+-" + std::string(width, '-') + "-+";
+    auto rule = [&] {
+        if (color) std::cout << "\033[2;36m";
+        std::cout << border;
+        if (color) std::cout << "\033[0m";
+        std::cout << '\n';
+    };
+    rule();
     for (const auto& line : lines) {
-        maxWidth = std::max(maxWidth, line.length());
+        for (const auto& row : wrapLine(line, width)) {
+            std::cout << "| ";
+            const bool heading = !row.empty() && (row.front() == '[' || row.front() == '=');
+            if (color && heading) std::cout << "\033[1;36m";
+            std::cout << row;
+            if (color && heading) std::cout << "\033[0m";
+            std::cout << std::string(width - textWidth(row), ' ') << " |\n";
+        }
     }
-    std::string border = std::string(maxWidth, '=');
-    std::cout << border << std::endl;
-    for (const auto& line : lines) {
-        std::cout << line << std::string(maxWidth - line.length(), ' ') << std::endl;
-    }
-    std::cout << border << std::endl;
+    rule();
+    if (color && !prompt.empty()) std::cout << "\033[1m";
     std::cout << prompt;
+    if (color && !prompt.empty()) std::cout << "\033[0m";
+    std::cout << std::flush;
+}
+
+std::string resourceBar(const std::string& label, int current, int maximum) {
+    const int filled = maximum > 0 ? static_cast<int>(12LL * std::clamp(current, 0, maximum) / maximum) : 0;
+    return label + " [" + std::string(filled, '#') + std::string(12 - filled, '-') + "] " +
+           std::to_string(current) + "/" + std::to_string(maximum);
 }
 
 size_t PagedSelector::select() {

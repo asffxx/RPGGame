@@ -3,6 +3,28 @@
 RPGGame's development history, newest milestone first. Entries describe shipped
 source changes and link to the commits behind earlier milestones.
 
+## v3.1.0 — Terminal interface refresh
+
+**Date:** 2026-11-01
+
+- Retained portable numbered controls while introducing consistent ASCII panels,
+  terminal-width wrapping, and subtle heading and border colors.
+- Added a versioned title screen and an at-a-glance main-menu display with
+  character, class, level, HP/mana bars, location, time, and currency.
+- Applied the shared panel renderer to combat, travel, guild boards, the journal,
+  and other existing bordered menus.
+- Added plain-text output for redirected streams and `TERM=dumb`, plus `NO_COLOR`
+  support. Screen clearing is skipped when output is redirected or the terminal
+  is marked dumb.
+- Removed `tests/cli_test.py` and Python discovery from CMake. Moved equivalent
+  creation, save/restart, and malformed-save CLI checks to `tests/cli_test.cmake`.
+- Added C++ panel-wrapping, UTF-8 boundary, and resource-bar checks. All 15 tests
+  pass on Linux.
+- Updated usage instructions and linked the original game on the `v1` branch.
+
+This is a backward-compatible feature release: game version advances from
+3.0.0 to 3.1.0. The save format stays at 3 and still reads formats 1 and 2.
+
 ## v3.0.0 — Persistent adventures and shared quests
 
 **Date:** 2026-11-01
@@ -97,6 +119,11 @@ The history explicitly names this version in
 ## v1.0.0 — Initial project (retrospective)
 
 **Date:** 2026-01-14
+
+The original v1 game is preserved on the
+[`v1` branch](https://github.com/asffxx/RPGGame/tree/v1), whose current tip is
+[`19b50cb`](https://github.com/asffxx/RPGGame/commit/19b50cb). That branch includes
+the early v1.1.0 changes and predates the modular refactor; `main` carries current development.
 
 - [Initial commit (`9c33a81`)](https://github.com/asffxx/RPGGame/commit/9c33a81)
   created README, license, and Git attributes.

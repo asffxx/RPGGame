@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(RPGGame VERSION 3.0.0 LANGUAGES CXX)
+project(RPGGame VERSION 3.1.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -103,10 +103,13 @@ if(BUILD_TESTING)
     add_test(NAME quest_save_migration COMMAND rpg_quest_tests save ${CMAKE_CURRENT_BINARY_DIR})
     add_test(NAME quest_menu_flows COMMAND rpg_quest_tests menus)
     set_tests_properties(quest_menu_flows PROPERTIES ENVIRONMENT "TERM=dumb" TIMEOUT 20)
-    find_package(Python3 COMPONENTS Interpreter QUIET)
-    if(Python3_Interpreter_FOUND)
-        add_test(NAME cli_flows COMMAND ${Python3_EXECUTABLE}
-            ${CMAKE_CURRENT_SOURCE_DIR}/tests/cli_test.py $<TARGET_FILE:rpg> ${CMAKE_CURRENT_BINARY_DIR})
-        set_tests_properties(cli_flows PROPERTIES TIMEOUT 30)
-    endif()
+    add_executable(rpg_ui_tests tests/ui_tests.cpp)
+    target_link_libraries(rpg_ui_tests PRIVATE rpg_core)
+    add_test(NAME terminal_ui COMMAND rpg_ui_tests)
+    set_tests_properties(terminal_ui PROPERTIES ENVIRONMENT "TERM=dumb")
+    add_test(NAME cli_flows COMMAND ${CMAKE_COMMAND}
+        -DRPG_BINARY=$<TARGET_FILE:rpg>
+        -DSCRATCH=${CMAKE_CURRENT_BINARY_DIR}/cli-test
+        -P ${CMAKE_CURRENT_SOURCE_DIR}/tests/cli_test.cmake)
+    set_tests_properties(cli_flows PROPERTIES TIMEOUT 30)
 endif()
