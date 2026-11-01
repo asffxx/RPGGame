@@ -3,6 +3,18 @@
 RPGGame's development history, newest milestone first. Entries describe shipped
 source changes and link to the commits behind earlier milestones.
 
+## v3.2.1 — Standalone Windows and Linux builds
+
+**Date:** 2026-11-01
+
+- Added prebuilt **Windows 10/11 x64** and **Linux x86_64** executables under
+  `dist/`, with a distribution README and SHA-256 checksums.
+- Windows build is a static MinGW-w64 UCRT console executable; no DLLs required.
+- Linux build is statically linked and runs without a separate C++ runtime.
+- Verified both binaries launch and show the v3.2.1 title screen. Windows checks
+  were run under Wine; full Linux tests remain green.
+- No gameplay or save-format changes. Patch release: 3.2.0 to 3.2.1.
+
 ## v3.2.0 — Shorter, category-based main menu
 
 **Date:** 2026-11-01

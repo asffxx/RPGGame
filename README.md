@@ -2,7 +2,7 @@
 
 A command-line RPG written in C++.
 
-**Current source release: v3.2.0** · [Development log and version history](DEVLOG.md)
+**Current source release: v3.2.1** · [Development log and version history](DEVLOG.md)
 
 The original v1 game is preserved on the [`v1` branch](https://github.com/asffxx/RPGGame/tree/v1).
 Use `main` for the current game.
@@ -121,6 +121,17 @@ HP cost having a minimum of 1 where applicable. Brace and Distract expire after
 the next retaliation and never modify permanent stats.
 
 ## Getting Started
+
+### Prebuilt binaries
+
+Standalone builds for **v3.2.1** are in [`dist/`](dist/):
+
+- `RPGGame-v3.2.1-windows-x64.exe` — Windows 10/11 x64 console executable.
+- `RPGGame-v3.2.1-linux-x86_64` — statically linked Linux x86_64 executable.
+
+Neither needs an installer, runtime, or extra DLLs. Run the file from a writable
+directory; saves go to `savegame.dat` in the current working directory. See
+[`dist/README.md`](dist/README.md) for run commands and SHA-256 checksums.
 
 ### Prerequisites
 
