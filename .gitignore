@@ -13,3 +13,4 @@ CMakeFiles/
 *.sh
 savegame.dat
 savegame.dat.tmp
+/rpg.exe
