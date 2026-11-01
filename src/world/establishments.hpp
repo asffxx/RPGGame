@@ -11,16 +11,19 @@
 #include "systems/inventory.hpp"
 #include "entities/player.hpp"
 
-// Tavern: sleep, buy food/drink, and hire party members.
+struct GameSession;
+
+// Tavern: sleep, buy food/drink, hire party members, and hear actionable rumors.
 class Tavern {
 public:
-    Tavern(PlayerInventory& inv, std::vector<NPC>& party) : inventory(inv), playerParty(party) {}
+    Tavern(PlayerInventory& inv, std::vector<NPC>& party, GameSession& game) : inventory(inv), playerParty(party), session(game) {}
 
     void openTavern(Player& player, TimeSystem& timeSystem);
 
 private:
     PlayerInventory& inventory;
     std::vector<NPC>& playerParty;
+    GameSession& session;
     FoodandDrinksDatabase foodDB;
     NPCGenerator npcGen;
 

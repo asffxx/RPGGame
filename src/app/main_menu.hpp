@@ -1,6 +1,6 @@
 #pragma once
 
-#include "entities/player.hpp"
+#include "session.hpp"
 
 // Builds the main menu and runs the top-level game loop.
-void mainMenu(Player& hero, bool debugMode = false);
+void mainMenu(GameSession& session, bool debugMode = false);

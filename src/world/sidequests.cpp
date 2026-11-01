@@ -1,0 +1,47 @@
+#include "sidequests.hpp"
+
+const std::vector<QuestDefinition>& sideQuests() {
+    static const std::vector<QuestDefinition> quests = {
+        {"side_unsent_letter", "A Letter Never Sent", "Find a sealed letter in the abandoned posthouse of Ghost Town.", "Ghost Town", "",
+         "Behind the postmaster's desk you find a letter of forgiveness, still waiting for its recipient.", 40, 25, QuestCategory::Side, 1, "", ""},
+        {"side_keepsake", "The Herbalist's Keepsake", "Search Enchanted Forest for an herbalist's silver locket.", "Enchanted Forest", "",
+         "A locket hangs from a thorn branch above a patch of moonwort. Its tiny portrait is unharmed.", 55, 35, QuestCategory::Side, 2, "", ""},
+        {"side_waystone", "The Broken Waystone", "Examine the fractured waystone in Mystic Ruins and copy its lost inscription.", "Mystic Ruins", "",
+         "Rubbing charcoal over the stone reveals an older road, erased from every modern map.", 90, 50, QuestCategory::Side, 3, "", ""},
+        {"side_lost_lantern", "A Lantern for the Lost", "Defeat the Bonewalker disturbing the memorial lanterns at Forgotten Cemetery.", "Forgotten Cemetery", "Bonewalker",
+         "The restless bones settle. You relight a lantern beside a gravestone whose name has worn away.", 85, 45, QuestCategory::Side, 3, "", ""},
+        {"side_oasis_promise", "The Oasis Promise", "Retrieve a traveler's medicine cache from Desert Oasis.", "Desert Oasis", "",
+         "The wrapped medicine is still dry beneath the well stones. Someone kept their promise to leave it here.", 55, 30, QuestCategory::Side, 2, "", ""},
+        {"side_warden_watch", "A Warden's Last Watch", "Recover a missing warden's badge from Barren Plains for the Ironward Company.", "Barren Plains", "",
+         "You find the badge beside a repaired milepost. Even stranded, the warden kept the road marked.", 70, 40, QuestCategory::Side, 2, "ironward", "ironward_supplies"},
+        {"side_unwritten_chapter", "The Unwritten Chapter", "Retrieve an unfinished manuscript from Enchanted Library for the Lantern Scholars.", "Enchanted Library", "",
+         "The manuscript ends in mid-sentence. Marginal notes reveal the missing argument the scholars need.", 100, 60, QuestCategory::Side, 3, "lantern", "lantern_keeper"},
+        {"side_counterfeit", "The Honest Counterfeit", "Confront the Outlaw forging merchant seals at Bandit Hideout.", "Bandit Hideout", "Outlaw",
+         "The outlaw's dies expose the forged seals, but an honest apprentice's name on the receipts clears one suspect.", 100, 55, QuestCategory::Side, 3, "silverthread", "silverthread_ledger"},
+        {"side_nameless_seal", "A Seal Without a Name", "Find the hidden witness testimony in Abandoned Castle for the Crownward Order.", "Abandoned Castle", "",
+         "Inside an unmarked seal case lies testimony that names the courier's betrayer, not the courier himself.", 125, 70, QuestCategory::Side, 4, "crownward", "crownward_seal"},
+        {"side_navigator_debt", "The Navigator's Debt", "Defeat the Mimic guarding a navigator's instruments in Crystal Caverns.", "Crystal Caverns", "Mimic",
+         "You recover a battered compass. Its dedication proves Oren never forgot the crew who saved him.", 100, 60, QuestCategory::Side, 3, "tidebound", "tidebound_journal"},
+        {"side_winter_song", "The Winter Song", "Find a musician's songbook beneath the old camp in Frozen Tundra.", "Frozen Tundra", "",
+         "A waxed pouch protects the last verse. The song ends with a homecoming instead of a farewell.", 70, 40, QuestCategory::Side, 3, "", ""},
+        {"side_hollow_tree", "The Hollow Tree", "Search the hollow elder tree in Whispering Woods for a child's carved bird.", "Whispering Woods", "",
+         "The wooden bird rests in a nest of moss. Its wings still turn when the wind catches them.", 50, 30, QuestCategory::Side, 2, "", ""},
+        {"side_empty_granary", "The Empty Granary", "Defeat the Rat Swarm guarding the last grain sacks in Ghost Town.", "Ghost Town", "Rat Swarm",
+         "You clear the granary and discover enough sound grain to help the refugees through another week.", 45, 30, QuestCategory::Side, 1, "", ""},
+        {"side_glass_memory", "A Memory in Glass", "Retrieve a crystal recording from Crystal Caverns.", "Crystal Caverns", "",
+         "Held to the light, the crystal echoes a miner's final directions to a sealed, safe passage.", 95, 55, QuestCategory::Side, 4, "", ""},
+        {"side_ruined_oath", "The Ruined Oath", "Defeat the Ancient Legionary keeping watch at Haunted Ruins.", "Haunted Ruins", "Ancient Legionary",
+         "The legionary finally lowers its blade. Beneath its shield is the oath it guarded for a forgotten kingdom.", 110, 65, QuestCategory::Side, 4, "", ""},
+        {"side_warning_bell", "The Warning Bell", "Find the cracked warning bell beside Barren Plains' abandoned watchpost.", "Barren Plains", "",
+         "The bell's clapper is intact. The Ironward smith can make the watchpost's warning heard again.", 45, 25, QuestCategory::Side, 1, "ironward", ""},
+        {"side_apprentice_notes", "The Apprentice's First Error", "Recover an apprentice's misplaced field notes in Enchanted Forest.", "Enchanted Forest", "",
+         "The notes contain more crossed-out guesses than answers. The final page shows the apprentice was learning.", 45, 30, QuestCategory::Side, 1, "lantern", ""},
+        {"side_small_debt", "A Very Small Debt", "Find a street vendor's missing account book at Desert Oasis.", "Desert Oasis", "",
+         "The account book records years of meals given on credit. The Consortium can now repay that quiet generosity.", 60, 35, QuestCategory::Side, 2, "silverthread", ""},
+        {"side_fallen_banner", "The Fallen Banner", "Retrieve the courier escort's banner in Whispering Woods.", "Whispering Woods", "",
+         "The torn banner bears every escort's stitched initials. The Royal Capital will remember their service.", 90, 50, QuestCategory::Side, 3, "crownward", "crownward_dispatch"},
+        {"side_last_beacon", "The Last Beacon", "Recover the expedition's beacon lens from Pirate Cove.", "Pirate Cove", "",
+         "The lens is hidden among worthless glass. Once returned to Velmora, it can guide the next expedition home.", 130, 75, QuestCategory::Side, 4, "tidebound", "tidebound_relic"}
+    };
+    return quests;
+}

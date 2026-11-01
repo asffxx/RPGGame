@@ -2,6 +2,11 @@
 
 locationDatabase::locationDatabase() {
     locationList = {
+        {"Attania", "An iron-gated city where the Ironward Company watches the trade roads.", 1, PeacefulCity},
+        {"Erden", "A city of lantern-lit archives, home to the Lantern Scholars.", 1, PeacefulCity},
+        {"Trisselie", "Canals and bustling markets surround the Silverthread Consortium's counting houses.", 1, PeacefulCity},
+        {"The Royal Capital", "White towers rise above the Crownward Order's ancient halls.", 1, PeacefulCity},
+        {"Velmora", "A salt-washed harbor where the Tidebound Fellowship charts forgotten shores.", 1, PeacefulCity},
         {"Enchanted Forest", "A mystical forest filled with magical creatures.", 2, Terrain},
         {"Abandoned Castle", "An old castle rumored to be haunted by ghosts.", 4, Dungeon},
         {"Dark Caves", "A network of dark caves inhabited by dangerous monsters.", 5, Terrain},

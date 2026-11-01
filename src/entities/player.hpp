@@ -43,12 +43,12 @@ public:
     TimeSystem timeSystem;
     std::vector<std::string> debuffs;
     std::vector<std::string> equippedWeaponDebuffs;
-    float equippedWeaponDebuffChance;
+    float equippedWeaponDebuffChance = 0.0f;
     LocationType currentLocationType;
     std::string currentLocation;
     std::vector<std::string> learnedSpells;
     std::vector<std::string> equippedStaffSpells;
-    bool sleptToday;
+    bool sleptToday = false;
     std::set<std::string> defeatedEnemies;
     std::set<std::string> discoveredLocations;
     std::set<std::string> boughtWeapons;

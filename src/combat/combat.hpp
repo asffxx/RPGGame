@@ -9,6 +9,7 @@
 #include "entities/enemy.hpp"
 #include "systems/inventory.hpp"
 #include "entities/player.hpp"
+#include "abilities.hpp"
 
 // Abstract interface for anything that can fight in combat.
 class ICombatant {
@@ -96,7 +97,7 @@ private:
 // Resolves attacks between combatants.
 class CombatSystem {
 public:
-    CombatResult attack(ICombatant& attacker, ICombatant& target);
+    CombatResult attack(ICombatant& attacker, ICombatant& target, float damageMultiplier = 1.0f);
 
 private:
     int calculateDamage(int attack, float defense);
@@ -120,6 +121,7 @@ private:
     TimeSystem timeSystem;
     NPCGenerator& npcGen;
     SpellDatabase& spellDB;
+    AbilityState abilityState;
 
     void displayCombatScreen();
     int getPlayerActionInput() const;

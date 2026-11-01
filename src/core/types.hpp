@@ -5,7 +5,7 @@
 #include <functional>
 
 // Where the player (or an enemy) can be.
-enum LocationType { PeacefulVillage, PeacefulTown, Dungeon, Terrain, SpellStore };
+enum LocationType { PeacefulVillage, PeacefulTown, Dungeon, Terrain, SpellStore, PeacefulCity };
 
 // Settings describing how a debuff behaves.
 namespace debuffSettings {

@@ -7,21 +7,24 @@
 
 #include "core/ui.hpp"
 #include "app/display.hpp"
+#include "systems/rumor.hpp"
 
 void Tavern::openTavern(Player& player, TimeSystem& timeSystem) {
     bool inTavern = true;
     while (inTavern) {
+        clearScreen();
         std::vector<std::string> lines = {
             "1. Sleep for 1 Gold (Restore HP & Advance Time)",
             "2. Buy Food and Drinks",
             "3. Hire a Party Member (Max 4)",
-            "4. Exit"
+            "4. Rumors",
+            "5. Exit"
         };
 
         display::tavernHeader();
         displayBorderedMenu(lines, "The Tavernkeeper wipes a mug. 'What'll it be?' ");
 
-        int choice = getNumberInput(1, 4);
+        int choice = getNumberInput(1, 5);
 
         if (choice == 1) {
             if (player.economy.subtractCurrency(0, 1, 0, 0)) {
@@ -40,6 +43,9 @@ void Tavern::openTavern(Player& player, TimeSystem& timeSystem) {
             hirePartyMember(player);
         }
         else if (choice == 4) {
+            listenToRumors(session);
+        }
+        else if (choice == 5) {
             display::tavernExit();
             inTavern = false;
         }

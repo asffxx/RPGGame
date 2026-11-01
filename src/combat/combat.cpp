@@ -15,7 +15,7 @@
 namespace {
 
 // Player-selectable actions in the combat menu.
-enum class CombatAction { Attack = 1, UseItem = 2, Run = 3, CastSpell = 4 };
+enum class CombatAction { Attack = 1, UseItem = 2, Run = 3, Signature = 4, CastSpell = 5 };
 
 // Renders a fixed-width HP bar, e.g. "[██████░░░░]".
 std::string makeHpBar(int hp, int maxHp, int width = 18) {
@@ -49,22 +49,15 @@ std::string describeAttack(const CombatResult& result) {
     return info;
 }
 
-// Waits for the user to press Enter exactly once. Combat reads the player's
-// action with getline (which already consumes its trailing newline), so there
-// is normally no leftover newline to discard. We only swallow a leftover '\n'
-// if one is already sitting in the buffer, without blocking for new input;
-// otherwise the first Enter the user presses would be consumed as that leftover
-// and a second press would be required.
+// Numeric menus use getline, and inventory consumes its formatted-input newline.
+// The next newline is the user's acknowledgement, including with queued input.
 void waitForEnter() {
-    if (std::cin.rdbuf()->in_avail() > 0 && std::cin.peek() == '\n') {
-        std::cin.ignore();
-    }
     display::pressEnter();
 }
 
 } // namespace
 
-CombatResult CombatSystem::attack(ICombatant& attacker, ICombatant& target) {
+CombatResult CombatSystem::attack(ICombatant& attacker, ICombatant& target, float damageMultiplier) {
     static std::mt19937 gen(std::random_device{}());
     std::uniform_real_distribution<float> dist(0.0f, 1.0f);
 
@@ -86,6 +79,7 @@ CombatResult CombatSystem::attack(ICombatant& attacker, ICombatant& target) {
             totalDamage = static_cast<int>(std::round(totalDamage * attacker.getCritDamage()));
         }
 
+        totalDamage = static_cast<int>(std::round(totalDamage * damageMultiplier));
         target.takeDamage(totalDamage);
 
         if (attacker.isPlayer()) {
@@ -115,6 +109,7 @@ int CombatSystem::calculateDamage(int attack, float defense) {
 
 void CombatScreen::startCombat(CombatSystem& combat, PlayerInventory& inventory) {
     bool inCombat = true;
+    abilityState = {};
 
     while (inCombat && (player.stats.hitpoints > 0 || !party.empty()) && enemy.stats.data.hitpoints > 0) {
         clearScreen();
@@ -135,6 +130,17 @@ void CombatScreen::startCombat(CombatSystem& combat, PlayerInventory& inventory)
             case CombatAction::CastSpell:
                 handleCastSpell();
                 break;
+            case CombatAction::Signature: {
+                static std::mt19937 gen(std::random_device{}());
+                std::uniform_real_distribution<float> roll(0.0f, 1.0f);
+                std::string log;
+                if (!useSignature(player, party, enemy, abilityState, roll(gen), roll(gen), log)) {
+                    display::message("Signature ability unavailable this encounter.");
+                    continue;
+                }
+                attackInfos.push_back(log);
+                break;
+            }
             default:
                 display::combatInvalidChoice();
                 break;
@@ -143,6 +149,7 @@ void CombatScreen::startCombat(CombatSystem& combat, PlayerInventory& inventory)
         // Living party members strike in turn; the dead are skipped and
         // removed after the enemy's retaliation.
         for (auto it = party.begin(); it != party.end(); ) {
+            if (enemy.stats.data.hitpoints <= 0) break;
             if (it->stats.hitpoints <= 0) {
                 ++it;
                 continue;
@@ -202,10 +209,13 @@ void CombatScreen::displayCombatScreen() {
 }
 
 int CombatScreen::getPlayerActionInput() const {
-    std::vector<std::string> actions = {"Attack", "Use Item / Potion", "Run"};
+    const auto& ability = signatureAbility(player.playerClass.name);
+    std::vector<std::string> actions = {"1. Attack", "2. Use Item / Potion", "3. Run",
+        "4. " + std::string(ability.name) + (abilityState.used ? " [used]" : " [1 use]")};
     if (!player.learnedSpells.empty()) {
-        actions.push_back("Cast Spell");
+        actions.push_back("5. Cast Spell");
     }
+    displayBorderedMenu({std::string(ability.name) + ": " + ability.description}, "");
     displayBorderedMenu(actions, "Choose your action: ");
     return getNumberInput(1, static_cast<int>(actions.size()));
 }
@@ -274,7 +284,12 @@ void CombatScreen::handleCastSpell() {
 void CombatScreen::handleEnemyTurn(CombatSystem& combat) {
     if (enemy.stats.data.hitpoints <= 0 || player.stats.hitpoints <= 0)
         return;
-    CombatResult result = combat.attack(enemyC, playerC);
+    float multiplier = abilityState.consumeRetaliation();
+    if (multiplier == 0.0f) {
+        attackInfos.push_back(enemy.name + " was distracted and could not act.");
+        return;
+    }
+    CombatResult result = combat.attack(enemyC, playerC, multiplier);
     attackInfos.push_back(describeAttack(result));
 }
 

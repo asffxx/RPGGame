@@ -8,13 +8,17 @@
 #include "data/spell.hpp"
 #include "app/display.hpp"
 
-void handleEvent(Player& hero, EnemyController& enemyCtrl, CombatSystem& combat, PlayerInventory& playerInventory, PlayerController& heroStats, NPCGenerator& npcGen) {
+void handleEvent(Player& hero, EnemyController& enemyCtrl, CombatSystem& combat, PlayerInventory& playerInventory, PlayerController& heroStats, NPCGenerator& npcGen, std::vector<NPC>& party, bool allowCombat) {
     eventDatabase eventDB;
     SpellDatabase spellDB;
     const auto& events = eventDB.getEvents();
     static std::mt19937 gen(std::random_device{}());
-    std::uniform_int_distribution<size_t> dist(0, events.size() - 1);
-    const auto& event = events[dist(gen)];
+    std::vector<size_t> eligible;
+    for (size_t i = 0; i < events.size(); ++i)
+        if (allowCombat || !events[i].enemyEncounter) eligible.push_back(i);
+    if (eligible.empty()) return;
+    std::uniform_int_distribution<size_t> dist(0, eligible.size() - 1);
+    const auto& event = events[eligible[dist(gen)]];
 
     display::eventHeader(event.name, event.description);
 
@@ -78,9 +82,8 @@ void handleEvent(Player& hero, EnemyController& enemyCtrl, CombatSystem& combat,
     if (event.enemyEncounter && !event.enemyName.empty()) {
         display::eventEnemyEncounter();
         Enemy enemy = enemyCtrl.getEnemyByName(event.enemyName, hero.stats.level, hero.currentLocationType);
-        std::vector<NPC> emptyParty;
         clearScreen();
-        CombatScreen combatScreen(hero, emptyParty, enemy, hero.timeSystem, npcGen, spellDB);
+        CombatScreen combatScreen(hero, party, enemy, hero.timeSystem, npcGen, spellDB);
         combatScreen.startCombat(combat, playerInventory);
         clearScreen();
 

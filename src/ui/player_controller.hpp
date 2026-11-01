@@ -9,7 +9,7 @@
 class PlayerController {
 public:
     PlayerController(Player& p, PlayerInventory& inv)
-        : player(p), inventory(inv), reqAmount(100) {}
+        : player(p), inventory(inv), reqAmount(p.progression.experienceRequired) {}
 
     void showStats() const;
     void levelUpChecker();
@@ -17,5 +17,5 @@ public:
 private:
     Player& player;
     PlayerInventory& inventory;
-    float reqAmount;
+    float& reqAmount;
 };

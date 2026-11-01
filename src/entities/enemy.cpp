@@ -65,6 +65,13 @@ Enemy EnemyDatabase::getRandomEnemy(int difficultyLevel) {
     return Enemy{ chosen->name, chosen->stats, chosen->debuffs };
 }
 
+bool EnemyController::hasEligibleEnemy(int difficultyLevel, LocationType locationType) const {
+    return std::any_of(enemyDB.templates.begin(), enemyDB.templates.end(), [&](const auto& enemy) {
+        return enemy.difficultyLevel <= difficultyLevel &&
+            std::find(enemy.allowedLocations.begin(), enemy.allowedLocations.end(), locationType) != enemy.allowedLocations.end();
+    });
+}
+
 Enemy EnemyController::encounterEnemy(int difficultyLevel, LocationType locationType) {
     Enemy enemy = enemyDB.getRandomEnemy(difficultyLevel, locationType);
     enemyScaleLevel(enemy, difficultyLevel, locationType);
@@ -112,6 +119,7 @@ void EnemyController::enemyScaleLevel(Enemy& enemy, int difficultyLevel, Locatio
         case Terrain: locationMultiplier = 1.0f; break;
         case Dungeon: locationMultiplier = 1.2f; break;
         case SpellStore: locationMultiplier = 0.9f; break;
+        case PeacefulCity: locationMultiplier = 0.9f; break;
     }
     enemy.stats.scale(locationMultiplier);
 
@@ -134,6 +142,7 @@ void EnemyController::enemyScaleLevel(Enemy& enemy, int difficultyLevel, Locatio
             enemy.stats.data.dodgeRate = std::max(0.0f, enemy.stats.data.dodgeRate - 0.05f);
             break;
         case SpellStore:
+        case PeacefulCity:
             break;
     }
 
