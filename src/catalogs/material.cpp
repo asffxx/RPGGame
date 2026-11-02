@@ -4,8 +4,8 @@
 #include <set>
 #include <stdexcept>
 
-#include "core/ids.hpp"
-#include "core/paths.hpp"
+#include "catalogs/content_ids.hpp"
+#include "catalogs/content_paths.hpp"
 #include "entities/enemy.hpp"
 #include "gameplay/datafile.hpp"
 #include "world/quest_system.hpp"

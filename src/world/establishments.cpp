@@ -123,8 +123,7 @@ void Tavern::hirePartyMember(Player& player) {
     display::tavernHireJoined(newNPC, hireLine);
 
 
-    std::vector<std::string> specialNames = {"Evelyn Chevalier", "Astra Yao", "Ye Shunguang ", "Burnice White","Jane Doe", "Belle"};
-    if (std::find(specialNames.begin(), specialNames.end(), newNPC.name) != specialNames.end()) {
+    if (npcGen.isSpecialCharacter(newNPC.name)) {
         player.hiredSpecialCharacters.insert(newNPC.name);
         player.hasNewDictionaryEntry = true;
     }

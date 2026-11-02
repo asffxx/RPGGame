@@ -15,7 +15,7 @@
 #include "gameplay/guild.hpp"
 #include "world/quest_system.hpp"
 #include "world/story_types.hpp"
-#include "core/ids.hpp"
+#include "catalogs/content_ids.hpp"
 #ifdef _WIN32
 #define NOMINMAX
 #include <windows.h>

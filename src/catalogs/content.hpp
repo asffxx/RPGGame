@@ -8,8 +8,8 @@
 #include <set>
 #include <stdexcept>
 #include <type_traits>
-#include "core/ids.hpp"
-#include "core/paths.hpp"
+#include "catalogs/content_ids.hpp"
+#include "catalogs/content_paths.hpp"
 #include "gameplay/datafile.hpp"
 #include "catalogs/equipment.hpp"
 #include "catalogs/potion.hpp"
@@ -202,5 +202,22 @@ template<class T> const std::vector<T>& catalog(const std::string& filename, boo
 }
 
 // Validates references after leaf catalogs load, avoiding constructor cycles.
-void validateCatalogs();
+inline void validateCatalogs() {
+    catalog<EquipmentandWeaponDatabase::equipmentProperties>("items/equipment.json");
+    catalog<PotionDatabase::potionProperties>("items/potions.json");
+    catalog<FoodandDrinksDatabase::FoodsandDrinksProperties>("items/food.json");
+    catalog<SpellDatabase::SpellData>("items/spells.json");
+    catalog<PlayerClassTemplate>("characters/classes.json");
+    catalog<PlayerRaceTemplate>("characters/races.json");
+    catalog<SignatureAbility>("characters/skills.json");
+    catalog<locationDatabase::locationProperties>("world/locations.json");
+    catalog<EnemyDatabase::EnemyTemplate>("world/enemies.json");
+    catalog<DebuffDatabase::DebuffDefinition>("world/debuffs.json");
+    catalog<eventDatabase::eventProperties>("world/events.json");
+    catalog<GuildDefinition>("narrative/guilds.json");
+    catalog<RumorDefinition>("narrative/rumors.json");
+    catalog<QuestDefinition>("narrative/sidequests.json");
+    catalog<QuestDefinition>("narrative/commissions.json");
+    catalog<QuestDefinition>("narrative/mainquests.json", true);
+}
 } // namespace content

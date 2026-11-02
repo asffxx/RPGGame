@@ -4,10 +4,10 @@
 #include <string>
 
 // Locates the JSON content directory. A single binary cannot carry the data
-// files, so release builds ship `data/` next to the executable.
+// files, so release builds ship content/ next to the executable.
 namespace paths {
 
-// Explicit RPG_DATA_DIR environment override (even if missing), then `data`
+// Explicit RPG_CONTENT_DIR environment override (even if missing), then `content`
 // under the working directory, then the build-time source directory.
 std::filesystem::path dataDir();
 

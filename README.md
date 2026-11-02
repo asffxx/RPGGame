@@ -2,7 +2,7 @@
 
 A command-line RPG written in C++.
 
-**Current source release: v3.4.0** · [Development log and version history](DEVLOG.md)
+**Current source release: v3.4.2** · [Development log and version history](DEVLOG.md)
 
 The original v1 game is preserved on the [`v1` branch](https://github.com/asffxx/RPGGame/tree/v1).
 Use `main` for the current game.
@@ -105,10 +105,11 @@ Enter a name during creation; some inventory prompts use `y`/`n`.
   or the material's listed copper value. Unequip the last copy before selling it.
   Existing saves above capacity still load; sell or consume items to make room.
 
-Recipes and materials load at startup from `content/recipes.json` and
-`content/materials.json`. Editing content needs a restart, not a rebuild. Syntax
-errors report file, line, and column; schema errors report file and field.
-Missing or invalid required files stop startup. See [data schemas](content/README.md).
+Recipes and materials load at startup from `content/crafting/recipes.json` and
+`content/crafting/materials.json`; all other catalogs load from `content/` as
+well. Editing content needs a restart, not a rebuild. Syntax errors report file,
+line, and column; schema errors report file and field. Missing or invalid
+required files stop startup. See [content schemas](content/README.md).
 
 ## Combat
 
@@ -159,11 +160,10 @@ the next retaliation and never modify permanent stats.
 
 ### Prebuilt binaries
 
-Standalone builds for **v3.2.1** are in [`dist/`](dist/). Rebuild them for
-v3.4.0 at the release step:
+Standalone builds for **v3.4.2** are in [`dist/`](dist/):
 
-- `RPGGame-v3.2.1-windows-x64.exe` — Windows 10/11 x64 console executable.
-- `RPGGame-v3.2.1-linux-x86_64` — statically linked Linux x86_64 executable.
+- `RPGGame-v3.4.2-windows-x64.exe` — Windows 10/11 x64 console executable.
+- `RPGGame-v3.4.2-linux-x86_64` — Linux x86_64 executable.
 
 Neither needs an installer, runtime, or extra DLLs. Run the file from a writable
 directory; saves go to `savegame.dat` in the current working directory. See
@@ -177,9 +177,9 @@ directory; saves go to `savegame.dat` in the current working directory. See
 
 ### Build & Run
 
-Version 3.4.0 distributions must include `content/`. Run from the folder containing
-it, or set `RPG_DATA_DIR` to its absolute path. Lookup order: explicit environment
-override, working-directory `content/`, then the build-time source data directory.
+Version 3.4.2 distributions must include `content/`. Run from the folder containing
+it, or set `RPG_CONTENT_DIR` to its absolute path. Lookup order: explicit environment
+override, working-directory `content/`, then the build-time source content directory.
 An invalid explicit override fails rather than falling back silently.
 
 **Linux / macOS:**
@@ -205,29 +205,11 @@ build with `cmake --build build --config Release` in that case.
 Without CMake, you can compile directly:
 
 ```sh
-g++ -std=c++17 -Isrc $(find src -name '*.cpp' ! -name 'enemy_data.cpp') -o rpg
+g++ -std=c++17 -Isrc $(find src -name '*.cpp') -o rpg
 ```
 
-`src/catalogs/enemy_data.cpp` must be excluded: it is `#include`d by
-`src/entities/enemy.cpp`, so compiling it separately causes duplicate symbols.
-
-### Tests
-
-```sh
-cmake -B build -S . -DBUILD_TESTING=ON
-cmake --build build
-ctest --test-dir build --output-on-failure
-```
-
-Tests cover full session round trips and invalid saves, class abilities,
-location eligibility, combat menus, all guild quest transitions, rumor discovery,
-version-1/2 save migration, all 40 new job definitions, unlock requirements,
-repeat cycles, one-time payouts, and interactive guild/board/tavern/travel flows.
-The 15-test suite includes terminal rendering and character reselection,
-Save/Continue across process restarts, and load errors. CLI checks use a CMake
-script; no Python scripts or Python dependency are required.
-For multi-configuration Windows builds, pass `-C Release` to CTest after
-building with `--config Release`.
+Run the resulting binary from the repository root so it finds `content/`, or set
+`RPG_CONTENT_DIR` to the content directory's absolute path.
 
 ## Gameplay Loop
 
@@ -284,7 +266,7 @@ quests, saving, and marking routes do not advance time.
 
 The five new cities use the `PeacefulCity` location type. Each has a store,
 tavern, magic store, and guild hall. Cities are discoverable by random travel
-or by following a tavern clue. The Royal Capital is always referred to by that
+or by following a tavern clue. Ariandel, The Royal Capital is always referred to by that
 title in game.
 
 | City | Guild | Two-quest storyline |
@@ -292,7 +274,7 @@ title in game.
 | Attania | Ironward Company | The Silent Patrol → Tracks in the Grove |
 | Erden | Lantern Scholars | Scattered Pages → The Unquiet Archive |
 | Trisselie | Silverthread Consortium | An Unbalanced Ledger → The Last Delivery |
-| The Royal Capital | Crownward Order | A Courier's Promise → The Stolen Seal |
+| Ariandel, The Royal Capital | Crownward Order | A Courier's Promise → The Stolen Seal |
 | Velmora | Tidebound Fellowship | Beyond the Last Chart → A Treasure with Teeth |
 
 ### Following a rumor
@@ -458,7 +440,7 @@ Shrewd Diplomat, Travelling Merchant, Sheltered Noble, Prisoner.
 - `src/gameplay/rumor.cpp`: eligible rumor pools, random selection, repeat
   avoidance, and unlocking city leads.
 - `src/world/travel.cpp`: lead selection and once-only arrival/discovery credit.
-- `src/gameplay/save.cpp`: version-3 serialization, version-1/2 migration, and
+- `src/gameplay/save.cpp`: version-4 serialization, version-1/2/3 migration, and
   validation of guild/quest/rumor state.
 
 ### Shared quest handling (`src/world/`)
@@ -501,13 +483,15 @@ under `src/`:
 ```
 src/
   app/        main menu loop and all text output
+  catalogs/   JSON-backed catalog loaders and content path/id helpers
   combat/     combatants, damage calculation, fight loop
-  core/       stats, economy, time, UI primitives
-  content/       static catalogs (races, classes, skills, items, enemies, events, guilds, rumors)
+  core/       stats, economy, time, UI primitives, version
   entities/   Player, Enemy, NPC and their generators
-  systems/    inventory, events, party, dictionary, guilds, rumors, saves
+  gameplay/   inventory, events, party, dictionary, guilds, rumors, saves
   ui/         menu rendering and the player stat panel
-  world/      travel, establishments, quest categories and shared quest handling
+  world/      travel, establishments, crafting, encounters, quest categories
+              and shared quest handling
+content/      runtime JSON catalogs (characters, items, crafting, narrative, world)
 ```
 
 ## Disclaimer

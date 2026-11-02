@@ -1,4 +1,4 @@
-#include "paths.hpp"
+#include "content_paths.hpp"
 
 #include <cstdlib>
 
@@ -10,6 +10,7 @@ std::filesystem::path dataDir() {
         std::filesystem::path candidate(env);
         return candidate;
     }
+    const std::filesystem::path local("content");
     if (std::filesystem::is_directory(local, ignored)) return local;
 #ifdef RPG_CONTENT_DIR
     {

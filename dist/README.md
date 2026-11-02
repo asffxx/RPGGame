@@ -1,33 +1,33 @@
-# RPGGame v3.2.1 prebuilt binaries
+# RPGGame v3.4.2 prebuilt binaries
 
 Standalone console builds. No installer, runtime, or DLL files are required.
 
 | Platform | File |
 | --- | --- |
-| Windows 10/11 x64 | `RPGGame-v3.2.1-windows-x64.exe` |
-| Linux x86_64 | `RPGGame-v3.2.1-linux-x86_64` |
+| Linux x86_64 | `RPGGame-v3.4.2-linux-x86_64` |
+| Windows 10/11 x64 | `RPGGame-v3.4.2-windows-x64.exe` |
 
 ## Run
-
-Windows (PowerShell or cmd):
-
-```powershell
-.\RPGGame-v3.2.1-windows-x64.exe
-```
 
 Linux:
 
 ```sh
-chmod +x RPGGame-v3.2.1-linux-x86_64
-./RPGGame-v3.2.1-linux-x86_64
+chmod +x RPGGame-v3.4.2-linux-x86_64
+./RPGGame-v3.4.2-linux-x86_64
 ```
 
-Run from a writable directory. Saves are written to `savegame.dat` in the
-current working directory, not next to the executable.
+Windows (PowerShell or cmd):
 
-The game needs an 80-column terminal. It uses plain text when output is
-redirected or `TERM=dumb`; set `NO_COLOR=1` to disable colors in an interactive
-terminal.
+```powershell
+.\RPGGame-v3.4.2-windows-x64.exe
+```
+
+Run from a writable directory alongside the `content/` folder.
+Saves are written to `savegame.dat` in the current working directory.
+
+The game needs an 80-column terminal. Use `NO_COLOR=1` to disable colors,
+or set `TERM=dumb` for plain text output. Set `RPG_CONTENT_DIR=/path/to/content`
+to override the default content directory location.
 
 ## Verify
 
@@ -38,10 +38,11 @@ sha256sum -c SHA256SUMS
 On Windows:
 
 ```powershell
-Get-FileHash .\RPGGame-v3.2.1-windows-x64.exe -Algorithm SHA256
+Get-FileHash .\RPGGame-v3.4.2-windows-x64.exe -Algorithm SHA256
 ```
 
 ## Build from source
 
-See `README.md` in the repository root. The Linux build is statically linked.
-The Windows build is a static MinGW-w64 x64 console executable.
+See `README.md` in the repository root for build instructions.
+The Linux build links libgcc and libstdc++ statically; no runtime required.
+The Windows build is a fully static MinGW-w64 x64 console executable.

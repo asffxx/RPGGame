@@ -5,8 +5,8 @@
 #include <stdexcept>
 
 #include "app/display.hpp"
-#include "core/ids.hpp"
-#include "core/paths.hpp"
+#include "catalogs/content_ids.hpp"
+#include "catalogs/content_paths.hpp"
 #include "core/ui.hpp"
 #include "catalogs/guild.hpp"
 #include "gameplay/datafile.hpp"

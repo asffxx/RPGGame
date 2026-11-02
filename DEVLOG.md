@@ -3,6 +3,54 @@
 RPGGame's development history, newest milestone first. Entries describe shipped
 source changes and link to the commits behind earlier milestones.
 
+## v3.4.2 — Content JSON migration and catalog infrastructure relocation
+
+**Date:** 2026-11-03 — source changes uncommitted in Git; release artifacts rebuilt.
+
+- Migrated all remaining authored game content to `content/`, making JSON the
+  sole source of truth for narrative and NPC data:
+  - `content/narrative/guilds.json` — 5 guilds, 10 embedded storyline quests.
+  - `content/narrative/rumors.json` — 15 rumors (5 road leads, 10 tavern).
+  - `content/narrative/sidequests.json` — 20 side quests.
+  - `content/narrative/commissions.json` — 20 repeatable commissions.
+  - `content/narrative/mainquests.json` — empty main-quest catalog (reserved).
+  - `content/characters/npc_pools.json` — name pools, special characters,
+    backstories, dialogue lines, starter items.
+- Updated all catalog C++ loaders (`guild.cpp`, `rumor.cpp`, `sidequests.cpp`,
+  `commissions.cpp`, `quest.cpp`, `npc.cpp`, `establishments.cpp`) to read from
+  `content/` via `content::catalog<T>()`; all hardcoded vectors removed.
+- Relocated `src/core/ids.cpp/.hpp` → `src/catalogs/content_ids.cpp/.hpp` and
+  `src/core/paths.cpp/.hpp` → `src/catalogs/content_paths.cpp/.hpp`. Content
+  infrastructure now lives beside the catalog layer it serves. `src/core/` is
+  engine-only (economy, stats, timesystem, ui).
+- Updated all callers (`content.hpp`, `material.cpp`, `crafting.cpp`, `save.cpp`,
+  `npc.cpp`, `crafting_tests.cpp`, `data_tests.cpp`) to include the new paths
+  directly. No forwarding headers left behind.
+- Updated `CMakeLists.txt`: removed `src/core/ids.cpp` and `src/core/paths.cpp`;
+  added `src/catalogs/content_ids.cpp` and `src/catalogs/content_paths.cpp`.
+- Bumped the project version to 3.4.2 in `CMakeLists.txt` and
+  `src/core/version.hpp`, and synced the README release line.
+- Rebuilt the v3.4.2 release artifacts with `scripts/build.sh`: Linux x86_64
+  and Windows x64 (MinGW-w64). Updated `dist/README.md` and `SHA256SUMS`;
+  both binaries launch and report v3.4.2.
+- Corrected stale documentation in `README.md` and `content/README.md`:
+  `RPG_CONTENT_DIR` (not `RPG_DATA_DIR`), current `content/` paths, the 23-test
+  suite, `src/catalogs/` and `src/gameplay/` layout, save format 4, and
+  JSON-sourced catalog ids.
+
+## v3.4.1 — Project structure refactor
+
+**Date:** 2026-11-01
+
+- Renamed `data/` to `content/` and reorganized JSON files into subdirectories
+  (`crafting/`, `narrative/`, `characters/`, `world/`, `items/`).
+- Renamed `src/systems/` to `src/gameplay/` and `src/content/` to `src/catalogs/`.
+- Renamed `src/ui/display.cpp` to `src/app/display.cpp`.
+- Moved `src/gameplay/datafile.*` to `src/gameplay/datafile.*`.
+- Updated all C++ include paths, CMake configurations, and JSON loader paths.
+- Updated path resolution to use `content/` instead of `data/`.
+- Verified build and 23/23 tests pass; verified catalog snapshot consistency.
+
 ## v3.4.0 — Crafting, material drops, backpack, and selling
 
 **Date:** 2026-11-01 — source changes, uncommitted; no release artifacts rebuilt.
@@ -128,7 +176,7 @@ guild storylines, discoverable jobs, and more distinct character choices.
 
 ### Cities, guilds, and discovery
 
-- Added five peaceful cities: Attania, Erden, Trisselie, The Royal Capital,
+- Added five peaceful cities: Attania, Erden, Trisselie, Ariandel, The Royal Capital,
   and Velmora.
 - Added five guilds with two storyline quests each. A character can join all five.
 - Added randomized tavern rumors, city travel leads, and quest hints.
@@ -223,15 +271,3 @@ save-compatibility changes increment MAJOR, backward-compatible features increme
 MINOR, and backward-compatible fixes increment PATCH. Save-format numbers are
 separate from game release versions. Add each release entry at the top of this log.
 
-## v3.4.1 — Project structure refactor
-
-**Date:** 2026-11-01 — Refactored directory structure.
-
-- Renamed root  to  and reorganized JSON files into subdirectories (, , , , ).
-- Renamed  to  and  to .
-- Renamed  to .
-- Moved  to .
-- Updated all C++ include paths, CMake configurations, and JSON loader paths in source and tests to reflect these changes.
-- Updated path resolution to use  instead of .
-- Verified build and 23/23 tests pass.
-- Verified catalog snapshot consistency.

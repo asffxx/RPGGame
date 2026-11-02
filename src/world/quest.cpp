@@ -1,6 +1,7 @@
 #include "quest.hpp"
+#include "catalogs/content.hpp"
 
 const std::vector<QuestDefinition>& mainQuests() {
-    static const std::vector<QuestDefinition> quests;
-    return quests;
+    return content::catalog<QuestDefinition>("narrative/mainquests.json", true);
 }
+

@@ -35,9 +35,9 @@ public:
 
     NPC generateNPC(int playerLevel);
 
+    bool isSpecialCharacter(const std::string& name) const;
+    const std::vector<std::string>& getSpecialCharacters() const;
+
 private:
-    const std::vector<std::string> firstNames;
-    const std::vector<std::string> lastNames;
-    const std::vector<std::string> specialCharacters;
     std::set<std::string> lockedNames;
 };

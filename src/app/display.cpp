@@ -20,7 +20,7 @@ void invalidChoice() {
 
 // --- Time system (core/timesystem) ---
 void sleepPenalty() {
-    std::cout << "[!] Your vision blurs. The shadows of 'The Lands Between' seem longer than usual." << std::endl;
+    std::cout << "[!] You got sleep deprived and fell face down, thats a bummer." << std::endl;
 }
 
 // --- Enemies (entities/enemy) ---

@@ -1,18 +1,21 @@
 
-# CMake build directories
+# ── Build output ─────────────────────────────────────────────────────────────
 /build/
+/build-win/
 /cmake-build-*/
 /out/
 
-# CMake generated files
+# CMake generated files (kept out of source tree)
 CMakeFiles/
 CMakeCache.txt
 cmake_install.cmake
-compile_commands.json
 CTestTestfile.cmake
 Testing/
 
-# Compiled files
+# compile_commands.json is generated per-machine; clangd reads it from build/
+compile_commands.json
+
+# ── Compiled / linked artefacts ───────────────────────────────────────────────
 *.o
 *.obj
 *.a
@@ -20,14 +23,44 @@ Testing/
 *.dll
 *.exe
 
-# Temporary files
+# ── Distribution binaries ─────────────────────────────────────────────────────
+# Built by hand at release time; not committed between releases.
+/dist/
+
+# ── Runtime data ──────────────────────────────────────────────────────────────
+# Player save file lives next to the executable, never in the repo.
+savegame.dat
+
+# Scratch / test output directories written by CTest runs
+/crafting-tests/
+/data-tests/
+/cli-test/
+
+# ── Python ────────────────────────────────────────────────────────────────────
+# scripts/ is tracked; its bytecode cache is not.
+__pycache__/
+*.py[cod]
+*.pyo
+
+# ── Temporary / editor ────────────────────────────────────────────────────────
 *.tmp
 *.swp
 *~
 .DS_Store
 Thumbs.db
 
-# IDE files
+# ── IDE / tooling ─────────────────────────────────────────────────────────────
 .vscode/
 .idea/
 .cache/
+*.user
+
+# ── Obsidian vault ────────────────────────────────────────────────────────────
+# Keep the local Obsidian vault out of version control.
+/RPGDOCS/
+
+# ── Development-only material ────────────────────────────────────────────────
+# Local documentation, helper scripts, and tests stay off release branches.
+/docs/
+/scripts/
+/tests/

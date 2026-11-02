@@ -18,7 +18,7 @@ A strict JSON subset:
 
 Errors name the file, line, and column, for example:
 
-    data/recipes.json: line 12, column 5: expected ':'
+    content/crafting/recipes.json: line 12, column 5: expected ':'
 
 ## Identifiers
 
@@ -28,9 +28,9 @@ Every record has an `id`:
 - starts with a letter, does not end with an underscore
 - unique within its file
 
-`src/core/ids.cpp` derives ids from display names for the existing C++
-catalogs, so `Iron Sword` becomes `iron_sword`. Duplicate names get `_2`, `_3`
-in catalog order. New data files state ids explicitly.
+Every catalog record states its `id` explicitly in JSON. The loaders validate
+each id with `src/catalogs/content_ids.cpp` and reject duplicates within a
+catalog. The `Iron Sword` item, for example, uses the id `iron_sword`.
 
 Records reference each other by id, never by array position:
 
@@ -58,8 +58,8 @@ accepts an empty catalog hides a missing export.
 
 ## Runtime loading
 
-`RPG_DATA_DIR` explicitly selects a directory. Otherwise the game prefers `data/`
-in its working directory, then the build-time source directory. Both catalogs
+`RPG_CONTENT_DIR` explicitly selects a directory. Otherwise the game prefers
+`content/` in its working directory, then the build-time source directory. Both catalogs
 must load successfully before the title screen. They are cached until restart.
 Schema errors identify the file and field; only syntax errors include positions.
 
@@ -84,7 +84,7 @@ Root: `{ "recipes": [...] }`. Each record requires `id`, `name`, `station`,
 `inputs`, `output`, and `unlock`. Station is `forge`, `alchemy`, or `kitchen`.
 Inputs are a nonempty array of `{ "item": "iron_ore", "quantity": 3 }`;
 output has the same shape. Quantities are integers 1..1000. Inputs cannot repeat
-an id. Items resolve across materials and the compiled equipment, potion, and
+an id. Items resolve across materials and the JSON equipment, potion, and
 food catalogs.
 
 Unlocks are `{ "type": "always" }` or `{ "type": "guild", "id": "ironward" }`,
@@ -96,12 +96,13 @@ dialogue/story definitions arrive in later phases.
 
 ## Reference rules
 
-- Items: ids from `src/catalogs/equipment.cpp`, `potion.cpp`, and `food.cpp`.
-- Enemies: ids from `src/catalogs/enemy_data.cpp`.
-- Locations: ids from `src/catalogs/location.cpp`.
-- Quests: ids from `src/world/sidequests.cpp`, `commissions.cpp`, and
-  `guild_quest.cpp`.
-- Factions: guild ids from `src/catalogs/guild.cpp`.
+- Items: ids from `content/items/equipment.json`, `content/items/potions.json`,
+  and `content/items/food.json`.
+- Enemies: ids from `content/world/enemies.json`.
+- Locations: ids from `content/world/locations.json`.
+- Quests: ids from `content/narrative/sidequests.json`,
+  `content/narrative/commissions.json`, and `content/narrative/guilds.json`.
+- Factions: guild ids from `content/narrative/guilds.json`.
 
 `tests/data_tests.cpp` proves every catalog id is valid and unique. A rename
 that changes an id breaks saves on purpose; add a migration instead.

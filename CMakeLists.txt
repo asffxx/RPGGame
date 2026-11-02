@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(RPGGame VERSION 3.4.0 LANGUAGES CXX)
+project(RPGGame VERSION 3.4.2 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -14,9 +14,6 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
 endif()
 
-# NOTE: src/catalogs/enemy_data.cpp is deliberately NOT listed here.
-# It is textually #include'd by src/entities/enemy.cpp, so compiling it as a
-# separate translation unit produces duplicate-symbol link errors.
 add_library(rpg_core
     src/app/display.cpp
     src/app/main_menu.cpp
@@ -25,12 +22,12 @@ add_library(rpg_core
     src/combat/abilities.cpp
 
     src/core/economy.cpp
-    src/core/ids.cpp
-    src/core/paths.cpp
     src/core/stats.cpp
     src/core/timesystem.cpp
     src/core/ui.cpp
 
+    src/catalogs/content_ids.cpp
+    src/catalogs/content_paths.cpp
     src/catalogs/class.cpp
     src/catalogs/class_skill.cpp
     src/catalogs/guild.cpp
@@ -86,7 +83,7 @@ else()
 endif()
 
 include(CTest)
-if(BUILD_TESTING)
+if(BUILD_TESTING AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tests/game_tests.cpp")
     add_executable(rpg_catalog_snapshot tests/catalog_snapshot.cpp)
     target_link_libraries(rpg_catalog_snapshot PRIVATE rpg_core)
     add_executable(rpg_crafting_tests tests/crafting_tests.cpp)
