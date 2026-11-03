@@ -1,5 +1,6 @@
 #include "main_menu.hpp"
 #include "world/dialogue.hpp"
+#include "world/story_board.hpp"
 
 #include <iostream>
 #include <map>
@@ -67,6 +68,10 @@ void mainMenu(GameSession& session, bool debugMode) {
         categories["Character"].push_back(items.size() - 1);
         items.push_back({"Quest Journal", "Review quests, commissions, and city leads.", [&]() { showQuestJournal(session); }});
         categories["Character"].push_back(items.size() - 1);
+
+        categories["Story"] = {};
+        items.push_back({"Story Board", "Review the act, its beats, open threads, and remembered choices.", [&]() { openStoryBoard(session); }});
+        categories["Story"].push_back(items.size() - 1);
 
         bool isCity = hero.currentLocationType == PeacefulCity;
         bool hasStore = hero.currentLocationType == PeacefulVillage || hero.currentLocationType == PeacefulTown || isCity;

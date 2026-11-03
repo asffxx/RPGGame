@@ -4,14 +4,9 @@
 #include <string>
 #include <vector>
 
-struct GameSession;
+#include "world/conditions.hpp"
 
-struct DialogueRule {
-    std::string type;
-    std::string id;
-    std::string state;
-    int value = 0;
-};
+struct GameSession;
 
 struct DialogueChoice {
     std::string id;
@@ -19,8 +14,8 @@ struct DialogueChoice {
     std::string next;
     std::string result;
     bool once = false;
-    std::vector<DialogueRule> conditions;
-    std::vector<DialogueRule> effects;
+    std::vector<ConditionRule> conditions;
+    std::vector<ConditionRule> effects;
 };
 
 struct DialogueNode {
@@ -34,6 +29,8 @@ struct DialogueResident {
     std::string name;
     std::string city;
     std::string role;
+    std::string concern;
+    std::string concernFlag;
     std::string entry;
     std::vector<DialogueNode> nodes;
     const DialogueNode* node(const std::string& id) const;

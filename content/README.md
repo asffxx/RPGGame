@@ -6,6 +6,7 @@ This folder contains the people, places, items, and stories used by RPGGame.
 - **items/** — equipment, food, potions, and spells.
 - **crafting/** — materials and recipes.
 - **narrative/** — guilds, quests, rumors, and conversations.
+- **story/** — the story board's acts and beats.
 - **world/** — locations, enemies, events, and harmful effects.
 
 Keep this folder with the game when downloading or moving it.

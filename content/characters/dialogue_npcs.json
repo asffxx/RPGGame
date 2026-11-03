@@ -4,91 +4,121 @@
       "id": "mara",
       "name": "Mara",
       "city": "Attania",
-      "role": "Ironward roadwarden"
+      "role": "Ironward roadwarden",
+      "concern": "A volunteer's route",
+      "concernFlag": "mara_decision"
     },
     {
       "id": "bren",
       "name": "Bren",
       "city": "Attania",
-      "role": "Smith"
+      "role": "Smith",
+      "concern": "The school stove and council fittings",
+      "concernFlag": "bren_decision"
     },
     {
       "id": "lysa",
       "name": "Lysa",
       "city": "Attania",
-      "role": "Community baker"
+      "role": "Community baker",
+      "concern": "Bread money and public thanks",
+      "concernFlag": "lysa_decision"
     },
     {
       "id": "iven",
       "name": "Iven",
       "city": "Erden",
-      "role": "Lantern archivist"
+      "role": "Lantern archivist",
+      "concern": "Credit for an apprentice's correction",
+      "concernFlag": "iven_decision"
     },
     {
       "id": "sella",
       "name": "Sella",
       "city": "Erden",
-      "role": "Apothecary"
+      "role": "Apothecary",
+      "concern": "Which lesson to teach first",
+      "concernFlag": "sella_decision"
     },
     {
       "id": "perrin",
       "name": "Perrin",
       "city": "Erden",
-      "role": "Lamplighter"
+      "role": "Lamplighter",
+      "concern": "Lamp glass for stalls or courtyard",
+      "concernFlag": "perrin_decision"
     },
     {
       "id": "tessa",
       "name": "Tessa",
       "city": "Trisselie",
-      "role": "Silverthread market steward"
+      "role": "Silverthread market steward",
+      "concern": "A late cart's fee",
+      "concernFlag": "tessa_decision"
     },
     {
       "id": "daro",
       "name": "Daro",
       "city": "Trisselie",
-      "role": "Dyer and remedy seller"
+      "role": "Dyer and remedy seller",
+      "concern": "Strong or mild batch",
+      "concernFlag": "daro_decision"
     },
     {
       "id": "edda",
       "name": "Edda",
       "city": "Trisselie",
-      "role": "Parcel porter"
+      "role": "Parcel porter",
+      "concern": "Paying for a shared handcart",
+      "concernFlag": "edda_decision"
     },
     {
       "id": "oren",
       "name": "Oren",
       "city": "Ariandel, The Royal Capital",
-      "role": "Crownward public clerk"
+      "role": "Crownward public clerk",
+      "concern": "A widow's permit witness",
+      "concernFlag": "oren_decision"
     },
     {
       "id": "halwen",
       "name": "Halwen",
       "city": "Ariandel, The Royal Capital",
-      "role": "Public workshop armorer"
+      "role": "Public workshop armorer",
+      "concern": "Contest entry or tool maintenance",
+      "concernFlag": "halwen_decision"
     },
     {
       "id": "mina",
       "name": "Mina",
       "city": "Ariandel, The Royal Capital",
-      "role": "Courtyard gardener"
+      "role": "Courtyard gardener",
+      "concern": "Roses or kitchen herbs",
+      "concernFlag": "mina_decision"
     },
     {
       "id": "nella",
       "name": "Nella",
       "city": "Velmora",
-      "role": "Tidebound ferry keeper"
+      "role": "Tidebound ferry keeper",
+      "concern": "Ferry repair schedule",
+      "concernFlag": "nella_decision"
     },
     {
       "id": "corin",
       "name": "Corin",
       "city": "Velmora",
-      "role": "Dockside cook and herbalist"
+      "role": "Dockside cook and herbalist",
+      "concern": "Credit for a visiting cook's recipe",
+      "concernFlag": "corin_decision"
     },
     {
       "id": "suri",
       "name": "Suri",
       "city": "Velmora",
-      "role": "Net mender"
+      "role": "Net mender",
+      "concern": "Festival lantern design",
+      "concernFlag": "suri_decision"
     }
   ]
 }

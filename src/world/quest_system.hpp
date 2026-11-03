@@ -9,6 +9,7 @@ class CombatSystem;
 class NPCGenerator;
 
 const char* questCategoryName(QuestCategory category);
+std::string questStatusLabel(const GameSession& session, const QuestDefinition& quest);
 const std::vector<QuestDefinition>& allQuests();
 const QuestDefinition* findQuest(const std::string& id);
 QuestProgress questProgress(const GameSession& session, const std::string& id);

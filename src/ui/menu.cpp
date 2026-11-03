@@ -27,7 +27,7 @@ void Menu::displayAndExecute() {
 
 std::vector<std::string> Menu::visibleCategories() const {
     std::vector<std::string> result;
-    for (const auto& name : {"Character", "Local Establishments", "Actions", "System"}) {
+    for (const auto& name : {"Character", "Story", "Local Establishments", "Actions", "System"}) {
         auto found = categories.find(name);
         if (found != categories.end() && !found->second.empty()) result.push_back(name);
     }

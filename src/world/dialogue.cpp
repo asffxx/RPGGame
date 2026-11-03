@@ -54,48 +54,6 @@ bool known(const GameSession& s, const std::string& id) {
     return std::find(s.story.knownRecipes.begin(), s.story.knownRecipes.end(), id) != s.story.knownRecipes.end();
 }
 
-DialogueRule rule(const Value& value, bool effect, const PlayerInventory& inventory) {
-    fields(value, {"type", "id", "state", "value"});
-    DialogueRule r;
-    r.type = text(value, "type");
-    r.id = identifier(value, "id");
-    r.state = optionalText(value, "state");
-    r.value = value.has("value") ? value.at("value").integer() : 0;
-    const std::set<std::string> effects = {"flag", "item", "quest", "standing", "recipe"};
-    const std::set<std::string> conditions = {"flag", "item", "quest", "standing", "recipe", "choice", "class", "race"};
-    require((effect ? effects : conditions).count(r.type), "unknown rule type: " + r.type);
-    if (r.type == "flag" || r.type == "standing" || r.type == "item")
-        require(value.has("value"), "rule requires value: " + r.type);
-    if (r.type == "flag") {
-        if (!effect) require(r.state == "eq" || r.state == "ne" || r.state == "gte", "flag requires eq/ne/gte state");
-    } else if (r.type == "standing") {
-        require(guildDatabase().find(r.id), "unknown guild: " + r.id);
-        require(r.value >= -100 && r.value <= 100, "standing value outside -100..100");
-    } else if (r.type == "item") {
-        PlayerInventory::ItemType type;
-        size_t index;
-        require(inventory.resolveItemId(r.id, type, index), "unknown item: " + r.id);
-        require(r.value > 0 && r.value <= 1000, "item quantity outside 1..1000");
-    } else if (r.type == "quest") {
-        require(findQuest(r.id), "unknown quest: " + r.id);
-        if (!effect) require(r.state == "available" || r.state == "active" || r.state == "objective" || r.state == "completed", "invalid quest state");
-    } else if (r.type == "recipe") {
-        require(craftingDatabase().find(r.id), "unknown recipe: " + r.id);
-        if (!effect) require(r.state == "known" || r.state == "unknown", "invalid recipe state");
-    } else if (r.type == "class") {
-        require(PlayerClassCollection().findById(r.id), "unknown class: " + r.id);
-    } else if (r.type == "race") {
-        require(PlayerRaceDatabase().findById(r.id), "unknown race: " + r.id);
-    } else if (r.type == "choice") {
-        require(r.state == "recorded" || r.state == "unrecorded", "invalid choice state");
-    }
-    const bool needsState = !effect && (r.type == "flag" || r.type == "quest" || r.type == "recipe" || r.type == "choice");
-    require(needsState || !value.has("state"), "unexpected state on " + r.type);
-    const bool needsValue = r.type == "flag" || r.type == "standing" || r.type == "item";
-    require(needsValue || !value.has("value"), "unexpected value on " + r.type);
-    return r;
-}
-
 int input(size_t maximum) {
     std::string line;
     while (std::getline(std::cin, line)) {
@@ -143,7 +101,7 @@ bool DialogueDatabase::load(const std::filesystem::path& root, std::string& erro
         std::set<std::string> residents;
         for (const auto& entry : roster.at("residents").array()) {
             where = (root / "characters/dialogue_npcs.json").string();
-            fields(entry, {"id", "name", "city", "role"});
+            fields(entry, {"id", "name", "city", "role", "concern", "concernFlag"});
             DialogueResident npc;
             npc.id = identifier(entry, "id");
             require(residents.insert(npc.id).second, "duplicate resident id: " + npc.id);
@@ -151,6 +109,12 @@ bool DialogueDatabase::load(const std::filesystem::path& root, std::string& erro
             npc.city = text(entry, "city");
             npc.role = text(entry, "role");
             require(guildDatabase().inCity(npc.city), "unknown city: " + npc.city);
+            const bool hasConcern = entry.has("concern");
+            require(hasConcern == entry.has("concernFlag"), "concern and concernFlag must appear together");
+            if (hasConcern) {
+                npc.concern = text(entry, "concern");
+                npc.concernFlag = identifier(entry, "concernFlag");
+            }
             where = (root / "narrative/dialogues" / (npc.id + ".json")).string();
             const auto graph = read(where);
             fields(graph, {"entry", "nodes"});
@@ -174,8 +138,8 @@ bool DialogueDatabase::load(const std::filesystem::path& root, std::string& erro
                     require(choice.result.size() <= 4096, "consequence text too long");
                     choice.once = item.has("once") && item.at("once").boolean();
                     require(choices.insert(choice.id).second, "duplicate choice: " + choice.id);
-                    if (item.has("conditions")) for (const auto& v : item.at("conditions").array()) choice.conditions.push_back(rule(v, false, inventory));
-                    if (item.has("effects")) for (const auto& v : item.at("effects").array()) choice.effects.push_back(rule(v, true, inventory));
+                    if (item.has("conditions")) for (const auto& v : item.at("conditions").array()) choice.conditions.push_back(parseRule(v, false, inventory));
+                    if (item.has("effects")) for (const auto& v : item.at("effects").array()) choice.effects.push_back(parseRule(v, true, inventory));
                     require(choice.effects.size() <= 32 && choice.conditions.size() <= 32, "too many rules");
                     require(choice.effects.empty() || choice.once, "effectful choices must be once-only");
                     require(!choice.once || !choice.result.empty(), "once-only choices require consequence text");
@@ -224,36 +188,8 @@ std::string dialogueLockReason(const GameSession& s, const DialogueResident& npc
     if (s.hero.stats.hitpoints <= 0) return "You must be alive to speak.";
     if (c.once && recorded(s, npc.id, c.id)) return "Already decided.";
     for (const auto& r : c.conditions) {
-        bool pass = false;
-        if (r.type == "flag") {
-            const auto* f = s.story.flag(r.id);
-            int v = f ? f->value : 0;
-            pass = r.state == "eq" ? v == r.value : r.state == "ne" ? v != r.value : v >= r.value;
-        } else if (r.type == "standing") pass = s.story.standing(r.id) >= r.value;
-        else if (r.type == "item") {
-            PlayerInventory::ItemType type; size_t index;
-            pass = s.inventory.resolveItemId(r.id, type, index) && s.inventory.countItem(type, index) >= r.value;
-        } else if (r.type == "recipe") pass = known(s, r.id) == (r.state == "known");
-        else if (r.type == "choice") pass = recorded(s, npc.id, r.id) == (r.state == "recorded");
-        else if (r.type == "class") pass = s.hero.playerClass.id == r.id;
-        else if (r.type == "race") {
-            PlayerRaceDatabase races;
-            const auto* entry = races.findById(r.id);
-            pass = entry && entry->name == s.hero.race.name;
-        } else if (r.type == "quest") {
-            auto p = questProgress(s, r.id);
-            if (r.state == "active") pass = p.active;
-            else if (r.state == "objective") pass = p.objectiveComplete;
-            else if (r.state == "completed") pass = p.completions > 0;
-            else { auto staged = s; pass = acceptQuest(staged, r.id); }
-        }
-        if (!pass) {
-            if (r.type == "flag") return "A different local decision or earlier conversation is required.";
-            if (r.type == "recipe") return r.state == "unknown" ? "Recipe already known." : "Learn the recipe first.";
-            if (r.type == "item") return "Requires " + std::to_string(r.value) + " of " + r.id + ".";
-            if (r.type == "standing") return "Requires standing " + std::to_string(r.value) + " with " + r.id + ".";
-            return "Requires " + r.type + ": " + r.id + (r.state.empty() ? "" : " (" + r.state + ")") + ".";
-        }
+        auto reason = conditionFailure(s, npc.id, r);
+        if (!reason.empty()) return reason;
     }
     return "";
 }

@@ -39,16 +39,6 @@ std::string returnInstructions(const QuestDefinition& quest) {
     if (quest.offeringGuild.empty()) return "Return to any guild hall for your reward.";
     return "Return to " + guildDatabase().find(quest.offeringGuild)->city + " for your reward.";
 }
-
-std::string statusLabel(const GameSession& session, const QuestDefinition& quest) {
-    const auto progress = questProgress(session, quest.id);
-    if (progress.objectiveComplete) return "Ready to turn in";
-    if (progress.active) return "Active";
-    if (progress.completions && quest.category != QuestCategory::Commission) return "Completed";
-    auto reason = questLockReason(session, quest);
-    if (!reason.empty()) return "Locked: " + reason;
-    return quest.category == QuestCategory::Commission && progress.completions ? "Available again" : "Available";
-}
 }
 
 const char* questCategoryName(QuestCategory category) {
@@ -59,6 +49,16 @@ const char* questCategoryName(QuestCategory category) {
         case QuestCategory::Commission: return "Commissions";
     }
     return "Unknown";
+}
+
+std::string questStatusLabel(const GameSession& session, const QuestDefinition& quest) {
+    const auto progress = questProgress(session, quest.id);
+    if (progress.objectiveComplete) return "Ready to turn in";
+    if (progress.active) return "Active";
+    if (progress.completions && quest.category != QuestCategory::Commission) return "Completed";
+    auto reason = questLockReason(session, quest);
+    if (!reason.empty()) return "Locked: " + reason;
+    return quest.category == QuestCategory::Commission && progress.completions ? "Available again" : "Available";
 }
 
 const std::vector<QuestDefinition>& allQuests() {
@@ -250,7 +250,7 @@ void openQuestBoard(GameSession& session, QuestCategory category) {
         auto quests = boardQuests(session, category);
         std::vector<std::string> lines = {std::string("=== ") + questCategoryName(category) + " ==="};
         for (size_t i = 0; i < quests.size(); ++i)
-            lines.push_back(std::to_string(i + 1) + ". " + quests[i]->title + " [" + statusLabel(session, *quests[i]) + "]");
+            lines.push_back(std::to_string(i + 1) + ". " + quests[i]->title + " [" + questStatusLabel(session, *quests[i]) + "]");
         lines.push_back("0. Back to guild hall");
         displayBorderedMenu(lines, "Choose a job: ");
         int choice = getNumberInput(0, static_cast<int>(quests.size()));
@@ -259,7 +259,7 @@ void openQuestBoard(GameSession& session, QuestCategory category) {
         auto progress = questProgress(session, quest.id);
         lines = {quest.title, quest.briefing, returnInstructions(quest),
             "Reward: " + std::to_string(quest.rewardSilver) + " silver, " + std::to_string(quest.rewardExperience) + " XP.",
-            "Status: " + statusLabel(session, quest)};
+            "Status: " + questStatusLabel(session, quest)};
         for (const auto& reward : quest.itemRewards) {
             PlayerInventory::ItemType type;
             size_t index;
@@ -293,7 +293,7 @@ void showQuestJournal(const GameSession& session) {
             if (!discovered) continue;
             any = true;
             auto progress = questProgress(session, quest.id);
-            lines.push_back(quest.title + " [" + statusLabel(session, quest) + "]");
+            lines.push_back(quest.title + " [" + questStatusLabel(session, quest) + "]");
             if (progress.active) lines.push_back(progress.objectiveComplete ? returnInstructions(quest) : quest.briefing);
             if (category == QuestCategory::Commission) lines.push_back("Runs completed: " + std::to_string(progress.completions));
         }

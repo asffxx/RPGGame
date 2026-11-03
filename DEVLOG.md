@@ -1,7 +1,33 @@
 # Development log
 
-RPGGame's development history, newest milestone first. Entries describe shipped
-source changes and link to the commits behind earlier milestones.
+RPGGame's development history, newest milestone first. Unreleased work is marked
+separately from published releases.
+
+## v3.6.0 — Story board
+
+**Date:** 2026-11-04 — Windows x64 and Linux x86_64 release builds.
+
+- Added a Story Board under a new main-menu Story category. It shows Act One,
+  six sequential beats, open threads, and every remembered dialogue choice.
+- Completed beats show their full text; future beats show hints. Already-met
+  requirements advance together in order when the board opens, without changing
+  the save or advancing game time.
+- Story text lives in `content/story/acts.json`; UI code carries no act or beat
+  strings. Beat state is derived from flags, quests, recipes, guild membership,
+  travel, and standing, so save format stays 4.
+- Extracted dialogue condition parsing and evaluation into a shared engine.
+  Added a `count` condition for level, completed quests, known recipes, joined
+  guilds, discovered cities, recorded choices, and highest standing.
+- Open threads list active jobs, including current guild storyline quests, plus
+  unresolved residents in cities the player has reached.
+- The final beat is an unexplained omen after seeing all five cities. No collapse
+  cause, main quest, or responsible race was authored.
+- Added six story test groups; all 35 CTest cases pass and formats 1–4 still load.
+- Reused rule-validation tables, reserved story-view storage, and skipped checks
+  for locked beats and redundant completion scans.
+- Packaged Linux and Windows binaries with matching content and SHA-256 checksums.
+- Both extracted packages passed Continue, Story Board, and Exit checks; the
+  Windows executable was tested under Wine.
 
 ## v3.5.0 — Peaceful-city dialogue
 

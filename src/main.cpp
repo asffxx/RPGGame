@@ -12,6 +12,7 @@
 #include "gameplay/save.hpp"
 #include "world/crafting.hpp"
 #include "world/dialogue.hpp"
+#include "world/story_board.hpp"
 
 int main() {
     if (!materialDatabase().loaded() || !craftingDatabase().loaded()) {
@@ -20,6 +21,10 @@ int main() {
     }
     if (!dialogueDatabase().loaded()) {
         std::cerr << "Content load failed: " << dialogueDatabase().error() << '\n';
+        return 1;
+    }
+    if (!storyDatabase().loaded()) {
+        std::cerr << "Content load failed: " << storyDatabase().error() << '\n';
         return 1;
     }
     while (true) {
