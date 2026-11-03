@@ -178,6 +178,13 @@ bool claimQuestReward(GameSession& session, const std::string& id) {
     auto progress = questProgress(session, id);
     if (!progress.active || !progress.objectiveComplete || progress.completions >= maxCompletions) return false;
     auto rewardedInventory = session.inventory;
+    for (const auto& reward : quest->itemRewards) {
+        PlayerInventory::ItemType type;
+        size_t index;
+        if (reward.quantity < 1 || reward.quantity > 1000 ||
+            !rewardedInventory.resolveItemId(reward.item, type, index) ||
+            !rewardedInventory.tryAddItem(type, index, reward.quantity)) return false;
+    }
     const auto& materials = materialDatabase().getMaterials();
     for (size_t i = 0; i < materials.size(); ++i) {
         for (const auto& reward : materials[i].questRewards) {
@@ -253,6 +260,12 @@ void openQuestBoard(GameSession& session, QuestCategory category) {
         lines = {quest.title, quest.briefing, returnInstructions(quest),
             "Reward: " + std::to_string(quest.rewardSilver) + " silver, " + std::to_string(quest.rewardExperience) + " XP.",
             "Status: " + statusLabel(session, quest)};
+        for (const auto& reward : quest.itemRewards) {
+            PlayerInventory::ItemType type;
+            size_t index;
+            if (session.inventory.resolveItemId(reward.item, type, index))
+                lines.push_back("Item reward: " + session.inventory.itemName(type, index) + " x" + std::to_string(reward.quantity));
+        }
         for (const auto& material : materialDatabase().getMaterials())
             for (const auto& reward : material.questRewards)
                 if (reward.first == quest.id) lines.push_back("Material reward: " + material.name + " x" + std::to_string(reward.second));

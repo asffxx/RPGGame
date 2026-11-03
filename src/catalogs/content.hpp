@@ -104,9 +104,11 @@ template<class A> void fields(A& a, ClassSkillEffects& v) {
 template<class A> void fields(A& a, SignatureAbility& v) {
     FIELD(className); FIELD(name); FIELD(description); FIELD(kind); FIELD(effects);
 }
+template<class A> void fields(A& a, QuestItemReward& v) { FIELD(item); FIELD(quantity); }
 template<class A> void fields(A& a, QuestDefinition& v) {
     FIELD(id); FIELD(title); FIELD(briefing); FIELD(location); FIELD(enemyName); FIELD(completionText);
     FIELD(rewardSilver); FIELD(rewardExperience); FIELD(category); FIELD(minimumLevel); FIELD(offeringGuild); FIELD(prerequisite);
+    FIELD(itemRewards);
 }
 template<class A> void fields(A& a, GuildDefinition& v) {
     FIELD(id); FIELD(name); FIELD(city); FIELD(introduction); FIELD(quests);
@@ -132,6 +134,7 @@ public:
     Reader(const datafile::Value& object, std::string where) : object(object), where(std::move(where)) {}
     template<class T> void operator()(const char* name, T& result) {
         used.insert(name);
+        if (std::string(name) == "itemRewards" && !object.has(name)) return;
         const std::string field = where + "." + name;
         try { decode(object.at(name), result, field); }
         catch (const std::exception& e) { throw std::runtime_error(field + ": " + e.what()); }

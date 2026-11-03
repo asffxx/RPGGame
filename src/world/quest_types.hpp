@@ -5,6 +5,11 @@
 
 enum class QuestCategory { Guild, Main, Side, Commission };
 
+struct QuestItemReward {
+    std::string item;
+    int quantity = 1;
+};
+
 struct QuestDefinition {
     std::string id;
     std::string title;
@@ -18,6 +23,7 @@ struct QuestDefinition {
     int minimumLevel = 1;
     std::string offeringGuild{}; // Empty means any guild hall.
     std::string prerequisite{}; // A guild quest whose reward must have been claimed.
+    std::vector<QuestItemReward> itemRewards{};
 };
 
 struct QuestProgress {

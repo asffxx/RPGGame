@@ -1,0 +1,216 @@
+{
+  "entry": "greeting",
+  "nodes": [
+    {
+      "id": "greeting",
+      "text": "Mara is chalking names onto a patrol board. 'Six volunteers, five dry cloaks. We can mend a cloak; we cannot mend a bad rota.'",
+      "choices": [
+        {
+          "id": "ask_life",
+          "text": "Tell me about life here.",
+          "next": "life"
+        },
+        {
+          "id": "ask_concern",
+          "text": "Is anything on your mind?",
+          "next": "concern",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "mara_decision",
+              "state": "eq",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": "remember_a",
+          "text": "How did our earlier discussion turn out?",
+          "next": "outcome_a",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "mara_decision",
+              "state": "eq",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": "remember_b",
+          "text": "How did our earlier discussion turn out?",
+          "next": "outcome_b",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "mara_decision",
+              "state": "eq",
+              "value": 2
+            }
+          ]
+        },
+        {
+          "id": "ask_work",
+          "text": "Do you know of a local job?",
+          "next": "work"
+        },
+        {
+          "id": "goodbye",
+          "text": "Goodbye.",
+          "next": ""
+        }
+      ]
+    },
+    {
+      "id": "life",
+      "text": "'Ironward keeps watchposts supplied and escorts people who cannot afford private guards. Most days our fiercest opponent is a broken axle.'",
+      "choices": [
+        {
+          "id": "personal_topic",
+          "text": "Discuss a warrior's training.",
+          "next": "personal",
+          "conditions": [
+            {
+              "type": "class",
+              "id": "warrior"
+            }
+          ]
+        },
+        {
+          "id": "life_back",
+          "text": "Thank you.",
+          "next": "greeting"
+        }
+      ]
+    },
+    {
+      "id": "concern",
+      "text": "'A new volunteer wants the busiest route. Her mother asks me to keep her near town. What would you advise?'",
+      "choices": [
+        {
+          "id": "decide_a",
+          "text": "Pair her with an experienced warden on the busy route.",
+          "next": "outcome_a",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "mara_decision",
+              "state": "eq",
+              "value": 0
+            }
+          ],
+          "effects": [
+            {
+              "type": "flag",
+              "id": "mara_decision",
+              "value": 1
+            },
+            {
+              "type": "standing",
+              "id": "ironward",
+              "value": 2
+            }
+          ],
+          "once": true,
+          "result": "Mara remembered your advice: Pair her with an experienced warden on the busy route."
+        },
+        {
+          "id": "decide_b",
+          "text": "Let her learn the town circuit first.",
+          "next": "outcome_b",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "mara_decision",
+              "state": "eq",
+              "value": 0
+            }
+          ],
+          "effects": [
+            {
+              "type": "flag",
+              "id": "mara_decision",
+              "value": 2
+            },
+            {
+              "type": "standing",
+              "id": "ironward",
+              "value": 2
+            }
+          ],
+          "once": true,
+          "result": "Mara remembered your advice: Let her learn the town circuit first."
+        },
+        {
+          "id": "concern_back",
+          "text": "I need to think about it.",
+          "next": "greeting"
+        }
+      ]
+    },
+    {
+      "id": "outcome_a",
+      "text": "'Responsibility with support. I can do that.' The volunteer returns next week with muddy boots and an excellent report.",
+      "choices": [
+        {
+          "id": "outcome_a_back",
+          "text": "Until next time.",
+          "next": "greeting"
+        }
+      ]
+    },
+    {
+      "id": "outcome_b",
+      "text": "'Practice is not cowardice.' Mara gives the volunteer responsibility for the market circuit, not another week of sweeping.",
+      "choices": [
+        {
+          "id": "outcome_b_back",
+          "text": "Until next time.",
+          "next": "greeting"
+        }
+      ]
+    },
+    {
+      "id": "work",
+      "text": "Roadside Supplies: Collect a fresh supply bundle from the caravan cache in Barren Plains. 'I can register your interest here; any guild hall handles payment.'",
+      "choices": [
+        {
+          "id": "accept_work",
+          "text": "Accept Roadside Supplies.",
+          "next": "greeting",
+          "conditions": [
+            {
+              "type": "quest",
+              "id": "commission_supplies",
+              "state": "available"
+            }
+          ],
+          "effects": [
+            {
+              "type": "quest",
+              "id": "commission_supplies"
+            }
+          ],
+          "once": true,
+          "result": "You accepted Roadside Supplies. Follow its lead and return to a guild hall for payment."
+        },
+        {
+          "id": "work_back",
+          "text": "Not now.",
+          "next": "greeting"
+        }
+      ]
+    },
+    {
+      "id": "personal",
+      "text": "'You know how to hold a line. Teaching someone else when to step back is the harder lesson.'",
+      "choices": [
+        {
+          "id": "personal_back",
+          "text": "Thank you.",
+          "next": "greeting"
+        }
+      ]
+    }
+  ]
+}

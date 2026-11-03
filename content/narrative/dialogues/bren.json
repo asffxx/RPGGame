@@ -1,0 +1,219 @@
+{
+  "entry": "greeting",
+  "nodes": [
+    {
+      "id": "greeting",
+      "text": "Bren turns a bent hinge beneath the light. 'Swords get songs. Hinges keep winter outside.'",
+      "choices": [
+        {
+          "id": "ask_life",
+          "text": "Tell me about life here.",
+          "next": "life"
+        },
+        {
+          "id": "ask_concern",
+          "text": "Is anything on your mind?",
+          "next": "concern",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "bren_decision",
+              "state": "eq",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": "remember_a",
+          "text": "How did our earlier discussion turn out?",
+          "next": "outcome_a",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "bren_decision",
+              "state": "eq",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": "remember_b",
+          "text": "How did our earlier discussion turn out?",
+          "next": "outcome_b",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "bren_decision",
+              "state": "eq",
+              "value": 2
+            }
+          ]
+        },
+        {
+          "id": "ask_lesson",
+          "text": "Could you teach me a recipe?",
+          "next": "lesson"
+        },
+        {
+          "id": "goodbye",
+          "text": "Goodbye.",
+          "next": ""
+        }
+      ]
+    },
+    {
+      "id": "life",
+      "text": "'The old watchpost iron is worth saving. Clean metal, careful heat, no fancy promises. I teach anyone willing to listen.'",
+      "choices": [
+        {
+          "id": "personal_topic",
+          "text": "Show Bren a piece of iron ore.",
+          "next": "personal",
+          "conditions": [
+            {
+              "type": "item",
+              "id": "iron_ore",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": "life_back",
+          "text": "Thank you.",
+          "next": "greeting"
+        }
+      ]
+    },
+    {
+      "id": "concern",
+      "text": "'The council wants polished gate fittings for its procession. The school needs a stove door. Which gets my afternoon?'",
+      "choices": [
+        {
+          "id": "decide_a",
+          "text": "Repair the school stove first.",
+          "next": "outcome_a",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "bren_decision",
+              "state": "eq",
+              "value": 0
+            }
+          ],
+          "effects": [
+            {
+              "type": "flag",
+              "id": "bren_decision",
+              "value": 1
+            }
+          ],
+          "once": true,
+          "result": "Bren remembered your advice: Repair the school stove first."
+        },
+        {
+          "id": "decide_b",
+          "text": "Finish the fittings, then use the fee for the stove.",
+          "next": "outcome_b",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "bren_decision",
+              "state": "eq",
+              "value": 0
+            }
+          ],
+          "effects": [
+            {
+              "type": "flag",
+              "id": "bren_decision",
+              "value": 2
+            }
+          ],
+          "once": true,
+          "result": "Bren remembered your advice: Finish the fittings, then use the fee for the stove."
+        },
+        {
+          "id": "concern_back",
+          "text": "I need to think about it.",
+          "next": "greeting"
+        }
+      ]
+    },
+    {
+      "id": "outcome_a",
+      "text": "'The procession can shine tomorrow.' Children bring Bren a thank-you drawing covered in improbable flames.",
+      "choices": [
+        {
+          "id": "outcome_a_back",
+          "text": "Until next time.",
+          "next": "greeting"
+        }
+      ]
+    },
+    {
+      "id": "outcome_b",
+      "text": "'Then I need that promise in writing.' Bren secures the school repair fee before accepting the council's order.",
+      "choices": [
+        {
+          "id": "outcome_b_back",
+          "text": "Until next time.",
+          "next": "greeting"
+        }
+      ]
+    },
+    {
+      "id": "lesson",
+      "text": "'I can teach you iron armor. Take your time with the measurements. A recipe is a promise you make to whoever uses the result.'",
+      "choices": [
+        {
+          "id": "learn_recipe",
+          "text": "Study the recipe together.",
+          "next": "greeting",
+          "conditions": [
+            {
+              "type": "recipe",
+              "id": "iron_armor_recipe",
+              "state": "unknown"
+            }
+          ],
+          "effects": [
+            {
+              "type": "recipe",
+              "id": "iron_armor_recipe"
+            }
+          ],
+          "once": true,
+          "result": "You learned iron armor through patient instruction."
+        },
+        {
+          "id": "known_recipe",
+          "text": "I already know this recipe; let us compare notes.",
+          "next": "life",
+          "conditions": [
+            {
+              "type": "recipe",
+              "id": "iron_armor_recipe",
+              "state": "known"
+            }
+          ]
+        },
+        {
+          "id": "lesson_back",
+          "text": "Another time.",
+          "next": "greeting"
+        }
+      ]
+    },
+    {
+      "id": "personal",
+      "text": "'See that seam? Good material, if you clean it carefully.' Bren returns the ore after showing you what to look for.",
+      "choices": [
+        {
+          "id": "personal_back",
+          "text": "Thank you.",
+          "next": "greeting"
+        }
+      ]
+    }
+  ]
+}

@@ -3,6 +3,7 @@
   "records": [
     {
       "id": "side_unsent_letter",
+      "itemRewards": [{"item": "bread", "quantity": 1}],
       "title": "A Letter Never Sent",
       "briefing": "Find a sealed letter in the abandoned posthouse of Ghost Town.",
       "location": "Ghost Town",

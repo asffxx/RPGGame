@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(RPGGame VERSION 3.4.2 LANGUAGES CXX)
+project(RPGGame VERSION 3.5.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -60,6 +60,7 @@ add_library(rpg_core
 
     src/world/establishments.cpp
     src/world/crafting.cpp
+    src/world/dialogue.cpp
     src/world/travel.cpp
     src/world/encounters.cpp
     src/world/guild_quest.cpp
@@ -84,6 +85,12 @@ endif()
 
 include(CTest)
 if(BUILD_TESTING AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tests/game_tests.cpp")
+    add_executable(rpg_dialogue_tests tests/dialogue_tests.cpp)
+    target_link_libraries(rpg_dialogue_tests PRIVATE rpg_core)
+    foreach(group catalogs branches effects conditions rewards menus)
+        add_test(NAME dialogue_${group} COMMAND rpg_dialogue_tests ${group} ${CMAKE_CURRENT_BINARY_DIR}/dialogue-tests/${group})
+        set_tests_properties(dialogue_${group} PROPERTIES ENVIRONMENT "TERM=dumb" TIMEOUT 20)
+    endforeach()
     add_executable(rpg_catalog_snapshot tests/catalog_snapshot.cpp)
     target_link_libraries(rpg_catalog_snapshot PRIVATE rpg_core)
     add_executable(rpg_crafting_tests tests/crafting_tests.cpp)

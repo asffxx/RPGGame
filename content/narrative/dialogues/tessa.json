@@ -1,0 +1,217 @@
+{
+  "entry": "greeting",
+  "nodes": [
+    {
+      "id": "greeting",
+      "text": "Tessa weighs a merchant's brass weight against her own. 'Trust is useful. So is checking.'",
+      "choices": [
+        {
+          "id": "ask_life",
+          "text": "Tell me about life here.",
+          "next": "life"
+        },
+        {
+          "id": "ask_concern",
+          "text": "Is anything on your mind?",
+          "next": "concern",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "tessa_decision",
+              "state": "eq",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": "remember_a",
+          "text": "How did our earlier discussion turn out?",
+          "next": "outcome_a",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "tessa_decision",
+              "state": "eq",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": "remember_b",
+          "text": "How did our earlier discussion turn out?",
+          "next": "outcome_b",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "tessa_decision",
+              "state": "eq",
+              "value": 2
+            }
+          ]
+        },
+        {
+          "id": "ask_work",
+          "text": "Do you know of a local job?",
+          "next": "work"
+        },
+        {
+          "id": "goodbye",
+          "text": "Goodbye.",
+          "next": ""
+        }
+      ]
+    },
+    {
+      "id": "life",
+      "text": "'Silverthread keeps contracts readable and warehouses accounted for. A missed delivery can cost a family its week's income.'",
+      "choices": [
+        {
+          "id": "personal_topic",
+          "text": "Ask to help review the public accounts.",
+          "next": "personal",
+          "conditions": [
+            {
+              "type": "standing",
+              "id": "silverthread",
+              "value": 2
+            }
+          ]
+        },
+        {
+          "id": "life_back",
+          "text": "Thank you.",
+          "next": "greeting"
+        }
+      ]
+    },
+    {
+      "id": "concern",
+      "text": "'A cart arrived late after its driver stopped to help an injured mule. The buyer demands the full late fee.'",
+      "choices": [
+        {
+          "id": "decide_a",
+          "text": "Ask the buyer to waive the fee this once.",
+          "next": "outcome_a",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "tessa_decision",
+              "state": "eq",
+              "value": 0
+            }
+          ],
+          "effects": [
+            {
+              "type": "flag",
+              "id": "tessa_decision",
+              "value": 1
+            },
+            {
+              "type": "standing",
+              "id": "silverthread",
+              "value": 2
+            }
+          ],
+          "once": true,
+          "result": "Tessa remembered your advice: Ask the buyer to waive the fee this once."
+        },
+        {
+          "id": "decide_b",
+          "text": "Use the merchants' relief fund to cover the fee.",
+          "next": "outcome_b",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "tessa_decision",
+              "state": "eq",
+              "value": 0
+            }
+          ],
+          "effects": [
+            {
+              "type": "flag",
+              "id": "tessa_decision",
+              "value": 2
+            },
+            {
+              "type": "standing",
+              "id": "silverthread",
+              "value": 2
+            }
+          ],
+          "once": true,
+          "result": "Tessa remembered your advice: Use the merchants' relief fund to cover the fee."
+        },
+        {
+          "id": "concern_back",
+          "text": "I need to think about it.",
+          "next": "greeting"
+        }
+      ]
+    },
+    {
+      "id": "outcome_a",
+      "text": "'An exception, recorded honestly.' Tessa gets the buyer's consent and adds the circumstances to the contract file.",
+      "choices": [
+        {
+          "id": "outcome_a_back",
+          "text": "Until next time.",
+          "next": "greeting"
+        }
+      ]
+    },
+    {
+      "id": "outcome_b",
+      "text": "'Then helping did not cost the driver his dinner.' Tessa posts the payment openly so the fund remains accountable.",
+      "choices": [
+        {
+          "id": "outcome_b_back",
+          "text": "Until next time.",
+          "next": "greeting"
+        }
+      ]
+    },
+    {
+      "id": "work",
+      "text": "The Empty Granary: Defeat the Rat Swarm guarding the last grain sacks in Ghost Town. 'I can register your interest here; any guild hall handles payment.'",
+      "choices": [
+        {
+          "id": "accept_work",
+          "text": "Accept The Empty Granary.",
+          "next": "greeting",
+          "conditions": [
+            {
+              "type": "quest",
+              "id": "side_empty_granary",
+              "state": "available"
+            }
+          ],
+          "effects": [
+            {
+              "type": "quest",
+              "id": "side_empty_granary"
+            }
+          ],
+          "once": true,
+          "result": "You accepted The Empty Granary. Follow its lead and return to a guild hall for payment."
+        },
+        {
+          "id": "work_back",
+          "text": "Not now.",
+          "next": "greeting"
+        }
+      ]
+    },
+    {
+      "id": "personal",
+      "text": "'You have shown care with other people's livelihoods. Sit here; I will explain how the relief fund works.'",
+      "choices": [
+        {
+          "id": "personal_back",
+          "text": "Thank you.",
+          "next": "greeting"
+        }
+      ]
+    }
+  ]
+}

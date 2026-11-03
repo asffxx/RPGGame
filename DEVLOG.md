@@ -3,6 +3,28 @@
 RPGGame's development history, newest milestone first. Entries describe shipped
 source changes and link to the commits behind earlier milestones.
 
+## v3.5.0 — Peaceful-city dialogue
+
+**Date:** 2026-11-03 — Windows x64 and Linux x86_64 release builds.
+
+- Added 15 authored, non-recruitable residents: three in each city, accessible
+  through Local Establishments → Talk. Each has local lore, a branching decision,
+  and remembered responses. Guild stories remain independent of the main quest.
+- Added JSON dialogue graphs with strict validation of IDs, references, effects,
+  conditions, node destinations, and reachability. Missing/invalid dialogue data
+  stops startup with a file-specific error.
+- Added conditions for flags, guild standing, items, quests, race, class, recipes,
+  and recorded choices; unavailable menu options explain their requirements.
+- Added atomic effects for flags, item gifts, quest acceptance, standing, recipe
+  teaching, and choice recording. Failed rewards leave all affected state intact.
+- Five craftspeople teach existing recipes. Five guild representatives introduce
+  existing local jobs. A Letter Never Sent now includes an optional bread reward.
+- Save format remains 4; decisions and responses survive reload. Added six local
+  CTest groups; all 29 cases pass. Dialogue menus handle Back, Leave, and EOF.
+- The collapse, its cause, and the main quest remain deliberately unwritten.
+- Packaged both platforms with matching runtime content and SHA-256 checksums.
+  Added the explicit algorithm header needed by the LLVM-MinGW Windows build.
+
 ## v3.4.2 — Content JSON migration and catalog infrastructure relocation
 
 **Date:** 2026-11-03 — source changes uncommitted in Git; release artifacts rebuilt.
@@ -270,4 +292,3 @@ Future releases follow semantic versioning: incompatible supported-interface or
 save-compatibility changes increment MAJOR, backward-compatible features increment
 MINOR, and backward-compatible fixes increment PATCH. Save-format numbers are
 separate from game release versions. Add each release entry at the top of this log.
-

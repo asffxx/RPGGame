@@ -1,4 +1,5 @@
 #include "main_menu.hpp"
+#include "world/dialogue.hpp"
 
 #include <iostream>
 #include <map>
@@ -92,6 +93,8 @@ void mainMenu(GameSession& session, bool debugMode) {
             }
             if (isCity) {
                 items.push_back({"Craft", "Use the forge, alchemy bench, or kitchen.", [&]() { openCrafting(session); }});
+                categories["Local Establishments"].push_back(items.size() - 1);
+                items.push_back({"Talk", "Meet the city's residents.", [&]() { openResidents(session); }});
                 categories["Local Establishments"].push_back(items.size() - 1);
             }
         }

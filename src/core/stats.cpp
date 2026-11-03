@@ -1,4 +1,5 @@
 #include "stats.hpp"
+#include <algorithm>
 
 void Stats::scale(float multiplier) {
     maxHitpoints = static_cast<int>(std::round(maxHitpoints * multiplier));

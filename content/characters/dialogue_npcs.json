@@ -1,0 +1,94 @@
+{
+  "residents": [
+    {
+      "id": "mara",
+      "name": "Mara",
+      "city": "Attania",
+      "role": "Ironward roadwarden"
+    },
+    {
+      "id": "bren",
+      "name": "Bren",
+      "city": "Attania",
+      "role": "Smith"
+    },
+    {
+      "id": "lysa",
+      "name": "Lysa",
+      "city": "Attania",
+      "role": "Community baker"
+    },
+    {
+      "id": "iven",
+      "name": "Iven",
+      "city": "Erden",
+      "role": "Lantern archivist"
+    },
+    {
+      "id": "sella",
+      "name": "Sella",
+      "city": "Erden",
+      "role": "Apothecary"
+    },
+    {
+      "id": "perrin",
+      "name": "Perrin",
+      "city": "Erden",
+      "role": "Lamplighter"
+    },
+    {
+      "id": "tessa",
+      "name": "Tessa",
+      "city": "Trisselie",
+      "role": "Silverthread market steward"
+    },
+    {
+      "id": "daro",
+      "name": "Daro",
+      "city": "Trisselie",
+      "role": "Dyer and remedy seller"
+    },
+    {
+      "id": "edda",
+      "name": "Edda",
+      "city": "Trisselie",
+      "role": "Parcel porter"
+    },
+    {
+      "id": "oren",
+      "name": "Oren",
+      "city": "Ariandel, The Royal Capital",
+      "role": "Crownward public clerk"
+    },
+    {
+      "id": "halwen",
+      "name": "Halwen",
+      "city": "Ariandel, The Royal Capital",
+      "role": "Public workshop armorer"
+    },
+    {
+      "id": "mina",
+      "name": "Mina",
+      "city": "Ariandel, The Royal Capital",
+      "role": "Courtyard gardener"
+    },
+    {
+      "id": "nella",
+      "name": "Nella",
+      "city": "Velmora",
+      "role": "Tidebound ferry keeper"
+    },
+    {
+      "id": "corin",
+      "name": "Corin",
+      "city": "Velmora",
+      "role": "Dockside cook and herbalist"
+    },
+    {
+      "id": "suri",
+      "name": "Suri",
+      "city": "Velmora",
+      "role": "Net mender"
+    }
+  ]
+}
