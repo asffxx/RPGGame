@@ -5,7 +5,7 @@ separately from published releases.
 
 ## v3.8.0 — Gap mechanics
 
-**Date:** 2026-11-05 — local development build.
+**Date:** 2026-11-05 — Windows x64 and Linux x86_64 release builds.
 
 - Unified every debuff under one duration and stacking model: per-stack damage
   and drain, refresh on reapply, maximum-stack amplifiers, and percentage-point
