@@ -1,0 +1,201 @@
+{
+  "entry": "greeting",
+  "nodes": [
+    {
+      "id": "greeting",
+      "text": "Mina is rescuing a seedling from a ceremonial bootprint. 'The flowers have lodged a complaint.'",
+      "choices": [
+        {
+          "id": "ask_life",
+          "text": "Tell me about life here.",
+          "next": "life"
+        },
+        {
+          "id": "ask_concern",
+          "text": "Is anything on your mind?",
+          "next": "concern",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "mina_decision",
+              "state": "eq",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": "remember_a",
+          "text": "How did our earlier discussion turn out?",
+          "next": "outcome_a",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "mina_decision",
+              "state": "eq",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": "remember_b",
+          "text": "How did our earlier discussion turn out?",
+          "next": "outcome_b",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "mina_decision",
+              "state": "eq",
+              "value": 2
+            }
+          ]
+        },
+        {
+          "id": "ask_custom",
+          "text": "What brings the neighborhood together?",
+          "next": "custom"
+        },
+        {
+          "id": "goodbye",
+          "text": "Goodbye.",
+          "next": ""
+        }
+      ]
+    },
+    {
+      "id": "life",
+      "text": "'These courtyards belong to everyone, even when the palace borrows them. People come here to eat lunch without being hurried.'",
+      "choices": [
+        {
+          "id": "life_back",
+          "text": "Thank you.",
+          "next": "greeting"
+        }
+      ]
+    },
+    {
+      "id": "concern",
+      "text": "'A new bed could hold formal roses or herbs the neighborhood kitchens can use.'",
+      "choices": [
+        {
+          "id": "decide_a",
+          "text": "Plant herbs for the kitchens.",
+          "next": "outcome_a",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "mina_decision",
+              "state": "eq",
+              "value": 0
+            }
+          ],
+          "effects": [
+            {
+              "type": "flag",
+              "id": "mina_decision",
+              "value": 1
+            },
+            {
+              "type": "standing",
+              "id": "crownward",
+              "value": 3
+            }
+          ],
+          "once": true,
+          "result": "Mina remembered your advice: Plant herbs for the kitchens."
+        },
+        {
+          "id": "decide_b",
+          "text": "Keep the roses and add herb pots along the path.",
+          "next": "outcome_b",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "mina_decision",
+              "state": "eq",
+              "value": 0
+            }
+          ],
+          "effects": [
+            {
+              "type": "flag",
+              "id": "mina_decision",
+              "value": 2
+            },
+            {
+              "type": "standing",
+              "id": "crownward",
+              "value": 3
+            }
+          ],
+          "once": true,
+          "result": "Mina remembered your advice: Keep the roses and add herb pots along the path."
+        },
+        {
+          "id": "decline_concern",
+          "text": "Roses. The kitchens can manage.",
+          "next": "",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "mina_decision",
+              "state": "eq",
+              "value": 0
+            }
+          ],
+          "effects": [
+            {
+              "type": "flag",
+              "id": "mina_decision",
+              "value": 3
+            },
+            {
+              "type": "standing",
+              "id": "crownward",
+              "value": -4
+            }
+          ],
+          "once": true,
+          "result": "Mina remembered your refusal: You told her the kitchens could manage."
+        },
+        {
+          "id": "concern_back",
+          "text": "I need to think about it.",
+          "next": "greeting"
+        }
+      ]
+    },
+    {
+      "id": "outcome_a",
+      "text": "'Useful things can be beautiful.' Mina marks the bed with picking instructions and leaves room for flowering thyme.",
+      "choices": [
+        {
+          "id": "outcome_a_back",
+          "text": "Until next time.",
+          "next": "greeting"
+        }
+      ]
+    },
+    {
+      "id": "outcome_b",
+      "text": "'Then someone must water both.' Mina recruits volunteers rather than promising work she cannot finish alone.",
+      "choices": [
+        {
+          "id": "outcome_b_back",
+          "text": "Until next time.",
+          "next": "greeting"
+        }
+      ]
+    },
+    {
+      "id": "custom",
+      "text": "'Shared meals, small repairs, someone noticing when a chair stays empty. Nothing a grand monument could replace.'",
+      "choices": [
+        {
+          "id": "custom_back",
+          "text": "I will remember that.",
+          "next": "greeting"
+        }
+      ]
+    }
+  ]
+}

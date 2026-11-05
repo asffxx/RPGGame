@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "world/conditions.hpp"
+#include "world/reputation.hpp"
 
 struct GameSession;
 
@@ -50,6 +51,14 @@ struct StoryView {
     std::vector<BeatView> beats;
     std::vector<std::string> threads;
     std::vector<std::string> choices;
+
+    struct StandingView {
+        std::string city;
+        std::string factionName;
+        int value = 0;
+        ReputationTier tier = ReputationTier::Neutral;
+    };
+    std::vector<StandingView> standings;
 };
 
 const StoryDatabase& storyDatabase();

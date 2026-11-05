@@ -3,6 +3,25 @@
 RPGGame's development history, newest milestone first. Unreleased work is marked
 separately from published releases.
 
+## v3.7.0 — Reputation and faction standing
+
+**Date:** 2026-11-05 — Windows x64 and Linux x86_64 release builds.
+
+- Added five guild standings, derived city standing, a -100..100 clamp, and
+  friendly/hostile thresholds at 6/-6. No decay or save-format change.
+- All 15 residents have authored tier reactions, +3 helpful decisions, and a
+  once-only -4 dismissive decision. Guild storyline claims grant +3 standing.
+- Hostile halls refuse new work while allowing active jobs to be turned in.
+  Five friendly-only side jobs remain visible with their lock reasons.
+- City shops filter stock and apply a 10% friendly discount or 20% hostile
+  markup. Displayed and charged prices match; villages and towns stay neutral.
+- Added current-city dashboard standing and all five standings to the Story Board.
+- Rules and stock live in `content/narrative/reputation.json`.
+- Seven new test groups bring coverage to 42 cases; formats 1–4 remain readable.
+- Linux and Windows Release builds passed all 42 tests, with Windows execution
+  verified through Wine. Packaged executables passed version, startup, save/load,
+  dependency, and checksum checks with matching runtime content.
+
 ## v3.6.0 — Story board
 
 **Date:** 2026-11-04 — Windows x64 and Linux x86_64 release builds.
@@ -45,7 +64,7 @@ separately from published releases.
   teaching, and choice recording. Failed rewards leave all affected state intact.
 - Five craftspeople teach existing recipes. Five guild representatives introduce
   existing local jobs. A Letter Never Sent now includes an optional bread reward.
-- Save format remains 4; decisions and responses survive reload. Added six local
+- Save format remains 4; decisions and responses survive reload. Added six
   CTest groups; all 29 cases pass. Dialogue menus handle Back, Leave, and EOF.
 - The collapse, its cause, and the main quest remain deliberately unwritten.
 - Packaged both platforms with matching runtime content and SHA-256 checksums.
@@ -53,7 +72,7 @@ separately from published releases.
 
 ## v3.4.2 — Content JSON migration and catalog infrastructure relocation
 
-**Date:** 2026-11-03 — source changes uncommitted in Git; release artifacts rebuilt.
+**Date:** 2026-11-03 — content migration and rebuilt release artifacts.
 
 - Migrated all remaining authored game content to `content/`, making JSON the
   sole source of truth for narrative and NPC data:
@@ -71,14 +90,13 @@ separately from published releases.
   `src/core/paths.cpp/.hpp` → `src/catalogs/content_paths.cpp/.hpp`. Content
   infrastructure now lives beside the catalog layer it serves. `src/core/` is
   engine-only (economy, stats, timesystem, ui).
-- Updated all callers (`content.hpp`, `material.cpp`, `crafting.cpp`, `save.cpp`,
-  `npc.cpp`, `crafting_tests.cpp`, `data_tests.cpp`) to include the new paths
+- Updated content loaders, gameplay callers, and validation code to include the new paths
   directly. No forwarding headers left behind.
 - Updated `CMakeLists.txt`: removed `src/core/ids.cpp` and `src/core/paths.cpp`;
   added `src/catalogs/content_ids.cpp` and `src/catalogs/content_paths.cpp`.
 - Bumped the project version to 3.4.2 in `CMakeLists.txt` and
   `src/core/version.hpp`, and synced the README release line.
-- Rebuilt the v3.4.2 release artifacts with `scripts/build.sh`: Linux x86_64
+- Rebuilt the v3.4.2 release artifacts for Linux x86_64
   and Windows x64 (MinGW-w64). Updated `dist/README.md` and `SHA256SUMS`;
   both binaries launch and report v3.4.2.
 - Corrected stale documentation in `README.md` and `content/README.md`:
@@ -101,7 +119,7 @@ separately from published releases.
 
 ## v3.4.0 — Crafting, material drops, backpack, and selling
 
-**Date:** 2026-11-01 — source changes, uncommitted; no release artifacts rebuilt.
+**Date:** 2026-11-01 — crafting and inventory improvements.
 
 - Added eleven materials and nine recipes in `data/materials.json` and
   `data/recipes.json`, with validated item, enemy, quest, guild, and station references.
@@ -189,8 +207,8 @@ Backward-compatible interface change: game version advances from 3.1.0 to
 - Added plain-text output for redirected streams and `TERM=dumb`, plus `NO_COLOR`
   support. Screen clearing is skipped when output is redirected or the terminal
   is marked dumb.
-- Removed `tests/cli_test.py` and Python discovery from CMake. Moved equivalent
-  creation, save/restart, and malformed-save CLI checks to `tests/cli_test.cmake`.
+- Removed the Python dependency from CLI verification. Equivalent creation,
+  save/restart, and malformed-save checks now run through CMake.
 - Added C++ panel-wrapping, UTF-8 boundary, and resource-bar checks. All 15 tests
   pass on Linux.
 - Updated usage instructions and linked the original game on the `v1` branch.

@@ -98,6 +98,11 @@
               "type": "item",
               "id": "bread",
               "value": 1
+            },
+            {
+              "type": "standing",
+              "id": "ironward",
+              "value": 3
             }
           ],
           "once": true,
@@ -125,10 +130,42 @@
               "type": "item",
               "id": "bread",
               "value": 1
+            },
+            {
+              "type": "standing",
+              "id": "ironward",
+              "value": 3
             }
           ],
           "once": true,
           "result": "Lysa remembered your advice: Thank everyone who keeps the soup pot going."
+        },
+        {
+          "id": "decline_concern",
+          "text": "Bread is bread. People can sort out their own thanks.",
+          "next": "",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "lysa_decision",
+              "state": "eq",
+              "value": 0
+            }
+          ],
+          "effects": [
+            {
+              "type": "flag",
+              "id": "lysa_decision",
+              "value": 3
+            },
+            {
+              "type": "standing",
+              "id": "ironward",
+              "value": -4
+            }
+          ],
+          "once": true,
+          "result": "Lysa remembered your refusal: You said the thanks did not matter."
         },
         {
           "id": "concern_back",

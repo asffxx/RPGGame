@@ -93,6 +93,11 @@
               "type": "flag",
               "id": "corin_decision",
               "value": 1
+            },
+            {
+              "type": "standing",
+              "id": "tidebound",
+              "value": 3
             }
           ],
           "once": true,
@@ -115,10 +120,42 @@
               "type": "flag",
               "id": "corin_decision",
               "value": 2
+            },
+            {
+              "type": "standing",
+              "id": "tidebound",
+              "value": 3
             }
           ],
           "once": true,
           "result": "Corin remembered your advice: Ask permission and share the proceeds."
+        },
+        {
+          "id": "decline_concern",
+          "text": "Sell it under the city's name. Visitors come and go.",
+          "next": "",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "corin_decision",
+              "state": "eq",
+              "value": 0
+            }
+          ],
+          "effects": [
+            {
+              "type": "flag",
+              "id": "corin_decision",
+              "value": 3
+            },
+            {
+              "type": "standing",
+              "id": "tidebound",
+              "value": -4
+            }
+          ],
+          "once": true,
+          "result": "Corin remembered your refusal: You told him to take the recipe's credit."
         },
         {
           "id": "concern_back",

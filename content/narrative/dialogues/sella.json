@@ -93,6 +93,11 @@
               "type": "flag",
               "id": "sella_decision",
               "value": 1
+            },
+            {
+              "type": "standing",
+              "id": "lantern",
+              "value": 3
             }
           ],
           "once": true,
@@ -115,10 +120,42 @@
               "type": "flag",
               "id": "sella_decision",
               "value": 2
+            },
+            {
+              "type": "standing",
+              "id": "lantern",
+              "value": 3
             }
           ],
           "once": true,
           "result": "Sella remembered your advice: Teach the strong remedy alongside its risks."
+        },
+        {
+          "id": "decline_concern",
+          "text": "Teach whatever fills the seats and stop asking.",
+          "next": "",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "sella_decision",
+              "state": "eq",
+              "value": 0
+            }
+          ],
+          "effects": [
+            {
+              "type": "flag",
+              "id": "sella_decision",
+              "value": 3
+            },
+            {
+              "type": "standing",
+              "id": "lantern",
+              "value": -4
+            }
+          ],
+          "once": true,
+          "result": "Sella remembered your refusal: You told her to teach for attendance."
         },
         {
           "id": "concern_back",

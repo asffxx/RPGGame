@@ -1,0 +1,201 @@
+{
+  "entry": "greeting",
+  "nodes": [
+    {
+      "id": "greeting",
+      "text": "Edda sits on a crate marked FRAGILE. 'Empty. Before you ask.'",
+      "choices": [
+        {
+          "id": "ask_life",
+          "text": "Tell me about life here.",
+          "next": "life"
+        },
+        {
+          "id": "ask_concern",
+          "text": "Is anything on your mind?",
+          "next": "concern",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "edda_decision",
+              "state": "eq",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": "remember_a",
+          "text": "How did our earlier discussion turn out?",
+          "next": "outcome_a",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "edda_decision",
+              "state": "eq",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": "remember_b",
+          "text": "How did our earlier discussion turn out?",
+          "next": "outcome_b",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "edda_decision",
+              "state": "eq",
+              "value": 2
+            }
+          ]
+        },
+        {
+          "id": "ask_custom",
+          "text": "What brings the neighborhood together?",
+          "next": "custom"
+        },
+        {
+          "id": "goodbye",
+          "text": "Goodbye.",
+          "next": ""
+        }
+      ]
+    },
+    {
+      "id": "life",
+      "text": "'You learn a city by carrying its parcels. Wedding ribbons, cracked tools, letters nobody wants to open. Mostly ordinary things.'",
+      "choices": [
+        {
+          "id": "life_back",
+          "text": "Thank you.",
+          "next": "greeting"
+        }
+      ]
+    },
+    {
+      "id": "concern",
+      "text": "'The porters want a shared handcart. Should each person pay the same, or according to what they earn?'",
+      "choices": [
+        {
+          "id": "decide_a",
+          "text": "Contribute according to earnings.",
+          "next": "outcome_a",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "edda_decision",
+              "state": "eq",
+              "value": 0
+            }
+          ],
+          "effects": [
+            {
+              "type": "flag",
+              "id": "edda_decision",
+              "value": 1
+            },
+            {
+              "type": "standing",
+              "id": "silverthread",
+              "value": 3
+            }
+          ],
+          "once": true,
+          "result": "Edda remembered your advice: Contribute according to earnings."
+        },
+        {
+          "id": "decide_b",
+          "text": "Use equal shares, with extra time to pay.",
+          "next": "outcome_b",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "edda_decision",
+              "state": "eq",
+              "value": 0
+            }
+          ],
+          "effects": [
+            {
+              "type": "flag",
+              "id": "edda_decision",
+              "value": 2
+            },
+            {
+              "type": "standing",
+              "id": "silverthread",
+              "value": 3
+            }
+          ],
+          "once": true,
+          "result": "Edda remembered your advice: Use equal shares, with extra time to pay."
+        },
+        {
+          "id": "decline_concern",
+          "text": "Equal shares, no exceptions. Make them figure it out.",
+          "next": "",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "edda_decision",
+              "state": "eq",
+              "value": 0
+            }
+          ],
+          "effects": [
+            {
+              "type": "flag",
+              "id": "edda_decision",
+              "value": 3
+            },
+            {
+              "type": "standing",
+              "id": "silverthread",
+              "value": -4
+            }
+          ],
+          "once": true,
+          "result": "Edda remembered your refusal: You told her to ignore what people earn."
+        },
+        {
+          "id": "concern_back",
+          "text": "I need to think about it.",
+          "next": "greeting"
+        }
+      ]
+    },
+    {
+      "id": "outcome_a",
+      "text": "'We will need honest accounts.' Edda proposes a private ledger and equal access to the cart.",
+      "choices": [
+        {
+          "id": "outcome_a_back",
+          "text": "Until next time.",
+          "next": "greeting"
+        }
+      ]
+    },
+    {
+      "id": "outcome_b",
+      "text": "'No one loses a turn for paying slowly.' Edda writes that protection into the arrangement before collecting coins.",
+      "choices": [
+        {
+          "id": "outcome_b_back",
+          "text": "Until next time.",
+          "next": "greeting"
+        }
+      ]
+    },
+    {
+      "id": "custom",
+      "text": "'Shared meals, small repairs, someone noticing when a chair stays empty. Nothing a grand monument could replace.'",
+      "choices": [
+        {
+          "id": "custom_back",
+          "text": "I will remember that.",
+          "next": "greeting"
+        }
+      ]
+    }
+  ]
+}

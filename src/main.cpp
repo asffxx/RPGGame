@@ -12,6 +12,7 @@
 #include "gameplay/save.hpp"
 #include "world/crafting.hpp"
 #include "world/dialogue.hpp"
+#include "world/reputation.hpp"
 #include "world/story_board.hpp"
 
 int main() {
@@ -25,6 +26,10 @@ int main() {
     }
     if (!storyDatabase().loaded()) {
         std::cerr << "Content load failed: " << storyDatabase().error() << '\n';
+        return 1;
+    }
+    if (!reputationDatabase().loaded()) {
+        std::cerr << "Content load failed: " << reputationDatabase().error() << '\n';
         return 1;
     }
     while (true) {

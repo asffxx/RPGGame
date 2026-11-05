@@ -1,0 +1,67 @@
+{
+  "acts": [
+    {
+      "id": "act_one",
+      "number": 1,
+      "title": "A Peaceful Season",
+      "summary": "You arrive with nothing and learn how this world keeps going.",
+      "completion": "Act One closes quietly. What comes next has not been written.",
+      "beats": [
+        {
+          "id": "arrival",
+          "title": "Arrival",
+          "text": "You leave the cell behind and reach a city that is still whole: warm windows, guarded gates, and people arguing about bread.",
+          "hint": "Reach one of the five cities.",
+          "conditions": [
+            {"type": "count", "id": "cities_discovered", "state": "gte", "value": 1}
+          ]
+        },
+        {
+          "id": "trade_learned",
+          "title": "A Trade Learned",
+          "text": "You learn a recipe and make something with your own hands. The world grows a little less borrowed.",
+          "hint": "Learn any crafting recipe.",
+          "conditions": [
+            {"type": "count", "id": "recipes_known", "state": "gte", "value": 1}
+          ]
+        },
+        {
+          "id": "place_to_belong",
+          "title": "A Place to Belong",
+          "text": "A guild accepts your name. Whatever comes later, you will not face the road entirely alone.",
+          "hint": "Join any guild.",
+          "conditions": [
+            {"type": "count", "id": "guilds_joined", "state": "gte", "value": 1}
+          ]
+        },
+        {
+          "id": "citys_trust",
+          "title": "A City's Trust",
+          "text": "Someone in a city trusts your judgment enough to ask for it. You answer carefully.",
+          "hint": "Earn standing with a guild.",
+          "conditions": [
+            {"type": "count", "id": "max_standing", "state": "gte", "value": 2}
+          ]
+        },
+        {
+          "id": "work_completed",
+          "title": "Work Completed",
+          "text": "A job is finished and paid for. The quiet work of keeping a city standing is larger than any single triumph.",
+          "hint": "Finish any local job.",
+          "conditions": [
+            {"type": "count", "id": "quests_completed", "state": "gte", "value": 1}
+          ]
+        },
+        {
+          "id": "something_at_the_edge",
+          "title": "Something at the Edge",
+          "text": "From the last gate, you look back across five cities. The roads are quiet. A bell stops mid-stroke, and no one else seems to notice. You cannot say why the silence stays with you.",
+          "hint": "See all five cities.",
+          "conditions": [
+            {"type": "count", "id": "cities_discovered", "state": "gte", "value": 5}
+          ]
+        }
+      ]
+    }
+  ]
+}

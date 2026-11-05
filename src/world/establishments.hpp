@@ -36,12 +36,13 @@ private:
 // General store: buy potions and equipment.
 class Store {
 public:
-    Store(PlayerInventory& inv) : inventory(inv) {}
+    Store(PlayerInventory& inv, GameSession& game) : inventory(inv), session(game) {}
 
     void openStore(Player& player);
 
 private:
     PlayerInventory& inventory;
+    GameSession& session;
     PotionDatabase potionDB;
     EquipmentandWeaponDatabase equipmentDB;
 
@@ -53,12 +54,13 @@ private:
 // Magic store: buy spells and enchant items.
 class magicStore {
 public:
-    magicStore(PlayerInventory& inv) : inventory(inv), debuffDB() {}
+    magicStore(PlayerInventory& inv, GameSession& game) : inventory(inv), session(game), debuffDB() {}
 
     void openStore(Player& player);
 
 private:
     PlayerInventory& inventory;
+    GameSession& session;
     SpellDatabase spellDB;
     DebuffDatabase debuffDB;
 

@@ -108,7 +108,7 @@
             {
               "type": "standing",
               "id": "lantern",
-              "value": 2
+              "value": 3
             }
           ],
           "once": true,
@@ -135,11 +135,38 @@
             {
               "type": "standing",
               "id": "lantern",
-              "value": 2
+              "value": 3
             }
           ],
           "once": true,
           "result": "Iven remembered your advice: Publish both roles clearly, without hiding her discovery."
+        },
+        {
+          "id": "decline_concern",
+          "text": "Credit whoever complains loudest and be done with it.",
+          "next": "",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "iven_decision",
+              "state": "eq",
+              "value": 0
+            }
+          ],
+          "effects": [
+            {
+              "type": "flag",
+              "id": "iven_decision",
+              "value": 3
+            },
+            {
+              "type": "standing",
+              "id": "lantern",
+              "value": -4
+            }
+          ],
+          "once": true,
+          "result": "Iven remembered your refusal: You told him to settle it by noise."
         },
         {
           "id": "concern_back",

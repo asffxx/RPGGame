@@ -7,7 +7,26 @@
 
 #include "core/ui.hpp"
 #include "app/display.hpp"
+#include "catalogs/guild.hpp"
 #include "gameplay/rumor.hpp"
+#include "world/reputation.hpp"
+
+namespace {
+struct ShopContext {
+    ReputationTier tier = ReputationTier::Neutral;
+    std::string factionId;
+};
+
+ShopContext shopContext(const GameSession& session) {
+    const auto* guild = guildDatabase().inCity(session.hero.currentLocation);
+    if (!guild) return {};
+    return {cityTier(session, guild->city), guild->id};
+}
+
+bool inStock(const ShopContext& context, const std::string& itemId) {
+    return context.factionId.empty() || stockVisible(context.factionId, context.tier, itemId);
+}
+}
 
 void Tavern::openTavern(Player& player, TimeSystem& timeSystem) {
     bool inTavern = true;
@@ -54,26 +73,38 @@ void Tavern::openTavern(Player& player, TimeSystem& timeSystem) {
 
 void Tavern::buyFoodAndDrinks(Player& player) {
     const auto& foods = foodDB.getFoodAndDrink();
+    const auto context = shopContext(session);
+    std::vector<size_t> available;
     std::vector<std::string> foodNames;
-    for (const auto& food : foods) {
+    for (size_t i = 0; i < foods.size(); ++i) {
+        if (!inStock(context, foods[i].id)) continue;
+        available.push_back(i);
+        const auto price = adjustedPrice(foods[i].pricePlatinum, foods[i].priceGold,
+                                         foods[i].priceSilver, foods[i].priceCopper, context.tier);
+        foodNames.push_back(foods[i].name + " (" + priceLabel(price) + ")");
+    }
 
-        std::string price = std::to_string(food.priceGold) + "g " + std::to_string(food.priceSilver) + "s";
-        foodNames.push_back(food.name + " (" + price + ")");
+    if (available.empty()) {
+        display::message("Nothing in stock at this standing.");
+        return;
     }
 
     std::cout << "\n--- Available ---" << std::endl;
     PagedSelector foodSelector(foodNames);
-    int index = foodSelector.select();
-
-    if (index == -1) return;
+    int selected = foodSelector.select();
+    if (selected == -1) return;
+    const size_t index = available[static_cast<size_t>(selected)];
+    const auto& food = foods[index];
+    const auto price = adjustedPrice(food.pricePlatinum, food.priceGold,
+                                     food.priceSilver, food.priceCopper, context.tier);
 
     if (!inventory.canAdd(PlayerInventory::ItemType::FoodAndDrink, index)) {
         display::message("Backpack full. Purchase cancelled.");
         return;
     }
-    if (player.economy.subtractCurrency(foods[index].pricePlatinum, foods[index].priceGold, foods[index].priceSilver, foods[index].priceCopper)) {
+    if (player.economy.subtractCurrency(price.platinum, price.gold, price.silver, price.copper)) {
         inventory.addItem(PlayerInventory::ItemType::FoodAndDrink, index);
-        display::tavernFoodPurchased(foods[index].name);
+        display::tavernFoodPurchased(food.name);
     } else {
         display::tavernFoodTooExpensive();
     }
@@ -157,20 +188,34 @@ void Store::openStore(Player& player) {
 
 void Store::buyPotions(Player& player) {
     const auto& potions = potionDB.getPotions();
+    const auto context = shopContext(session);
+    std::vector<size_t> available;
     std::vector<std::string> potionNames;
-    for (const auto& potion : potions) {
-        potionNames.push_back(potion.name + " - " + std::to_string(potion.priceSilver) + "s " + std::to_string(potion.priceCopper) + "c");
+    for (size_t i = 0; i < potions.size(); ++i) {
+        if (!inStock(context, potions[i].id)) continue;
+        available.push_back(i);
+        const auto price = adjustedPrice(potions[i].pricePlatinum, potions[i].priceGold,
+                                         potions[i].priceSilver, potions[i].priceCopper, context.tier);
+        potionNames.push_back(potions[i].name + " - " + priceLabel(price));
+    }
+    if (available.empty()) {
+        display::message("Nothing in stock at this standing.");
+        return;
     }
     PagedSelector potionSelector(potionNames);
-    int index = potionSelector.select();
-    if (index < 0) return;
+    int selected = potionSelector.select();
+    if (selected < 0) return;
+    const size_t index = available[static_cast<size_t>(selected)];
+    const auto& potion = potions[index];
+    const auto price = adjustedPrice(potion.pricePlatinum, potion.priceGold,
+                                     potion.priceSilver, potion.priceCopper, context.tier);
     if (!inventory.canAdd(PlayerInventory::ItemType::Potion, index)) {
         display::message("Backpack full. Purchase cancelled.");
         return;
     }
-    if (player.economy.subtractCurrency(0, 0, potions[index].priceSilver, potions[index].priceCopper)) {
+    if (player.economy.subtractCurrency(price.platinum, price.gold, price.silver, price.copper)) {
         inventory.addItem(PlayerInventory::ItemType::Potion, index);
-        display::storeBoughtPotion(potions[index].name);
+        display::storeBoughtPotion(potion.name);
     } else {
         display::storeNotEnoughCurrency();
     }
@@ -178,22 +223,36 @@ void Store::buyPotions(Player& player) {
 
 void Store::buyEquipment(Player& player) {
     const auto& equipment = equipmentDB.getEquipment();
+    const auto context = shopContext(session);
+    std::vector<size_t> available;
     std::vector<std::string> equipmentNames;
-    for (const auto& eq : equipment) {
-        equipmentNames.push_back(eq.name + " - " + std::to_string(eq.priceSilver) + "s " + std::to_string(eq.priceCopper) + "c");
+    for (size_t i = 0; i < equipment.size(); ++i) {
+        if (!inStock(context, equipment[i].id)) continue;
+        available.push_back(i);
+        const auto price = adjustedPrice(equipment[i].pricePlatinum, equipment[i].priceGold,
+                                         equipment[i].priceSilver, equipment[i].priceCopper, context.tier);
+        equipmentNames.push_back(equipment[i].name + " - " + priceLabel(price));
+    }
+    if (available.empty()) {
+        display::message("Nothing in stock at this standing.");
+        return;
     }
     PagedSelector equipmentSelector(equipmentNames);
-    int index = equipmentSelector.select();
-    if (index < 0) return;
+    int selected = equipmentSelector.select();
+    if (selected < 0) return;
+    const size_t index = available[static_cast<size_t>(selected)];
+    const auto& item = equipment[index];
+    const auto price = adjustedPrice(item.pricePlatinum, item.priceGold,
+                                     item.priceSilver, item.priceCopper, context.tier);
     if (!inventory.canAdd(PlayerInventory::ItemType::Equipment, index)) {
         display::message("Backpack full. Purchase cancelled.");
         return;
     }
-    if (player.economy.subtractCurrency(0, 0, equipment[index].priceSilver, equipment[index].priceCopper)) {
+    if (player.economy.subtractCurrency(price.platinum, price.gold, price.silver, price.copper)) {
         inventory.addItem(PlayerInventory::ItemType::Equipment, index);
-        display::storeBoughtEquipment(equipment[index].name);
-        if (equipment[index].type == "Weapon") {
-            player.boughtWeapons.insert(equipment[index].name);
+        display::storeBoughtEquipment(item.name);
+        if (item.type == "Weapon") {
+            player.boughtWeapons.insert(item.name);
             player.hasNewDictionaryEntry = true;
         }
     } else {
@@ -271,9 +330,10 @@ void magicStore::openStore(Player& player) {
 
 void magicStore::buySpells(Player& player) {
     const auto& spells = spellDB.getSpells();
+    const auto context = shopContext(session);
     std::vector<size_t> availableSpells;
     for (size_t i = 0; i < spells.size(); ++i) {
-        if (spells[i].requiredLevel <= player.stats.level) {
+        if (spells[i].requiredLevel <= player.stats.level && inStock(context, spells[i].id)) {
             availableSpells.push_back(i);
         }
     }
@@ -286,13 +346,17 @@ void magicStore::buySpells(Player& player) {
     std::vector<std::string> spellNames;
     for (size_t i : availableSpells) {
         const auto& spell = spells[i];
-        spellNames.push_back(spell.spellName + " - " + std::to_string(spell.pricePlatinum) + "p " + std::to_string(spell.priceGold) + "g " + std::to_string(spell.priceSilver) + "s " + std::to_string(spell.priceCopper) + "c");
+        const auto price = adjustedPrice(spell.pricePlatinum, spell.priceGold,
+                                         spell.priceSilver, spell.priceCopper, context.tier);
+        spellNames.push_back(spell.spellName + " - " + priceLabel(price));
     }
     PagedSelector spellSelector(spellNames);
     size_t selectedIndex = spellSelector.select();
     size_t index = availableSpells[selectedIndex];
     const auto& spell = spells[index];
-    if (player.economy.subtractCurrency(spell.pricePlatinum, spell.priceGold, spell.priceSilver, spell.priceCopper)) {
+    const auto price = adjustedPrice(spell.pricePlatinum, spell.priceGold,
+                                     spell.priceSilver, spell.priceCopper, context.tier);
+    if (player.economy.subtractCurrency(price.platinum, price.gold, price.silver, price.copper)) {
 
         if (std::find(player.learnedSpells.begin(), player.learnedSpells.end(), spell.spellName) == player.learnedSpells.end()) {
             player.learnedSpells.push_back(spell.spellName);

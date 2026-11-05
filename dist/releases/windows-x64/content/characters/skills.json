@@ -1,0 +1,265 @@
+{
+  "schemaVersion": 1,
+  "records": [
+    {
+      "className": "Warrior",
+      "name": "Power Strike",
+      "description": "Strike for 175% physical damage.",
+      "kind": 0,
+      "effects": {
+        "damageMultiplier": 1.75,
+        "alternateDamageMultiplier": 1,
+        "healthThreshold": 0.5,
+        "strongOutcomeChance": 0.5,
+        "healthCostPercent": 0,
+        "manaCostPercent": 0,
+        "manaRestorePercent": 0,
+        "healFraction": 0,
+        "alternateHealFraction": 0,
+        "retaliationMultiplier": 1,
+        "magical": false,
+        "undodgeable": false
+      }
+    },
+    {
+      "className": "Knight",
+      "name": "Brace",
+      "description": "Strike normally; halve the next enemy retaliation.",
+      "kind": 1,
+      "effects": {
+        "damageMultiplier": 1,
+        "alternateDamageMultiplier": 1,
+        "healthThreshold": 0.5,
+        "strongOutcomeChance": 0.5,
+        "healthCostPercent": 0,
+        "manaCostPercent": 0,
+        "manaRestorePercent": 0,
+        "healFraction": 0,
+        "alternateHealFraction": 0,
+        "retaliationMultiplier": 0.5,
+        "magical": false,
+        "undodgeable": false
+      }
+    },
+    {
+      "className": "Berserker",
+      "name": "Blood Rage",
+      "description": "Spend 10% max HP (cannot self-kill); strike for 250% physical damage.",
+      "kind": 2,
+      "effects": {
+        "damageMultiplier": 2.5,
+        "alternateDamageMultiplier": 1,
+        "healthThreshold": 0.5,
+        "strongOutcomeChance": 0.5,
+        "healthCostPercent": 10,
+        "manaCostPercent": 0,
+        "manaRestorePercent": 0,
+        "healFraction": 0,
+        "alternateHealFraction": 0,
+        "retaliationMultiplier": 1,
+        "magical": false,
+        "undodgeable": false
+      }
+    },
+    {
+      "className": "Assassin",
+      "name": "Execute",
+      "description": "Strike for 250% physical damage below half enemy HP, otherwise 125%.",
+      "kind": 3,
+      "effects": {
+        "damageMultiplier": 2.5,
+        "alternateDamageMultiplier": 1.25,
+        "healthThreshold": 0.5,
+        "strongOutcomeChance": 0.5,
+        "healthCostPercent": 0,
+        "manaCostPercent": 0,
+        "manaRestorePercent": 0,
+        "healFraction": 0,
+        "alternateHealFraction": 0,
+        "retaliationMultiplier": 1,
+        "magical": false,
+        "undodgeable": false
+      }
+    },
+    {
+      "className": "Rogue",
+      "name": "Risky Strike",
+      "description": "50% chance of 300% physical damage, otherwise 50%.",
+      "kind": 4,
+      "effects": {
+        "damageMultiplier": 3,
+        "alternateDamageMultiplier": 0.5,
+        "healthThreshold": 0.5,
+        "strongOutcomeChance": 0.5,
+        "healthCostPercent": 0,
+        "manaCostPercent": 0,
+        "manaRestorePercent": 0,
+        "healFraction": 0,
+        "alternateHealFraction": 0,
+        "retaliationMultiplier": 1,
+        "magical": false,
+        "undodgeable": false
+      }
+    },
+    {
+      "className": "Ranger",
+      "name": "Aimed Shot",
+      "description": "Strike for 150% physical damage; cannot be dodged.",
+      "kind": 5,
+      "effects": {
+        "damageMultiplier": 1.5,
+        "alternateDamageMultiplier": 1,
+        "healthThreshold": 0.5,
+        "strongOutcomeChance": 0.5,
+        "healthCostPercent": 0,
+        "manaCostPercent": 0,
+        "manaRestorePercent": 0,
+        "healFraction": 0,
+        "alternateHealFraction": 0,
+        "retaliationMultiplier": 1,
+        "magical": false,
+        "undodgeable": true
+      }
+    },
+    {
+      "className": "Mage",
+      "name": "Arcane Bolt",
+      "description": "Deal 175% magic damage without spending mana.",
+      "kind": 6,
+      "effects": {
+        "damageMultiplier": 1.75,
+        "alternateDamageMultiplier": 1,
+        "healthThreshold": 0.5,
+        "strongOutcomeChance": 0.5,
+        "healthCostPercent": 0,
+        "manaCostPercent": 0,
+        "manaRestorePercent": 0,
+        "healFraction": 0,
+        "alternateHealFraction": 0,
+        "retaliationMultiplier": 1,
+        "magical": true,
+        "undodgeable": false
+      }
+    },
+    {
+      "className": "Sorcerer",
+      "name": "Mana Burst",
+      "description": "Spend half current mana; deal 200% magic damage plus mana spent.",
+      "kind": 7,
+      "effects": {
+        "damageMultiplier": 2,
+        "alternateDamageMultiplier": 1,
+        "healthThreshold": 0.5,
+        "strongOutcomeChance": 0.5,
+        "healthCostPercent": 0,
+        "manaCostPercent": 50,
+        "manaRestorePercent": 0,
+        "healFraction": 0,
+        "alternateHealFraction": 0,
+        "retaliationMultiplier": 1,
+        "magical": true,
+        "undodgeable": false
+      }
+    },
+    {
+      "className": "Scholar",
+      "name": "Meditate",
+      "description": "Restore 40% maximum mana (at least 1).",
+      "kind": 8,
+      "effects": {
+        "damageMultiplier": 1,
+        "alternateDamageMultiplier": 1,
+        "healthThreshold": 0.5,
+        "strongOutcomeChance": 0.5,
+        "healthCostPercent": 0,
+        "manaCostPercent": 0,
+        "manaRestorePercent": 40,
+        "healFraction": 0,
+        "alternateHealFraction": 0,
+        "retaliationMultiplier": 1,
+        "magical": false,
+        "undodgeable": false
+      }
+    },
+    {
+      "className": "Shrewd Diplomat",
+      "name": "Distract",
+      "description": "Prevent the next enemy retaliation.",
+      "kind": 9,
+      "effects": {
+        "damageMultiplier": 1,
+        "alternateDamageMultiplier": 1,
+        "healthThreshold": 0.5,
+        "strongOutcomeChance": 0.5,
+        "healthCostPercent": 0,
+        "manaCostPercent": 0,
+        "manaRestorePercent": 0,
+        "healFraction": 0,
+        "alternateHealFraction": 0,
+        "retaliationMultiplier": 1,
+        "magical": false,
+        "undodgeable": false
+      }
+    },
+    {
+      "className": "Travelling Merchant",
+      "name": "Emergency Supplies",
+      "description": "Restore 30% maximum HP (at least 1).",
+      "kind": 10,
+      "effects": {
+        "damageMultiplier": 1,
+        "alternateDamageMultiplier": 1,
+        "healthThreshold": 0.5,
+        "strongOutcomeChance": 0.5,
+        "healthCostPercent": 0,
+        "manaCostPercent": 0,
+        "manaRestorePercent": 0,
+        "healFraction": 0.300000012,
+        "alternateHealFraction": 0,
+        "retaliationMultiplier": 1,
+        "magical": false,
+        "undodgeable": false
+      }
+    },
+    {
+      "className": "Sheltered Noble",
+      "name": "Rally",
+      "description": "Restore 20% maximum HP to yourself and each living companion.",
+      "kind": 11,
+      "effects": {
+        "damageMultiplier": 1,
+        "alternateDamageMultiplier": 1,
+        "healthThreshold": 0.5,
+        "strongOutcomeChance": 0.5,
+        "healthCostPercent": 0,
+        "manaCostPercent": 0,
+        "manaRestorePercent": 0,
+        "healFraction": 0.200000003,
+        "alternateHealFraction": 0,
+        "retaliationMultiplier": 1,
+        "magical": false,
+        "undodgeable": false
+      }
+    },
+    {
+      "className": "Prisoner",
+      "name": "Last Stand",
+      "description": "Restore 40% maximum HP below half HP, otherwise 20%.",
+      "kind": 12,
+      "effects": {
+        "damageMultiplier": 1,
+        "alternateDamageMultiplier": 1,
+        "healthThreshold": 0.5,
+        "strongOutcomeChance": 0.5,
+        "healthCostPercent": 0,
+        "manaCostPercent": 0,
+        "manaRestorePercent": 0,
+        "healFraction": 0.400000006,
+        "alternateHealFraction": 0.200000003,
+        "retaliationMultiplier": 1,
+        "magical": false,
+        "undodgeable": false
+      }
+    }
+  ]
+}

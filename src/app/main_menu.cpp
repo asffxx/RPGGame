@@ -1,5 +1,6 @@
 #include "main_menu.hpp"
 #include "world/dialogue.hpp"
+#include "world/reputation.hpp"
 #include "world/story_board.hpp"
 
 #include <iostream>
@@ -27,16 +28,26 @@
 #include "gameplay/guild.hpp"
 #include "world/crafting.hpp"
 
+namespace {
+std::string standingStatus(const GameSession& session) {
+    const auto* guild = guildDatabase().inCity(session.hero.currentLocation);
+    if (!guild) return "Standing: no city";
+    const int value = cityStanding(session, guild->city);
+    return "Standing: " + guild->city + " - " + tierName(tierFor(value)) +
+           " (" + std::to_string(value) + ")";
+}
+}
+
 void mainMenu(GameSession& session, bool debugMode) {
     auto& hero = session.hero;
     EnemyController enemyCtrl;
     CombatSystem combat;
     auto& playerInventory = session.inventory;
     PlayerController heroStats(hero, playerInventory);
-    Store store(playerInventory);
+    Store store(playerInventory, session);
     auto& playerParty = session.party;
     Tavern tavern(playerInventory, playerParty, session);
-    magicStore magicStore(playerInventory);
+    magicStore magicStore(playerInventory, session);
     NPCGenerator npcGen;
     for (const auto& npc : playerParty) npcGen.lockName(npc.name);
     SpellDatabase spellDB;
@@ -174,7 +185,7 @@ void mainMenu(GameSession& session, bool debugMode) {
         items.push_back({"Exit", "Quit the game.", [&]() { running = false; }});
         categories["System"].push_back(items.size() - 1);
 
-        Menu menu(items, categories, hero);
+        Menu menu(items, categories, hero, standingStatus(session));
         menu.displayAndExecute();
         clearScreen();
     }

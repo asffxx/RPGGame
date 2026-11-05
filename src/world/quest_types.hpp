@@ -23,6 +23,7 @@ struct QuestDefinition {
     int minimumLevel = 1;
     std::string offeringGuild{}; // Empty means any guild hall.
     std::string prerequisite{}; // A guild quest whose reward must have been claimed.
+    int minimumStanding = -100; // -100 means no standing requirement.
     std::vector<QuestItemReward> itemRewards{};
 };
 

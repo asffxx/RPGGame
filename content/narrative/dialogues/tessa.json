@@ -109,7 +109,7 @@
             {
               "type": "standing",
               "id": "silverthread",
-              "value": 2
+              "value": 3
             }
           ],
           "once": true,
@@ -136,11 +136,38 @@
             {
               "type": "standing",
               "id": "silverthread",
-              "value": 2
+              "value": 3
             }
           ],
           "once": true,
           "result": "Tessa remembered your advice: Use the merchants' relief fund to cover the fee."
+        },
+        {
+          "id": "decline_concern",
+          "text": "Charge the full fee. The driver's problem is not yours.",
+          "next": "",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "tessa_decision",
+              "state": "eq",
+              "value": 0
+            }
+          ],
+          "effects": [
+            {
+              "type": "flag",
+              "id": "tessa_decision",
+              "value": 3
+            },
+            {
+              "type": "standing",
+              "id": "silverthread",
+              "value": -4
+            }
+          ],
+          "once": true,
+          "result": "Tessa remembered your refusal: You told her to charge the full fee."
         },
         {
           "id": "concern_back",

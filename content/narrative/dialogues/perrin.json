@@ -93,6 +93,11 @@
               "type": "flag",
               "id": "perrin_decision",
               "value": 1
+            },
+            {
+              "type": "standing",
+              "id": "lantern",
+              "value": 3
             }
           ],
           "once": true,
@@ -115,10 +120,42 @@
               "type": "flag",
               "id": "perrin_decision",
               "value": 2
+            },
+            {
+              "type": "standing",
+              "id": "lantern",
+              "value": 3
             }
           ],
           "once": true,
           "result": "Perrin remembered your advice: Light the courtyard and share portable lamps with the stalls."
+        },
+        {
+          "id": "decline_concern",
+          "text": "Put the glass wherever it looks best and stop asking.",
+          "next": "",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "perrin_decision",
+              "state": "eq",
+              "value": 0
+            }
+          ],
+          "effects": [
+            {
+              "type": "flag",
+              "id": "perrin_decision",
+              "value": 3
+            },
+            {
+              "type": "standing",
+              "id": "lantern",
+              "value": -4
+            }
+          ],
+          "once": true,
+          "result": "Perrin remembered your refusal: You told him to choose by appearance."
         },
         {
           "id": "concern_back",

@@ -108,7 +108,7 @@
             {
               "type": "standing",
               "id": "ironward",
-              "value": 2
+              "value": 3
             }
           ],
           "once": true,
@@ -135,11 +135,38 @@
             {
               "type": "standing",
               "id": "ironward",
-              "value": 2
+              "value": 3
             }
           ],
           "once": true,
           "result": "Mara remembered your advice: Let her learn the town circuit first."
+        },
+        {
+          "id": "decline_concern",
+          "text": "That rota is your problem, not mine.",
+          "next": "",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "mara_decision",
+              "state": "eq",
+              "value": 0
+            }
+          ],
+          "effects": [
+            {
+              "type": "flag",
+              "id": "mara_decision",
+              "value": 3
+            },
+            {
+              "type": "standing",
+              "id": "ironward",
+              "value": -4
+            }
+          ],
+          "once": true,
+          "result": "Mara remembered your refusal: You left the rota to someone else."
         },
         {
           "id": "concern_back",

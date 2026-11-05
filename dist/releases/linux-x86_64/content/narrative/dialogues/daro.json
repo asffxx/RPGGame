@@ -1,0 +1,233 @@
+{
+  "entry": "greeting",
+  "nodes": [
+    {
+      "id": "greeting",
+      "text": "Daro holds up two stained hands. 'The purple washes out. The green is negotiating.'",
+      "choices": [
+        {
+          "id": "ask_life",
+          "text": "Tell me about life here.",
+          "next": "life"
+        },
+        {
+          "id": "ask_concern",
+          "text": "Is anything on your mind?",
+          "next": "concern",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "daro_decision",
+              "state": "eq",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": "remember_a",
+          "text": "How did our earlier discussion turn out?",
+          "next": "outcome_a",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "daro_decision",
+              "state": "eq",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": "remember_b",
+          "text": "How did our earlier discussion turn out?",
+          "next": "outcome_b",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "daro_decision",
+              "state": "eq",
+              "value": 2
+            }
+          ]
+        },
+        {
+          "id": "ask_lesson",
+          "text": "Could you teach me a recipe?",
+          "next": "lesson"
+        },
+        {
+          "id": "goodbye",
+          "text": "Goodbye.",
+          "next": ""
+        }
+      ]
+    },
+    {
+      "id": "life",
+      "text": "'Trade brings us ingredients, but local makers keep us honest. If a supplier exaggerates, someone here knows the actual plant.'",
+      "choices": [
+        {
+          "id": "life_back",
+          "text": "Thank you.",
+          "next": "greeting"
+        }
+      ]
+    },
+    {
+      "id": "concern",
+      "text": "'A customer wants the strongest batch for heavy work. A milder batch costs less and lasts longer on the shelf.'",
+      "choices": [
+        {
+          "id": "decide_a",
+          "text": "Explain both choices and let the customer decide.",
+          "next": "outcome_a",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "daro_decision",
+              "state": "eq",
+              "value": 0
+            }
+          ],
+          "effects": [
+            {
+              "type": "flag",
+              "id": "daro_decision",
+              "value": 1
+            },
+            {
+              "type": "standing",
+              "id": "silverthread",
+              "value": 3
+            }
+          ],
+          "once": true,
+          "result": "Daro remembered your advice: Explain both choices and let the customer decide."
+        },
+        {
+          "id": "decide_b",
+          "text": "Recommend the milder batch for ordinary work.",
+          "next": "outcome_b",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "daro_decision",
+              "state": "eq",
+              "value": 0
+            }
+          ],
+          "effects": [
+            {
+              "type": "flag",
+              "id": "daro_decision",
+              "value": 2
+            },
+            {
+              "type": "standing",
+              "id": "silverthread",
+              "value": 3
+            }
+          ],
+          "once": true,
+          "result": "Daro remembered your advice: Recommend the milder batch for ordinary work."
+        },
+        {
+          "id": "decline_concern",
+          "text": "Sell the strongest and let them find out.",
+          "next": "",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "daro_decision",
+              "state": "eq",
+              "value": 0
+            }
+          ],
+          "effects": [
+            {
+              "type": "flag",
+              "id": "daro_decision",
+              "value": 3
+            },
+            {
+              "type": "standing",
+              "id": "silverthread",
+              "value": -4
+            }
+          ],
+          "once": true,
+          "result": "Daro remembered your refusal: You told him to sell the strongest batch."
+        },
+        {
+          "id": "concern_back",
+          "text": "I need to think about it.",
+          "next": "greeting"
+        }
+      ]
+    },
+    {
+      "id": "outcome_a",
+      "text": "'A sale without a trick. What a scandal.' Daro writes clearer labels before the afternoon crowd arrives.",
+      "choices": [
+        {
+          "id": "outcome_a_back",
+          "text": "Until next time.",
+          "next": "greeting"
+        }
+      ]
+    },
+    {
+      "id": "outcome_b",
+      "text": "'Enough is a useful measure.' Daro sets the costly stock behind the counter, available when genuinely needed.",
+      "choices": [
+        {
+          "id": "outcome_b_back",
+          "text": "Until next time.",
+          "next": "greeting"
+        }
+      ]
+    },
+    {
+      "id": "lesson",
+      "text": "'I can teach you strength potion. Take your time with the measurements. A recipe is a promise you make to whoever uses the result.'",
+      "choices": [
+        {
+          "id": "learn_recipe",
+          "text": "Study the recipe together.",
+          "next": "greeting",
+          "conditions": [
+            {
+              "type": "recipe",
+              "id": "strength_potion_recipe",
+              "state": "unknown"
+            }
+          ],
+          "effects": [
+            {
+              "type": "recipe",
+              "id": "strength_potion_recipe"
+            }
+          ],
+          "once": true,
+          "result": "You learned strength potion through patient instruction."
+        },
+        {
+          "id": "known_recipe",
+          "text": "I already know this recipe; let us compare notes.",
+          "next": "life",
+          "conditions": [
+            {
+              "type": "recipe",
+              "id": "strength_potion_recipe",
+              "state": "known"
+            }
+          ]
+        },
+        {
+          "id": "lesson_back",
+          "text": "Another time.",
+          "next": "greeting"
+        }
+      ]
+    }
+  ]
+}

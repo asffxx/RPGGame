@@ -35,7 +35,7 @@ std::vector<std::string> Menu::visibleCategories() const {
 }
 
 std::vector<std::string> Menu::statusLines() const {
-    return {
+    std::vector<std::string> lines = {
         std::string("[ RPGGame / v") + gameVersion + " ]",
         hero.name + " / " + hero.playerClass.name + " / Level " + std::to_string(hero.stats.level),
         resourceBar("HP", hero.stats.hitpoints, hero.stats.maxHitpoints),
@@ -46,6 +46,10 @@ std::vector<std::string> Menu::statusLines() const {
             std::to_string(hero.economy.gold) + "g " + std::to_string(hero.economy.silver) + "s " +
             std::to_string(hero.economy.copper) + "c"
     };
+    if (!status.empty()) {
+        lines.insert(lines.begin() + 5, status);
+    }
+    return lines;
 }
 
 void Menu::displayOverview(const std::vector<std::string>& order) {

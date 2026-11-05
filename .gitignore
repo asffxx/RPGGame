@@ -22,10 +22,8 @@ compile_commands.json
 *.so
 *.dll
 *.exe
-
-# ── Distribution binaries ─────────────────────────────────────────────────────
-# Built by hand at release time; not committed between releases.
-/dist/
+# Published Windows release binaries are tracked; local build output is not.
+!dist/releases/**/*.exe
 
 # ── Runtime data ──────────────────────────────────────────────────────────────
 # Player save file lives next to the executable, never in the repo.

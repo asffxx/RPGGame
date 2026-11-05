@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(RPGGame VERSION 3.6.0 LANGUAGES CXX)
+project(RPGGame VERSION 3.7.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -62,6 +62,7 @@ add_library(rpg_core
     src/world/crafting.cpp
     src/world/conditions.cpp
     src/world/dialogue.cpp
+    src/world/reputation.cpp
     src/world/story_board.cpp
     src/world/travel.cpp
     src/world/encounters.cpp
@@ -138,6 +139,17 @@ if(BUILD_TESTING AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tests/game_tests.cpp")
     target_link_libraries(rpg_ui_tests PRIVATE rpg_core)
     add_test(NAME terminal_ui COMMAND rpg_ui_tests)
     set_tests_properties(terminal_ui PROPERTIES ENVIRONMENT "TERM=dumb")
+
+    add_executable(rpg_reputation_tests tests/reputation_tests.cpp)
+    target_link_libraries(rpg_reputation_tests PRIVATE rpg_core)
+    add_test(NAME reputation_catalog COMMAND rpg_reputation_tests catalog ${CMAKE_CURRENT_BINARY_DIR}/reputation-tests/catalog)
+    add_test(NAME reputation_tiers COMMAND rpg_reputation_tests tiers ${CMAKE_CURRENT_BINARY_DIR}/reputation-tests/tiers)
+    add_test(NAME reputation_dialogue COMMAND rpg_reputation_tests dialogue ${CMAKE_CURRENT_BINARY_DIR}/reputation-tests/dialogue)
+    add_test(NAME reputation_quests COMMAND rpg_reputation_tests quests ${CMAKE_CURRENT_BINARY_DIR}/reputation-tests/quests)
+    add_test(NAME reputation_shops COMMAND rpg_reputation_tests shops ${CMAKE_CURRENT_BINARY_DIR}/reputation-tests/shops)
+    add_test(NAME reputation_display COMMAND rpg_reputation_tests display ${CMAKE_CURRENT_BINARY_DIR}/reputation-tests/display)
+    add_test(NAME reputation_save COMMAND rpg_reputation_tests save ${CMAKE_CURRENT_BINARY_DIR}/reputation-tests/save)
+
     add_test(NAME cli_flows COMMAND ${CMAKE_COMMAND}
         -DRPG_BINARY=$<TARGET_FILE:rpg>
         -DSCRATCH=${CMAKE_CURRENT_BINARY_DIR}/cli-test

@@ -1,0 +1,185 @@
+{
+  "schemaVersion": 1,
+  "records": [
+    {
+      "id": "ironward",
+      "name": "Ironward Company",
+      "city": "Attania",
+      "introduction": "Captain Sera offers a place beside the city's roadwardens. 'Bring our people home.'",
+      "quests": [
+        {
+          "id": "ironward_supplies",
+          "title": "The Silent Patrol",
+          "briefing": "Recover the missing patrol's supply satchel in Barren Plains.",
+          "location": "Barren Plains",
+          "enemyName": "",
+          "completionText": "Beneath a broken cart you find the patrol's supplies and a scout's map leading to Shadowed Grove.",
+          "rewardSilver": 40,
+          "rewardExperience": 30,
+          "category": 0,
+          "minimumLevel": 1,
+          "offeringGuild": "ironward",
+          "prerequisite": ""
+        },
+        {
+          "id": "ironward_scout",
+          "title": "Tracks in the Grove",
+          "briefing": "Confront the Goblin Scout in Shadowed Grove and secure the patrol's escape route.",
+          "location": "Shadowed Grove",
+          "enemyName": "Goblin Scout",
+          "completionText": "The scout falls. The surviving wardens emerge from hiding, ready to return to Attania.",
+          "rewardSilver": 100,
+          "rewardExperience": 70,
+          "category": 0,
+          "minimumLevel": 1,
+          "offeringGuild": "ironward",
+          "prerequisite": "ironward_supplies"
+        }
+      ]
+    },
+    {
+      "id": "lantern",
+      "name": "Lantern Scholars",
+      "city": "Erden",
+      "introduction": "Archivist Iven welcomes curious minds. 'A lost page can be more dangerous than a drawn blade.'",
+      "quests": [
+        {
+          "id": "lantern_pages",
+          "title": "Scattered Pages",
+          "briefing": "Retrieve the scholar's research from Enchanted Forest.",
+          "location": "Enchanted Forest",
+          "enemyName": "",
+          "completionText": "You gather rain-stained pages beneath a hollow tree. Their diagrams point to Enchanted Library.",
+          "rewardSilver": 40,
+          "rewardExperience": 30,
+          "category": 0,
+          "minimumLevel": 1,
+          "offeringGuild": "lantern",
+          "prerequisite": ""
+        },
+        {
+          "id": "lantern_keeper",
+          "title": "The Unquiet Archive",
+          "briefing": "Defeat the Bonewalker guarding the missing folio in Enchanted Library.",
+          "location": "Enchanted Library",
+          "enemyName": "Bonewalker",
+          "completionText": "The guardian crumbles, revealing the folio that completes the scholars' research.",
+          "rewardSilver": 100,
+          "rewardExperience": 70,
+          "category": 0,
+          "minimumLevel": 1,
+          "offeringGuild": "lantern",
+          "prerequisite": "lantern_pages"
+        }
+      ]
+    },
+    {
+      "id": "silverthread",
+      "name": "Silverthread Consortium",
+      "city": "Trisselie",
+      "introduction": "Factor Mirelle studies your hands. 'Honest work pays. Finding what was stolen pays better.'",
+      "quests": [
+        {
+          "id": "silverthread_ledger",
+          "title": "An Unbalanced Ledger",
+          "briefing": "Recover the stolen shipping ledger hidden in Ghost Town.",
+          "location": "Ghost Town",
+          "enemyName": "",
+          "completionText": "A ledger lies under a loose floorboard. False entries reveal a shipment diverted to Bandit Hideout.",
+          "rewardSilver": 50,
+          "rewardExperience": 25,
+          "category": 0,
+          "minimumLevel": 1,
+          "offeringGuild": "silverthread",
+          "prerequisite": ""
+        },
+        {
+          "id": "silverthread_outlaw",
+          "title": "The Last Delivery",
+          "briefing": "Confront the Outlaw in Bandit Hideout and reclaim the stolen merchandise.",
+          "location": "Bandit Hideout",
+          "enemyName": "Outlaw",
+          "completionText": "Behind the outlaw's barricade you find the missing cargo, still bearing Trisselie's silver seals.",
+          "rewardSilver": 120,
+          "rewardExperience": 60,
+          "category": 0,
+          "minimumLevel": 1,
+          "offeringGuild": "silverthread",
+          "prerequisite": "silverthread_ledger"
+        }
+      ]
+    },
+    {
+      "id": "crownward",
+      "name": "Crownward Order",
+      "city": "Ariandel, The Royal Capital",
+      "introduction": "Warden Alis lowers her voice. 'Service to the crown begins with keeping a promise.'",
+      "quests": [
+        {
+          "id": "crownward_dispatch",
+          "title": "A Courier's Promise",
+          "briefing": "Find the missing courier's dispatch in Whispering Woods.",
+          "location": "Whispering Woods",
+          "enemyName": "",
+          "completionText": "The wounded courier entrusts you with a dispatch: raiders carried the royal seal to Abandoned Castle.",
+          "rewardSilver": 40,
+          "rewardExperience": 35,
+          "category": 0,
+          "minimumLevel": 1,
+          "offeringGuild": "crownward",
+          "prerequisite": ""
+        },
+        {
+          "id": "crownward_seal",
+          "title": "The Stolen Seal",
+          "briefing": "Defeat the Goblin Marauder at Abandoned Castle and retrieve the royal seal.",
+          "location": "Abandoned Castle",
+          "enemyName": "Goblin Marauder",
+          "completionText": "The marauder drops a velvet case. The royal seal inside will restore trust in the capital's messengers.",
+          "rewardSilver": 110,
+          "rewardExperience": 80,
+          "category": 0,
+          "minimumLevel": 1,
+          "offeringGuild": "crownward",
+          "prerequisite": "crownward_dispatch"
+        }
+      ]
+    },
+    {
+      "id": "tidebound",
+      "name": "Tidebound Fellowship",
+      "city": "Velmora",
+      "introduction": "Navigator Oren spreads a weathered chart. 'Every lost voyage deserves someone to follow its wake.'",
+      "quests": [
+        {
+          "id": "tidebound_journal",
+          "title": "Beyond the Last Chart",
+          "briefing": "Find the expedition's journal at Desert Oasis.",
+          "location": "Desert Oasis",
+          "enemyName": "",
+          "completionText": "The expedition sheltered here. Its journal marks a relic cache deep in Crystal Caverns.",
+          "rewardSilver": 45,
+          "rewardExperience": 30,
+          "category": 0,
+          "minimumLevel": 1,
+          "offeringGuild": "tidebound",
+          "prerequisite": ""
+        },
+        {
+          "id": "tidebound_relic",
+          "title": "A Treasure with Teeth",
+          "briefing": "Defeat the Mimic concealing the expedition's relic in Crystal Caverns.",
+          "location": "Crystal Caverns",
+          "enemyName": "Mimic",
+          "completionText": "The false chest collapses. You recover the expedition's tideglass relic from its splintered remains.",
+          "rewardSilver": 100,
+          "rewardExperience": 75,
+          "category": 0,
+          "minimumLevel": 1,
+          "offeringGuild": "tidebound",
+          "prerequisite": "tidebound_journal"
+        }
+      ]
+    }
+  ]
+}

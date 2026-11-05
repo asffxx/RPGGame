@@ -93,6 +93,11 @@
               "type": "flag",
               "id": "halwen_decision",
               "value": 1
+            },
+            {
+              "type": "standing",
+              "id": "crownward",
+              "value": 3
             }
           ],
           "once": true,
@@ -115,10 +120,42 @@
               "type": "flag",
               "id": "halwen_decision",
               "value": 2
+            },
+            {
+              "type": "standing",
+              "id": "crownward",
+              "value": 3
             }
           ],
           "once": true,
           "result": "Halwen remembered your advice: Make the contest entry a demonstration of tool care."
+        },
+        {
+          "id": "decline_concern",
+          "text": "Skip the maintenance. The contest matters more.",
+          "next": "",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "halwen_decision",
+              "state": "eq",
+              "value": 0
+            }
+          ],
+          "effects": [
+            {
+              "type": "flag",
+              "id": "halwen_decision",
+              "value": 3
+            },
+            {
+              "type": "standing",
+              "id": "crownward",
+              "value": -4
+            }
+          ],
+          "once": true,
+          "result": "Halwen remembered your refusal: You told him to risk the tools for the contest."
         },
         {
           "id": "concern_back",

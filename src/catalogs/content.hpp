@@ -108,7 +108,7 @@ template<class A> void fields(A& a, QuestItemReward& v) { FIELD(item); FIELD(qua
 template<class A> void fields(A& a, QuestDefinition& v) {
     FIELD(id); FIELD(title); FIELD(briefing); FIELD(location); FIELD(enemyName); FIELD(completionText);
     FIELD(rewardSilver); FIELD(rewardExperience); FIELD(category); FIELD(minimumLevel); FIELD(offeringGuild); FIELD(prerequisite);
-    FIELD(itemRewards);
+    FIELD(minimumStanding); FIELD(itemRewards);
 }
 template<class A> void fields(A& a, GuildDefinition& v) {
     FIELD(id); FIELD(name); FIELD(city); FIELD(introduction); FIELD(quests);
@@ -135,9 +135,13 @@ public:
     template<class T> void operator()(const char* name, T& result) {
         used.insert(name);
         if (std::string(name) == "itemRewards" && !object.has(name)) return;
+        if (std::string(name) == "minimumStanding" && !object.has(name)) return;
         const std::string field = where + "." + name;
         try { decode(object.at(name), result, field); }
         catch (const std::exception& e) { throw std::runtime_error(field + ": " + e.what()); }
+        if constexpr (std::is_same_v<T, int>)
+            if (std::string(name) == "minimumStanding" && (result < -100 || result > 100))
+                throw std::runtime_error(field + ": outside -100..100");
     }
     void finish() const {
         for (const auto& entry : object.object())

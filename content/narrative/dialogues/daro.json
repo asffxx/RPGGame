@@ -93,6 +93,11 @@
               "type": "flag",
               "id": "daro_decision",
               "value": 1
+            },
+            {
+              "type": "standing",
+              "id": "silverthread",
+              "value": 3
             }
           ],
           "once": true,
@@ -115,10 +120,42 @@
               "type": "flag",
               "id": "daro_decision",
               "value": 2
+            },
+            {
+              "type": "standing",
+              "id": "silverthread",
+              "value": 3
             }
           ],
           "once": true,
           "result": "Daro remembered your advice: Recommend the milder batch for ordinary work."
+        },
+        {
+          "id": "decline_concern",
+          "text": "Sell the strongest and let them find out.",
+          "next": "",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "daro_decision",
+              "state": "eq",
+              "value": 0
+            }
+          ],
+          "effects": [
+            {
+              "type": "flag",
+              "id": "daro_decision",
+              "value": 3
+            },
+            {
+              "type": "standing",
+              "id": "silverthread",
+              "value": -4
+            }
+          ],
+          "once": true,
+          "result": "Daro remembered your refusal: You told him to sell the strongest batch."
         },
         {
           "id": "concern_back",

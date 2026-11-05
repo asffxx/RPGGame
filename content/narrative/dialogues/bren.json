@@ -105,6 +105,11 @@
               "type": "flag",
               "id": "bren_decision",
               "value": 1
+            },
+            {
+              "type": "standing",
+              "id": "ironward",
+              "value": 3
             }
           ],
           "once": true,
@@ -127,10 +132,42 @@
               "type": "flag",
               "id": "bren_decision",
               "value": 2
+            },
+            {
+              "type": "standing",
+              "id": "ironward",
+              "value": 3
             }
           ],
           "once": true,
           "result": "Bren remembered your advice: Finish the fittings, then use the fee for the stove."
+        },
+        {
+          "id": "decline_concern",
+          "text": "Pick whichever is cheaper and stop asking me.",
+          "next": "",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "bren_decision",
+              "state": "eq",
+              "value": 0
+            }
+          ],
+          "effects": [
+            {
+              "type": "flag",
+              "id": "bren_decision",
+              "value": 3
+            },
+            {
+              "type": "standing",
+              "id": "ironward",
+              "value": -4
+            }
+          ],
+          "once": true,
+          "result": "Bren remembered your refusal: You told him to pick the cheaper job."
         },
         {
           "id": "concern_back",

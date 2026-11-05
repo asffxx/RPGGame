@@ -97,7 +97,7 @@
             {
               "type": "standing",
               "id": "tidebound",
-              "value": 2
+              "value": 3
             }
           ],
           "once": true,
@@ -124,11 +124,38 @@
             {
               "type": "standing",
               "id": "tidebound",
-              "value": 2
+              "value": 3
             }
           ],
           "once": true,
           "result": "Nella remembered your advice: Keep essential crossings while repairing in stages."
+        },
+        {
+          "id": "decline_concern",
+          "text": "Run the crossings and patch it when it breaks.",
+          "next": "",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "nella_decision",
+              "state": "eq",
+              "value": 0
+            }
+          ],
+          "effects": [
+            {
+              "type": "flag",
+              "id": "nella_decision",
+              "value": 3
+            },
+            {
+              "type": "standing",
+              "id": "tidebound",
+              "value": -4
+            }
+          ],
+          "once": true,
+          "result": "Nella remembered your refusal: You told her to keep running the ferry."
         },
         {
           "id": "concern_back",

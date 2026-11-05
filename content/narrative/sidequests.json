@@ -3,7 +3,12 @@
   "records": [
     {
       "id": "side_unsent_letter",
-      "itemRewards": [{"item": "bread", "quantity": 1}],
+      "itemRewards": [
+        {
+          "item": "bread",
+          "quantity": 1
+        }
+      ],
       "title": "A Letter Never Sent",
       "briefing": "Find a sealed letter in the abandoned posthouse of Ghost Town.",
       "location": "Ghost Town",
@@ -281,6 +286,81 @@
       "minimumLevel": 4,
       "offeringGuild": "tidebound",
       "prerequisite": "tidebound_relic"
+    },
+    {
+      "id": "side_ironward_trust",
+      "title": "The Long Watch",
+      "briefing": "Walk the outer watch with an Ironward patrol and clear the outlaws shadowing the Barren Plains road.",
+      "location": "Barren Plains",
+      "enemyName": "Outlaw",
+      "completionText": "The patrol returns with every wagon accounted for. The roadwarden marks your name beside hers on the roster.",
+      "rewardSilver": 120,
+      "rewardExperience": 70,
+      "category": 2,
+      "minimumLevel": 3,
+      "offeringGuild": "ironward",
+      "prerequisite": "",
+      "minimumStanding": 6
+    },
+    {
+      "id": "side_lantern_trust",
+      "title": "A Shelf for the City",
+      "briefing": "Recover a missing folio from the Enchanted Library before the Lantern archive loses its only copy.",
+      "location": "Enchanted Library",
+      "enemyName": "Wraith",
+      "completionText": "The folio is damp but legible. Iven shelves it himself and leaves the reading room open for you.",
+      "rewardSilver": 130,
+      "rewardExperience": 75,
+      "category": 2,
+      "minimumLevel": 3,
+      "offeringGuild": "lantern",
+      "prerequisite": "",
+      "minimumStanding": 6
+    },
+    {
+      "id": "side_silverthread_trust",
+      "title": "The Honest Ledger",
+      "briefing": "Recover the stolen Silverthread ledger from the Bandit Hideout before the market opens.",
+      "location": "Bandit Hideout",
+      "enemyName": "Bandit Leader",
+      "completionText": "The ledger is intact. Tessa reads the first page aloud to the market and leaves your name in the margin.",
+      "rewardSilver": 140,
+      "rewardExperience": 80,
+      "category": 2,
+      "minimumLevel": 3,
+      "offeringGuild": "silverthread",
+      "prerequisite": "",
+      "minimumStanding": 6
+    },
+    {
+      "id": "side_crownward_trust",
+      "title": "The Crown's Quiet Errand",
+      "briefing": "Escort a Crownward clerk through the Cursed Citadel and recover the seal she is carrying.",
+      "location": "Cursed Citadel",
+      "enemyName": "Sentinel",
+      "completionText": "The clerk delivers the seal and records your service without ceremony. The order's trust is not given twice.",
+      "rewardSilver": 150,
+      "rewardExperience": 90,
+      "category": 2,
+      "minimumLevel": 4,
+      "offeringGuild": "crownward",
+      "prerequisite": "",
+      "minimumStanding": 6
+    },
+    {
+      "id": "side_tidebound_trust",
+      "title": "The Tidebound Charter",
+      "briefing": "Recover the Tidebound charter from the Underwater Temple before the next crossing is licensed.",
+      "location": "Underwater Temple",
+      "enemyName": "Siren",
+      "completionText": "The charter comes up dry in its wax case. Nella reads it on the ferry and adds your name to the passenger roll.",
+      "rewardSilver": 150,
+      "rewardExperience": 90,
+      "category": 2,
+      "minimumLevel": 4,
+      "offeringGuild": "tidebound",
+      "prerequisite": "",
+      "minimumStanding": 6
     }
   ]
 }

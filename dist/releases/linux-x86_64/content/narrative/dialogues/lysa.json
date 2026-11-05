@@ -1,0 +1,211 @@
+{
+  "entry": "greeting",
+  "nodes": [
+    {
+      "id": "greeting",
+      "text": "Lysa moves a tray out of reach of a hopeful dog. 'He paid yesterday with a stick. We are renegotiating.'",
+      "choices": [
+        {
+          "id": "ask_life",
+          "text": "Tell me about life here.",
+          "next": "life"
+        },
+        {
+          "id": "ask_concern",
+          "text": "Is anything on your mind?",
+          "next": "concern",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "lysa_decision",
+              "state": "eq",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "id": "remember_a",
+          "text": "How did our earlier discussion turn out?",
+          "next": "outcome_a",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "lysa_decision",
+              "state": "eq",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": "remember_b",
+          "text": "How did our earlier discussion turn out?",
+          "next": "outcome_b",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "lysa_decision",
+              "state": "eq",
+              "value": 2
+            }
+          ]
+        },
+        {
+          "id": "ask_custom",
+          "text": "What brings the neighborhood together?",
+          "next": "custom"
+        },
+        {
+          "id": "goodbye",
+          "text": "Goodbye.",
+          "next": ""
+        }
+      ]
+    },
+    {
+      "id": "life",
+      "text": "'The wardens buy yesterday's loaves for their soup pot. Nobody calls it charity, which helps some people accept a bowl.'",
+      "choices": [
+        {
+          "id": "life_back",
+          "text": "Thank you.",
+          "next": "greeting"
+        }
+      ]
+    },
+    {
+      "id": "concern",
+      "text": "'A neighbor keeps leaving bread money anonymously. Another wants us to thank them in public.'",
+      "choices": [
+        {
+          "id": "decide_a",
+          "text": "Respect the donor's privacy.",
+          "next": "outcome_a",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "lysa_decision",
+              "state": "eq",
+              "value": 0
+            }
+          ],
+          "effects": [
+            {
+              "type": "flag",
+              "id": "lysa_decision",
+              "value": 1
+            },
+            {
+              "type": "item",
+              "id": "bread",
+              "value": 1
+            },
+            {
+              "type": "standing",
+              "id": "ironward",
+              "value": 3
+            }
+          ],
+          "once": true,
+          "result": "Lysa remembered your advice: Respect the donor's privacy."
+        },
+        {
+          "id": "decide_b",
+          "text": "Thank everyone who keeps the soup pot going.",
+          "next": "outcome_b",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "lysa_decision",
+              "state": "eq",
+              "value": 0
+            }
+          ],
+          "effects": [
+            {
+              "type": "flag",
+              "id": "lysa_decision",
+              "value": 2
+            },
+            {
+              "type": "item",
+              "id": "bread",
+              "value": 1
+            },
+            {
+              "type": "standing",
+              "id": "ironward",
+              "value": 3
+            }
+          ],
+          "once": true,
+          "result": "Lysa remembered your advice: Thank everyone who keeps the soup pot going."
+        },
+        {
+          "id": "decline_concern",
+          "text": "Bread is bread. People can sort out their own thanks.",
+          "next": "",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "lysa_decision",
+              "state": "eq",
+              "value": 0
+            }
+          ],
+          "effects": [
+            {
+              "type": "flag",
+              "id": "lysa_decision",
+              "value": 3
+            },
+            {
+              "type": "standing",
+              "id": "ironward",
+              "value": -4
+            }
+          ],
+          "once": true,
+          "result": "Lysa remembered your refusal: You said the thanks did not matter."
+        },
+        {
+          "id": "concern_back",
+          "text": "I need to think about it.",
+          "next": "greeting"
+        }
+      ]
+    },
+    {
+      "id": "outcome_a",
+      "text": "'A full table is thanks enough.' Lysa leaves a small painted loaf in the donor's usual basket.",
+      "choices": [
+        {
+          "id": "outcome_a_back",
+          "text": "Until next time.",
+          "next": "greeting"
+        }
+      ]
+    },
+    {
+      "id": "outcome_b",
+      "text": "'Everyone, then. No names.' Lysa starts a shared supper where cooks, donors, and diners sit together.",
+      "choices": [
+        {
+          "id": "outcome_b_back",
+          "text": "Until next time.",
+          "next": "greeting"
+        }
+      ]
+    },
+    {
+      "id": "custom",
+      "text": "'Shared meals, small repairs, someone noticing when a chair stays empty. Nothing a grand monument could replace.'",
+      "choices": [
+        {
+          "id": "custom_back",
+          "text": "I will remember that.",
+          "next": "greeting"
+        }
+      ]
+    }
+  ]
+}

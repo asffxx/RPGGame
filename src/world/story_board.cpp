@@ -142,6 +142,10 @@ StoryView buildStoryView(const GameSession& session) {
         if (flag && flag->value != 0) continue;
         view.threads.push_back(npc.city + ": " + npc.name + " - " + npc.concern);
     }
+    for (const auto& guild : guildDatabase().getGuilds()) {
+        const int value = session.story.standing(guild.id);
+        view.standings.push_back({guild.city, guild.name, value, tierFor(value)});
+    }
     for (const auto& choice : session.story.choices) view.choices.push_back(choice.result);
     return view;
 }
@@ -174,6 +178,12 @@ void openStoryBoard(const GameSession& session) {
     lines.push_back("--- Open Threads ---");
     if (view.threads.empty()) lines.push_back("No open threads.");
     else lines.insert(lines.end(), view.threads.begin(), view.threads.end());
+    lines.push_back("");
+    lines.push_back("--- Standing ---");
+    if (view.standings.empty()) lines.push_back("No guilds known.");
+    else for (const auto& standing : view.standings)
+        lines.push_back(standing.city + " - " + standing.factionName + ": " +
+                        tierName(standing.tier) + " (" + std::to_string(standing.value) + ")");
     lines.push_back("");
     lines.push_back("--- Choices Remembered ---");
     if (view.choices.empty()) lines.push_back("No choices recorded yet.");

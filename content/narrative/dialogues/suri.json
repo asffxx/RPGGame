@@ -105,6 +105,11 @@
               "type": "flag",
               "id": "suri_decision",
               "value": 1
+            },
+            {
+              "type": "standing",
+              "id": "tidebound",
+              "value": 3
             }
           ],
           "once": true,
@@ -127,10 +132,42 @@
               "type": "flag",
               "id": "suri_decision",
               "value": 2
+            },
+            {
+              "type": "standing",
+              "id": "tidebound",
+              "value": 3
             }
           ],
           "once": true,
           "result": "Suri remembered your advice: Make a star with small boats around it."
+        },
+        {
+          "id": "decline_concern",
+          "text": "The old star. The children will get over it.",
+          "next": "",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "suri_decision",
+              "state": "eq",
+              "value": 0
+            }
+          ],
+          "effects": [
+            {
+              "type": "flag",
+              "id": "suri_decision",
+              "value": 3
+            },
+            {
+              "type": "standing",
+              "id": "tidebound",
+              "value": -4
+            }
+          ],
+          "once": true,
+          "result": "Suri remembered your refusal: You told her to ignore the children's design."
         },
         {
           "id": "concern_back",

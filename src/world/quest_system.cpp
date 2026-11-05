@@ -14,6 +14,7 @@
 #include "encounters.hpp"
 #include "guild_quest.hpp"
 #include "quest.hpp"
+#include "reputation.hpp"
 #include "sidequests.hpp"
 
 namespace {
@@ -110,7 +111,17 @@ void discoverBoardQuests(GameSession& session, QuestCategory category) {
 
 std::string questLockReason(const GameSession& session, const QuestDefinition& quest) {
     std::vector<std::string> reasons;
+    const auto* cityGuild = currentGuild(session);
+    if (cityGuild && cityTier(session, cityGuild->city) == ReputationTier::Hostile)
+        reasons.push_back("the local guild refuses work while your standing is hostile");
     if (session.hero.stats.level < quest.minimumLevel) reasons.push_back("requires level " + std::to_string(quest.minimumLevel));
+    if (quest.minimumStanding != -100) {
+        const auto* guild = quest.offeringGuild.empty() ? cityGuild : guildDatabase().find(quest.offeringGuild);
+        const int standing = guild ? cityStanding(session, guild->city) : 0;
+        if (standing < quest.minimumStanding)
+            reasons.push_back("requires standing " + std::to_string(quest.minimumStanding) + " with " +
+                              (guild ? guild->name : quest.offeringGuild));
+    }
     if (!quest.offeringGuild.empty()) {
         const auto* guild = guildDatabase().find(quest.offeringGuild);
         const auto* progress = guildProgress(session.guilds, quest.offeringGuild);
@@ -197,6 +208,7 @@ bool claimQuestReward(GameSession& session, const std::string& id) {
         auto& state = discoverGuild(session.guilds, guild->id);
         state.active = state.objectiveComplete = false;
         ++state.completedQuests;
+        applyStanding(session, guild->id, reputationDatabase().guildQuestStanding());
     } else {
         auto& state = *storedProgress(session, id);
         state.active = state.objectiveComplete = false;

@@ -31,6 +31,8 @@ struct DialogueResident {
     std::string role;
     std::string concern;
     std::string concernFlag;
+    std::string friendlyLine;
+    std::string hostileLine;
     std::string entry;
     std::vector<DialogueNode> nodes;
     const DialogueNode* node(const std::string& id) const;

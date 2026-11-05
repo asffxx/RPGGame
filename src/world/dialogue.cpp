@@ -16,6 +16,7 @@
 #include "gameplay/datafile.hpp"
 #include "world/crafting.hpp"
 #include "world/quest_system.hpp"
+#include "world/reputation.hpp"
 
 namespace {
 using Value = datafile::Value;
@@ -101,7 +102,8 @@ bool DialogueDatabase::load(const std::filesystem::path& root, std::string& erro
         std::set<std::string> residents;
         for (const auto& entry : roster.at("residents").array()) {
             where = (root / "characters/dialogue_npcs.json").string();
-            fields(entry, {"id", "name", "city", "role", "concern", "concernFlag"});
+            fields(entry, {"id", "name", "city", "role", "concern", "concernFlag",
+                           "friendlyLine", "hostileLine"});
             DialogueResident npc;
             npc.id = identifier(entry, "id");
             require(residents.insert(npc.id).second, "duplicate resident id: " + npc.id);
@@ -109,6 +111,8 @@ bool DialogueDatabase::load(const std::filesystem::path& root, std::string& erro
             npc.city = text(entry, "city");
             npc.role = text(entry, "role");
             require(guildDatabase().inCity(npc.city), "unknown city: " + npc.city);
+            npc.friendlyLine = text(entry, "friendlyLine");
+            npc.hostileLine = text(entry, "hostileLine");
             const bool hasConcern = entry.has("concern");
             require(hasConcern == entry.has("concernFlag"), "concern and concernFlag must appear together");
             if (hasConcern) {
@@ -206,9 +210,7 @@ bool chooseDialogue(GameSession& s, const DialogueResident& npc, const DialogueC
             if (it == staged.story.flags.end()) staged.story.flags.push_back({r.id, r.value});
             else it->value = r.value;
         } else if (r.type == "standing") {
-            auto it = std::find_if(staged.story.factions.begin(), staged.story.factions.end(), [&](const FactionStanding& f) { return f.factionId == r.id; });
-            if (it == staged.story.factions.end()) staged.story.factions.push_back({r.id, std::clamp(r.value, minStanding, maxStanding)});
-            else it->standing = std::clamp(it->standing + r.value, minStanding, maxStanding);
+            applyStanding(staged, r.id, r.value);
         } else if (r.type == "recipe") {
             if (!craftingDatabase().find(r.id)) { error = "Unknown recipe."; return false; }
             if (!known(staged, r.id)) staged.story.knownRecipes.push_back(r.id);
@@ -231,9 +233,20 @@ bool chooseDialogue(GameSession& s, const DialogueResident& npc, const DialogueC
 
 void openDialogue(GameSession& s, const DialogueResident& npc) {
     if (s.hero.currentLocation != npc.city || s.hero.currentLocationType != PeacefulCity) return;
+    const auto tier = cityTier(s, npc.city);
+    if (tier == ReputationTier::Hostile) {
+        displayBorderedMenu({npc.name + " - " + npc.role, npc.hostileLine, "",
+                             "0. Leave conversation"}, "Choose: ");
+        input(0);
+        return;
+    }
     auto* node = npc.node(npc.entry);
     while (node) {
-        std::vector<std::string> lines{npc.name + " - " + npc.role, node->text, ""};
+        std::vector<std::string> lines{npc.name + " - " + npc.role};
+        if (tier == ReputationTier::Friendly && node == npc.node(npc.entry))
+            lines.push_back(npc.friendlyLine);
+        lines.push_back(node->text);
+        lines.push_back("");
         for (size_t i = 0; i < node->choices.size(); ++i) {
             const auto& c = node->choices[i];
             auto reason = dialogueLockReason(s, npc, c);

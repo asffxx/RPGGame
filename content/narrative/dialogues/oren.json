@@ -109,7 +109,7 @@
             {
               "type": "standing",
               "id": "crownward",
-              "value": 2
+              "value": 3
             }
           ],
           "once": true,
@@ -136,11 +136,38 @@
             {
               "type": "standing",
               "id": "crownward",
-              "value": 2
+              "value": 3
             }
           ],
           "once": true,
           "result": "Oren remembered your advice: Request a formal exemption and help her submit it."
+        },
+        {
+          "id": "decline_concern",
+          "text": "Rules are rules. Send her away.",
+          "next": "",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "oren_decision",
+              "state": "eq",
+              "value": 0
+            }
+          ],
+          "effects": [
+            {
+              "type": "flag",
+              "id": "oren_decision",
+              "value": 3
+            },
+            {
+              "type": "standing",
+              "id": "crownward",
+              "value": -4
+            }
+          ],
+          "once": true,
+          "result": "Oren remembered your refusal: You told him to turn the widow away."
         },
         {
           "id": "concern_back",

@@ -1,0 +1,1828 @@
+{
+  "schemaVersion": 1,
+  "records": [
+    {
+      "name": "Sludge",
+      "stats": {
+        "data": {
+          "hitpoints": 50,
+          "maxHitpoints": 50,
+          "armor": 0.0199999996,
+          "magicArmor": 0.0199999996,
+          "attack": 5,
+          "magicAttack": 0,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0,
+          "critDamage": 1.5,
+          "dodgeRate": 0,
+          "magicAmplifierRate": 1,
+          "level": 1,
+          "expe": 10,
+          "economy": {
+            "platinum": 0,
+            "gold": 0,
+            "silver": 0,
+            "copper": 70
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "A pulsating ooze, a corrupted mass of slime that dissolves flesh on contact."
+      },
+      "minLevel": 1,
+      "debuffs": [],
+      "difficultyLevel": 1,
+      "allowedLocations": [
+        3,
+        2
+      ],
+      "id": "sludge"
+    },
+    {
+      "name": "Mimic",
+      "stats": {
+        "data": {
+          "hitpoints": 45,
+          "maxHitpoints": 45,
+          "armor": 0.0199999996,
+          "magicArmor": 0.0199999996,
+          "attack": 4,
+          "magicAttack": 0,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0,
+          "critDamage": 1.5,
+          "dodgeRate": 0,
+          "magicAmplifierRate": 1,
+          "level": 1,
+          "expe": 8,
+          "economy": {
+            "platinum": 0,
+            "gold": 5,
+            "silver": 0,
+            "copper": 0
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "A cursed chest that lies in wait for greedy adventurers, revealing rows of fangs the moment treasure is within reach."
+      },
+      "minLevel": 1,
+      "debuffs": [],
+      "difficultyLevel": 1,
+      "allowedLocations": [
+        2,
+        3
+      ],
+      "id": "mimic"
+    },
+    {
+      "name": "Rat Swarm",
+      "stats": {
+        "data": {
+          "hitpoints": 40,
+          "maxHitpoints": 40,
+          "armor": 0.00999999978,
+          "magicArmor": 0.00999999978,
+          "attack": 4,
+          "magicAttack": 0,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0,
+          "critDamage": 1.39999998,
+          "dodgeRate": 0.0500000007,
+          "magicAmplifierRate": 1,
+          "level": 1,
+          "expe": 6,
+          "economy": {
+            "platinum": 0,
+            "gold": 0,
+            "silver": 2,
+            "copper": 40
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "A mass of diseased rats scurrying as one, gnawing anything in their path."
+      },
+      "minLevel": 1,
+      "debuffs": [
+        "Poison"
+      ],
+      "difficultyLevel": 1,
+      "allowedLocations": [
+        3,
+        2
+      ],
+      "id": "rat_swarm"
+    },
+    {
+      "name": "Bonewalker",
+      "stats": {
+        "data": {
+          "hitpoints": 55,
+          "maxHitpoints": 55,
+          "armor": 0.0299999993,
+          "magicArmor": 0.0500000007,
+          "attack": 6,
+          "magicAttack": 1,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0,
+          "critDamage": 1.39999998,
+          "dodgeRate": 0,
+          "magicAmplifierRate": 1,
+          "level": 1,
+          "expe": 14,
+          "economy": {
+            "platinum": 0,
+            "gold": 0,
+            "silver": 8,
+            "copper": 20
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "A poorly animated skeleton barely held together by dark magic."
+      },
+      "minLevel": 1,
+      "debuffs": [],
+      "difficultyLevel": 1,
+      "allowedLocations": [
+        2
+      ],
+      "id": "bonewalker"
+    },
+    {
+      "name": "Direwolf",
+      "stats": {
+        "data": {
+          "hitpoints": 72,
+          "maxHitpoints": 72,
+          "armor": 0.0799999982,
+          "magicArmor": 0.0399999991,
+          "attack": 10,
+          "magicAttack": 0,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0,
+          "critDamage": 1.5,
+          "dodgeRate": 0,
+          "magicAmplifierRate": 1,
+          "level": 1,
+          "expe": 24,
+          "economy": {
+            "platinum": 0,
+            "gold": 0,
+            "silver": 10,
+            "copper": 30
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "Direwolves are fierce predators that hunt in packs, their eyes glowing with feral hunger."
+      },
+      "minLevel": 1,
+      "debuffs": [],
+      "difficultyLevel": 2,
+      "allowedLocations": [
+        3
+      ],
+      "id": "direwolf"
+    },
+    {
+      "name": "Viper",
+      "stats": {
+        "data": {
+          "hitpoints": 60,
+          "maxHitpoints": 60,
+          "armor": 0.0299999993,
+          "magicArmor": 0.0299999993,
+          "attack": 7,
+          "magicAttack": 0,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0,
+          "critDamage": 1.5,
+          "dodgeRate": 0,
+          "magicAmplifierRate": 1,
+          "level": 1,
+          "expe": 12,
+          "economy": {
+            "platinum": 0,
+            "gold": 0,
+            "silver": 5,
+            "copper": 10
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "A venomous serpent, coiled in shadows, striking with deadly precision."
+      },
+      "minLevel": 1,
+      "debuffs": [
+        "Poison"
+      ],
+      "difficultyLevel": 2,
+      "allowedLocations": [
+        3
+      ],
+      "id": "viper"
+    },
+    {
+      "name": "Carrion Vulture",
+      "stats": {
+        "data": {
+          "hitpoints": 55,
+          "maxHitpoints": 55,
+          "armor": 0.0199999996,
+          "magicArmor": 0.0199999996,
+          "attack": 6,
+          "magicAttack": 0,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0,
+          "critDamage": 1.5,
+          "dodgeRate": 0,
+          "magicAmplifierRate": 1,
+          "level": 1,
+          "expe": 11,
+          "economy": {
+            "platinum": 0,
+            "gold": 0,
+            "silver": 15,
+            "copper": 10
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "A scavenging carrion bird, feasting on the dead, its talons dripping with decay."
+      },
+      "minLevel": 1,
+      "debuffs": [],
+      "difficultyLevel": 2,
+      "allowedLocations": [
+        3
+      ],
+      "id": "carrion_vulture"
+    },
+    {
+      "name": "Tusk Boar",
+      "stats": {
+        "data": {
+          "hitpoints": 80,
+          "maxHitpoints": 80,
+          "armor": 0.0700000003,
+          "magicArmor": 0.0199999996,
+          "attack": 11,
+          "magicAttack": 0,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0,
+          "critDamage": 1.39999998,
+          "dodgeRate": 0,
+          "magicAmplifierRate": 1,
+          "level": 1,
+          "expe": 26,
+          "economy": {
+            "platinum": 0,
+            "gold": 0,
+            "silver": 15,
+            "copper": 40
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "A raging boar that charges without fear, fueled by primal rage."
+      },
+      "minLevel": 1,
+      "debuffs": [],
+      "difficultyLevel": 2,
+      "allowedLocations": [
+        3
+      ],
+      "id": "tusk_boar"
+    },
+    {
+      "name": "Goblin Scout",
+      "stats": {
+        "data": {
+          "hitpoints": 58,
+          "maxHitpoints": 58,
+          "armor": 0.0399999991,
+          "magicArmor": 0.0299999993,
+          "attack": 7,
+          "magicAttack": 0,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0.0500000007,
+          "critDamage": 1.5,
+          "dodgeRate": 0.0500000007,
+          "magicAmplifierRate": 1,
+          "level": 1,
+          "expe": 18,
+          "economy": {
+            "platinum": 0,
+            "gold": 0,
+            "silver": 20,
+            "copper": 25
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "A nimble goblin scout, observing prey before calling reinforcements."
+      },
+      "minLevel": 1,
+      "debuffs": [],
+      "difficultyLevel": 2,
+      "allowedLocations": [
+        0,
+        3
+      ],
+      "id": "goblin_scout"
+    },
+    {
+      "name": "Goblin Marauder",
+      "stats": {
+        "data": {
+          "hitpoints": 64,
+          "maxHitpoints": 64,
+          "armor": 0.0799999982,
+          "magicArmor": 0.0399999991,
+          "attack": 8,
+          "magicAttack": 0,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0,
+          "critDamage": 1.5,
+          "dodgeRate": 0,
+          "magicAmplifierRate": 1,
+          "level": 1,
+          "expe": 16,
+          "economy": {
+            "platinum": 0,
+            "gold": 0,
+            "silver": 30,
+            "copper": 50
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "Goblin marauders are savage raiders, pillaging villages under the cover of darkness."
+      },
+      "minLevel": 1,
+      "debuffs": [],
+      "difficultyLevel": 3,
+      "allowedLocations": [
+        1,
+        3,
+        2
+      ],
+      "id": "goblin_marauder"
+    },
+    {
+      "name": "Outlaw",
+      "stats": {
+        "data": {
+          "hitpoints": 65,
+          "maxHitpoints": 65,
+          "armor": 0.0500000007,
+          "magicArmor": 0.0199999996,
+          "attack": 8,
+          "magicAttack": 0,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0,
+          "critDamage": 1.5,
+          "dodgeRate": 0,
+          "magicAmplifierRate": 1,
+          "level": 1,
+          "expe": 15,
+          "economy": {
+            "platinum": 0,
+            "gold": 1,
+            "silver": 50,
+            "copper": 0
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "A ruthless Outlaw, ambushing travelers on cursed roads for their souls."
+      },
+      "minLevel": 1,
+      "debuffs": [],
+      "difficultyLevel": 3,
+      "allowedLocations": [
+        1,
+        3
+      ],
+      "id": "outlaw"
+    },
+    {
+      "name": "Ancient Legionary",
+      "stats": {
+        "data": {
+          "hitpoints": 56,
+          "maxHitpoints": 56,
+          "armor": 0.0399999991,
+          "magicArmor": 0.0799999982,
+          "attack": 6,
+          "magicAttack": 2,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0,
+          "critDamage": 1.5,
+          "dodgeRate": 0,
+          "magicAmplifierRate": 1,
+          "level": 1,
+          "expe": 20,
+          "economy": {
+            "platinum": 0,
+            "gold": 0,
+            "silver": 5,
+            "copper": 30
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "Ancient remains are cursed bones of forgotten warriors, animated by dark sorcery."
+      },
+      "minLevel": 1,
+      "debuffs": [],
+      "difficultyLevel": 3,
+      "allowedLocations": [
+        3,
+        2
+      ],
+      "id": "ancient_legionary"
+    },
+    {
+      "name": "Wraith",
+      "stats": {
+        "data": {
+          "hitpoints": 60,
+          "maxHitpoints": 60,
+          "armor": 0.0199999996,
+          "magicArmor": 0.100000001,
+          "attack": 4,
+          "magicAttack": 12,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0.0500000007,
+          "critDamage": 1.60000002,
+          "dodgeRate": 0.100000001,
+          "magicAmplifierRate": 1.20000005,
+          "level": 2,
+          "expe": 30,
+          "economy": {
+            "platinum": 0,
+            "gold": 0,
+            "silver": 20,
+            "copper": 50
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "A spectral entity, a tormented soul bound to the mortal realm."
+      },
+      "minLevel": 2,
+      "debuffs": [
+        "Freeze"
+      ],
+      "difficultyLevel": 4,
+      "allowedLocations": [
+        2,
+        3
+      ],
+      "id": "wraith"
+    },
+    {
+      "name": "Ghoul",
+      "stats": {
+        "data": {
+          "hitpoints": 85,
+          "maxHitpoints": 85,
+          "armor": 0.0500000007,
+          "magicArmor": 0.0299999993,
+          "attack": 12,
+          "magicAttack": 2,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0.0299999993,
+          "critDamage": 1.39999998,
+          "dodgeRate": 0.0500000007,
+          "magicAmplifierRate": 1,
+          "level": 2,
+          "expe": 35,
+          "economy": {
+            "platinum": 0,
+            "gold": 0,
+            "silver": 25,
+            "copper": 75
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "A rotting undead creature, driven by insatiable hunger."
+      },
+      "minLevel": 2,
+      "debuffs": [
+        "Poison"
+      ],
+      "difficultyLevel": 4,
+      "allowedLocations": [
+        2,
+        3
+      ],
+      "id": "ghoul"
+    },
+    {
+      "name": "Specter",
+      "stats": {
+        "data": {
+          "hitpoints": 50,
+          "maxHitpoints": 50,
+          "armor": 0.00999999978,
+          "magicArmor": 0.119999997,
+          "attack": 3,
+          "magicAttack": 15,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0.100000001,
+          "critDamage": 1.79999995,
+          "dodgeRate": 0.150000006,
+          "magicAmplifierRate": 1.29999995,
+          "level": 3,
+          "expe": 40,
+          "economy": {
+            "platinum": 0,
+            "gold": 0,
+            "silver": 30,
+            "copper": 0
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "A ghostly apparition, fading in and out of reality."
+      },
+      "minLevel": 3,
+      "debuffs": [
+        "Magic Dampening"
+      ],
+      "difficultyLevel": 5,
+      "allowedLocations": [
+        2,
+        3
+      ],
+      "id": "specter"
+    },
+    {
+      "name": "Vampire",
+      "stats": {
+        "data": {
+          "hitpoints": 90,
+          "maxHitpoints": 90,
+          "armor": 0.0599999987,
+          "magicArmor": 0.0799999982,
+          "attack": 8,
+          "magicAttack": 8,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0.0799999982,
+          "critDamage": 1.70000005,
+          "dodgeRate": 0.100000001,
+          "magicAmplifierRate": 1.20000005,
+          "level": 5,
+          "expe": 60,
+          "economy": {
+            "platinum": 0,
+            "gold": 1,
+            "silver": 50,
+            "copper": 0
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "An immortal blood-drinker, elegant yet deadly."
+      },
+      "minLevel": 5,
+      "debuffs": [
+        "Bleeding"
+      ],
+      "difficultyLevel": 5,
+      "allowedLocations": [
+        2
+      ],
+      "id": "vampire"
+    },
+    {
+      "name": "Hellfiend",
+      "stats": {
+        "data": {
+          "hitpoints": 100,
+          "maxHitpoints": 100,
+          "armor": 0.0799999982,
+          "magicArmor": 0.0599999987,
+          "attack": 10,
+          "magicAttack": 10,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0.0500000007,
+          "critDamage": 1.5,
+          "dodgeRate": 0.0500000007,
+          "magicAmplifierRate": 1.10000002,
+          "level": 4,
+          "expe": 50,
+          "economy": {
+            "platinum": 0,
+            "gold": 1,
+            "silver": 0,
+            "copper": 0
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "A fiendish being from the abyssal depths."
+      },
+      "minLevel": 4,
+      "debuffs": [
+        "Burning"
+      ],
+      "difficultyLevel": 6,
+      "allowedLocations": [
+        2
+      ],
+      "id": "hellfiend"
+    },
+    {
+      "name": "Lich",
+      "stats": {
+        "data": {
+          "hitpoints": 70,
+          "maxHitpoints": 70,
+          "armor": 0.0299999993,
+          "magicArmor": 0.150000006,
+          "attack": 5,
+          "magicAttack": 20,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0.0500000007,
+          "critDamage": 1.60000002,
+          "dodgeRate": 0.0500000007,
+          "magicAmplifierRate": 1.39999998,
+          "level": 6,
+          "expe": 75,
+          "economy": {
+            "platinum": 0,
+            "gold": 2,
+            "silver": 0,
+            "copper": 0
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "A powerful necromancer who cheated death."
+      },
+      "minLevel": 6,
+      "debuffs": [
+        "Mana Weakness"
+      ],
+      "difficultyLevel": 6,
+      "allowedLocations": [
+        2
+      ],
+      "id": "lich"
+    },
+    {
+      "name": "Flameborn",
+      "stats": {
+        "data": {
+          "hitpoints": 80,
+          "maxHitpoints": 80,
+          "armor": 0.0500000007,
+          "magicArmor": 0.0500000007,
+          "attack": 5,
+          "magicAttack": 15,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0.0500000007,
+          "critDamage": 1.5,
+          "dodgeRate": 0.0500000007,
+          "magicAmplifierRate": 1.20000005,
+          "level": 6,
+          "expe": 80,
+          "economy": {
+            "platinum": 0,
+            "gold": 0,
+            "silver": 50,
+            "copper": 0
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "A fiery elemental born from volcanic flames, wielding destructive fire magic."
+      },
+      "minLevel": 6,
+      "debuffs": [
+        "Burning"
+      ],
+      "difficultyLevel": 6,
+      "allowedLocations": [
+        3
+      ],
+      "id": "flameborn"
+    },
+    {
+      "name": "Frost Wraith",
+      "stats": {
+        "data": {
+          "hitpoints": 60,
+          "maxHitpoints": 60,
+          "armor": 0.0199999996,
+          "magicArmor": 0.0799999982,
+          "attack": 4,
+          "magicAttack": 10,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0.100000001,
+          "critDamage": 1.60000002,
+          "dodgeRate": 0.100000001,
+          "magicAmplifierRate": 1.29999995,
+          "level": 3,
+          "expe": 45,
+          "economy": {
+            "platinum": 0,
+            "gold": 0,
+            "silver": 30,
+            "copper": 0
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "A spectral being of ice, haunting frozen wastes."
+      },
+      "minLevel": 3,
+      "debuffs": [
+        "Freeze"
+      ],
+      "difficultyLevel": 3,
+      "allowedLocations": [
+        3
+      ],
+      "id": "frost_wraith"
+    },
+    {
+      "name": "Bog Beast",
+      "stats": {
+        "data": {
+          "hitpoints": 90,
+          "maxHitpoints": 90,
+          "armor": 0.0799999982,
+          "magicArmor": 0.0399999991,
+          "attack": 12,
+          "magicAttack": 0,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0.0299999993,
+          "critDamage": 1.39999998,
+          "dodgeRate": 0.0199999996,
+          "magicAmplifierRate": 1,
+          "level": 4,
+          "expe": 55,
+          "economy": {
+            "platinum": 0,
+            "gold": 0,
+            "silver": 40,
+            "copper": 50
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "A monstrous creature lurking in murky swamps, dripping with venom."
+      },
+      "minLevel": 4,
+      "debuffs": [
+        "Poison"
+      ],
+      "difficultyLevel": 4,
+      "allowedLocations": [
+        3
+      ],
+      "id": "bog_beast"
+    },
+    {
+      "name": "Cave Troll",
+      "stats": {
+        "data": {
+          "hitpoints": 120,
+          "maxHitpoints": 120,
+          "armor": 0.100000001,
+          "magicArmor": 0.0199999996,
+          "attack": 14,
+          "magicAttack": 0,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0.0199999996,
+          "critDamage": 1.29999995,
+          "dodgeRate": 0.00999999978,
+          "magicAmplifierRate": 1,
+          "level": 5,
+          "expe": 70,
+          "economy": {
+            "platinum": 0,
+            "gold": 0,
+            "silver": 60,
+            "copper": 0
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "A hulking troll dwelling in dark caves, smashing intruders with brute force."
+      },
+      "minLevel": 5,
+      "debuffs": [],
+      "difficultyLevel": 5,
+      "allowedLocations": [
+        2,
+        3
+      ],
+      "id": "cave_troll"
+    },
+    {
+      "name": "Necrotic Undead",
+      "stats": {
+        "data": {
+          "hitpoints": 75,
+          "maxHitpoints": 75,
+          "armor": 0.0599999987,
+          "magicArmor": 0.0599999987,
+          "attack": 8,
+          "magicAttack": 0,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0,
+          "critDamage": 1.20000005,
+          "dodgeRate": 0,
+          "magicAmplifierRate": 1,
+          "level": 3,
+          "expe": 40,
+          "economy": {
+            "platinum": 0,
+            "gold": 0,
+            "silver": 25,
+            "copper": 25
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "A reanimated corpse infused with necrotic energy, spreading decay."
+      },
+      "minLevel": 3,
+      "debuffs": [
+        "Poison"
+      ],
+      "difficultyLevel": 3,
+      "allowedLocations": [
+        2,
+        3
+      ],
+      "id": "necrotic_undead"
+    },
+    {
+      "name": "Shadow lurker",
+      "stats": {
+        "data": {
+          "hitpoints": 55,
+          "maxHitpoints": 55,
+          "armor": 0.00999999978,
+          "magicArmor": 0.119999997,
+          "attack": 3,
+          "magicAttack": 12,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0.150000006,
+          "critDamage": 1.79999995,
+          "dodgeRate": 0.200000003,
+          "magicAmplifierRate": 1.39999998,
+          "level": 4,
+          "expe": 60,
+          "economy": {
+            "platinum": 0,
+            "gold": 0,
+            "silver": 35,
+            "copper": 0
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "A shadowy demon that drains magic and hides in darkness."
+      },
+      "minLevel": 4,
+      "debuffs": [
+        "Magic Dampening"
+      ],
+      "difficultyLevel": 4,
+      "allowedLocations": [
+        2
+      ],
+      "id": "shadow_lurker"
+    },
+    {
+      "name": "Magma Golem",
+      "stats": {
+        "data": {
+          "hitpoints": 150,
+          "maxHitpoints": 150,
+          "armor": 0.119999997,
+          "magicArmor": 0.0799999982,
+          "attack": 16,
+          "magicAttack": 8,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0.00999999978,
+          "critDamage": 1.20000005,
+          "dodgeRate": 0,
+          "magicAmplifierRate": 1.10000002,
+          "level": 7,
+          "expe": 100,
+          "economy": {
+            "platinum": 0,
+            "gold": 1,
+            "silver": 0,
+            "copper": 0
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "A massive golem forged from volcanic rock, radiating intense heat."
+      },
+      "minLevel": 7,
+      "debuffs": [
+        "Burning"
+      ],
+      "difficultyLevel": 7,
+      "allowedLocations": [
+        2,
+        3
+      ],
+      "id": "magma_golem"
+    },
+    {
+      "name": "Northern Giant",
+      "stats": {
+        "data": {
+          "hitpoints": 140,
+          "maxHitpoints": 140,
+          "armor": 0.100000001,
+          "magicArmor": 0.0500000007,
+          "attack": 18,
+          "magicAttack": 0,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0.0399999991,
+          "critDamage": 1.39999998,
+          "dodgeRate": 0.0299999993,
+          "magicAmplifierRate": 1,
+          "level": 6,
+          "expe": 90,
+          "economy": {
+            "platinum": 0,
+            "gold": 0,
+            "silver": 80,
+            "copper": 0
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "A colossal giant from icy realms, wielding freezing winds."
+      },
+      "minLevel": 6,
+      "debuffs": [
+        "Freeze"
+      ],
+      "difficultyLevel": 6,
+      "allowedLocations": [
+        3
+      ],
+      "id": "northern_giant"
+    },
+    {
+      "name": "Plague Bearer",
+      "stats": {
+        "data": {
+          "hitpoints": 70,
+          "maxHitpoints": 70,
+          "armor": 0.0399999991,
+          "magicArmor": 0.0399999991,
+          "attack": 6,
+          "magicAttack": 4,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0.0500000007,
+          "critDamage": 1.5,
+          "dodgeRate": 0.0500000007,
+          "magicAmplifierRate": 1.10000002,
+          "level": 4,
+          "expe": 50,
+          "economy": {
+            "platinum": 0,
+            "gold": 0,
+            "silver": 45,
+            "copper": 0
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "A plague-ridden harbinger, spreading disease and despair."
+      },
+      "minLevel": 4,
+      "debuffs": [
+        "Poison"
+      ],
+      "difficultyLevel": 4,
+      "allowedLocations": [
+        3
+      ],
+      "id": "plague_bearer"
+    },
+    {
+      "name": "Wyrmling",
+      "stats": {
+        "data": {
+          "hitpoints": 100,
+          "maxHitpoints": 100,
+          "armor": 0.0799999982,
+          "magicArmor": 0.100000001,
+          "attack": 10,
+          "magicAttack": 12,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0.0799999982,
+          "critDamage": 1.70000005,
+          "dodgeRate": 0.100000001,
+          "magicAmplifierRate": 1.29999995,
+          "level": 8,
+          "expe": 120,
+          "economy": {
+            "platinum": 0,
+            "gold": 2,
+            "silver": 0,
+            "copper": 0
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "A young dragon, fierce and powerful, guarding its territory."
+      },
+      "minLevel": 8,
+      "debuffs": [
+        "Burning"
+      ],
+      "difficultyLevel": 8,
+      "allowedLocations": [
+        2
+      ],
+      "id": "wyrmling"
+    },
+    {
+      "name": "Swamp Troll",
+      "stats": {
+        "data": {
+          "hitpoints": 140,
+          "maxHitpoints": 140,
+          "armor": 0.119999997,
+          "magicArmor": 0.0399999991,
+          "attack": 16,
+          "magicAttack": 2,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0.0199999996,
+          "critDamage": 1.29999995,
+          "dodgeRate": 0.00999999978,
+          "magicAmplifierRate": 1,
+          "level": 6,
+          "expe": 95,
+          "economy": {
+            "platinum": 0,
+            "gold": 0,
+            "silver": 70,
+            "copper": 0
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "A hulking troll from the swamps, covered in muck and wielding a massive club."
+      },
+      "minLevel": 6,
+      "debuffs": [
+        "Poison"
+      ],
+      "difficultyLevel": 6,
+      "allowedLocations": [
+        3
+      ],
+      "id": "swamp_troll"
+    },
+    {
+      "name": "Sylvan Spirit",
+      "stats": {
+        "data": {
+          "hitpoints": 60,
+          "maxHitpoints": 60,
+          "armor": 0.0199999996,
+          "magicArmor": 0.0799999982,
+          "attack": 4,
+          "magicAttack": 10,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0.100000001,
+          "critDamage": 1.60000002,
+          "dodgeRate": 0.150000006,
+          "magicAmplifierRate": 1.20000005,
+          "level": 4,
+          "expe": 55,
+          "economy": {
+            "platinum": 0,
+            "gold": 0,
+            "silver": 40,
+            "copper": 0
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "A ethereal spirit of the forest, weaving magic and illusions."
+      },
+      "minLevel": 4,
+      "debuffs": [
+        "Freeze"
+      ],
+      "difficultyLevel": 4,
+      "allowedLocations": [
+        3
+      ],
+      "id": "sylvan_spirit"
+    },
+    {
+      "name": "Mountain Giant",
+      "stats": {
+        "data": {
+          "hitpoints": 160,
+          "maxHitpoints": 160,
+          "armor": 0.150000006,
+          "magicArmor": 0.0500000007,
+          "attack": 20,
+          "magicAttack": 0,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0.00999999978,
+          "critDamage": 1.20000005,
+          "dodgeRate": 0,
+          "magicAmplifierRate": 1,
+          "level": 7,
+          "expe": 110,
+          "economy": {
+            "platinum": 0,
+            "gold": 1,
+            "silver": 0,
+            "copper": 0
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "A colossal giant dwelling in the mountains, hurling boulders at intruders."
+      },
+      "minLevel": 7,
+      "debuffs": [],
+      "difficultyLevel": 7,
+      "allowedLocations": [
+        3
+      ],
+      "id": "mountain_giant"
+    },
+    {
+      "name": "Desert Stinger",
+      "stats": {
+        "data": {
+          "hitpoints": 70,
+          "maxHitpoints": 70,
+          "armor": 0.0399999991,
+          "magicArmor": 0.0399999991,
+          "attack": 8,
+          "magicAttack": 0,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0.0500000007,
+          "critDamage": 1.5,
+          "dodgeRate": 0.0500000007,
+          "magicAmplifierRate": 1.10000002,
+          "level": 3,
+          "expe": 50,
+          "economy": {
+            "platinum": 0,
+            "gold": 0,
+            "silver": 35,
+            "copper": 0
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "A venomous scorpion adapted to the harsh desert, striking with deadly precision."
+      },
+      "minLevel": 3,
+      "debuffs": [
+        "Poison"
+      ],
+      "difficultyLevel": 3,
+      "allowedLocations": [
+        3
+      ],
+      "id": "desert_stinger"
+    },
+    {
+      "name": "Blood Bats",
+      "stats": {
+        "data": {
+          "hitpoints": 50,
+          "maxHitpoints": 50,
+          "armor": 0.00999999978,
+          "magicArmor": 0.00999999978,
+          "attack": 6,
+          "magicAttack": 0,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0.200000003,
+          "critDamage": 1.79999995,
+          "dodgeRate": 0.200000003,
+          "magicAmplifierRate": 1,
+          "level": 2,
+          "expe": 40,
+          "economy": {
+            "platinum": 0,
+            "gold": 0,
+            "silver": 25,
+            "copper": 0
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "Bloodthirsty bats that descend in frenzied swarms, draining the life from anything they can sink their fangs into."
+      },
+      "minLevel": 2,
+      "debuffs": [],
+      "difficultyLevel": 2,
+      "allowedLocations": [
+        2
+      ],
+      "id": "blood_bats"
+    },
+    {
+      "name": "Sentinel",
+      "stats": {
+        "data": {
+          "hitpoints": 120,
+          "maxHitpoints": 120,
+          "armor": 0.100000001,
+          "magicArmor": 0.119999997,
+          "attack": 12,
+          "magicAttack": 8,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0.0399999991,
+          "critDamage": 1.39999998,
+          "dodgeRate": 0.0299999993,
+          "magicAmplifierRate": 1.10000002,
+          "level": 5,
+          "expe": 85,
+          "economy": {
+            "platinum": 0,
+            "gold": 0,
+            "silver": 60,
+            "copper": 0
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "An ancient guardian of forgotten ruins, infused with arcane energy."
+      },
+      "minLevel": 5,
+      "debuffs": [
+        "Magic Dampening"
+      ],
+      "difficultyLevel": 5,
+      "allowedLocations": [
+        2
+      ],
+      "id": "sentinel"
+    },
+    {
+      "name": "Dire Pack",
+      "stats": {
+        "data": {
+          "hitpoints": 90,
+          "maxHitpoints": 90,
+          "armor": 0.0599999987,
+          "magicArmor": 0.0299999993,
+          "attack": 12,
+          "magicAttack": 0,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0.0299999993,
+          "critDamage": 1.39999998,
+          "dodgeRate": 0.0199999996,
+          "magicAmplifierRate": 1,
+          "level": 4,
+          "expe": 65,
+          "economy": {
+            "platinum": 0,
+            "gold": 0,
+            "silver": 45,
+            "copper": 0
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "A pack of wolves roaming the plains, hunting in coordinated attacks."
+      },
+      "minLevel": 4,
+      "debuffs": [],
+      "difficultyLevel": 4,
+      "allowedLocations": [
+        3
+      ],
+      "id": "dire_pack"
+    },
+    {
+      "name": "Volcano Imp",
+      "stats": {
+        "data": {
+          "hitpoints": 65,
+          "maxHitpoints": 65,
+          "armor": 0.0299999993,
+          "magicArmor": 0.0599999987,
+          "attack": 5,
+          "magicAttack": 8,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0.0799999982,
+          "critDamage": 1.60000002,
+          "dodgeRate": 0.100000001,
+          "magicAmplifierRate": 1.20000005,
+          "level": 3,
+          "expe": 55,
+          "economy": {
+            "platinum": 0,
+            "gold": 0,
+            "silver": 40,
+            "copper": 0
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "A mischievous imp from volcanic regions, hurling fireballs."
+      },
+      "minLevel": 3,
+      "debuffs": [
+        "Burning"
+      ],
+      "difficultyLevel": 3,
+      "allowedLocations": [
+        3
+      ],
+      "id": "volcano_imp"
+    },
+    {
+      "name": "Frozen Yeti",
+      "stats": {
+        "data": {
+          "hitpoints": 130,
+          "maxHitpoints": 130,
+          "armor": 0.100000001,
+          "magicArmor": 0.0799999982,
+          "attack": 15,
+          "magicAttack": 5,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0.0299999993,
+          "critDamage": 1.29999995,
+          "dodgeRate": 0.0199999996,
+          "magicAmplifierRate": 1,
+          "level": 6,
+          "expe": 100,
+          "economy": {
+            "platinum": 0,
+            "gold": 0,
+            "silver": 75,
+            "copper": 0
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "A massive yeti from frozen tundras, wielding icy winds."
+      },
+      "minLevel": 6,
+      "debuffs": [
+        "Freeze"
+      ],
+      "difficultyLevel": 6,
+      "allowedLocations": [
+        3
+      ],
+      "id": "frozen_yeti"
+    },
+    {
+      "name": "Widow Spider",
+      "stats": {
+        "data": {
+          "hitpoints": 110,
+          "maxHitpoints": 110,
+          "armor": 0.0299999993,
+          "magicArmor": 0.0299999993,
+          "attack": 9,
+          "magicAttack": 0,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0,
+          "critDamage": 1.5,
+          "dodgeRate": 0.100000001,
+          "magicAmplifierRate": 1,
+          "level": 3,
+          "expe": 55,
+          "economy": {
+            "platinum": 0,
+            "gold": 0,
+            "silver": 40,
+            "copper": 0
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "A massive spider with venomous fangs, lurking in dark corners."
+      },
+      "minLevel": 3,
+      "debuffs": [
+        "Poison"
+      ],
+      "difficultyLevel": 3,
+      "allowedLocations": [
+        2,
+        3
+      ],
+      "id": "widow_spider"
+    },
+    {
+      "name": "Bandit Leader",
+      "stats": {
+        "data": {
+          "hitpoints": 85,
+          "maxHitpoints": 85,
+          "armor": 0.0599999987,
+          "magicArmor": 0.0399999991,
+          "attack": 12,
+          "magicAttack": 0,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0.0500000007,
+          "critDamage": 1.60000002,
+          "dodgeRate": 0.0500000007,
+          "magicAmplifierRate": 1,
+          "level": 4,
+          "expe": 75,
+          "economy": {
+            "platinum": 0,
+            "gold": 1,
+            "silver": 0,
+            "copper": 0
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "A cunning bandit leader, skilled in combat and tactics."
+      },
+      "minLevel": 4,
+      "debuffs": [],
+      "difficultyLevel": 4,
+      "allowedLocations": [
+        1,
+        3
+      ],
+      "id": "bandit_leader"
+    },
+    {
+      "name": "Dread Knight",
+      "stats": {
+        "data": {
+          "hitpoints": 120,
+          "maxHitpoints": 120,
+          "armor": 0.100000001,
+          "magicArmor": 0.0799999982,
+          "attack": 15,
+          "magicAttack": 5,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0.0299999993,
+          "critDamage": 1.39999998,
+          "dodgeRate": 0.0199999996,
+          "magicAmplifierRate": 1,
+          "level": 5,
+          "expe": 90,
+          "economy": {
+            "platinum": 0,
+            "gold": 1,
+            "silver": 50,
+            "copper": 0
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "A knight corrupted by dark magic, wielding a cursed blade."
+      },
+      "minLevel": 5,
+      "debuffs": [
+        "Bleeding"
+      ],
+      "difficultyLevel": 5,
+      "allowedLocations": [
+        2
+      ],
+      "id": "dread_knight"
+    },
+    {
+      "name": "Stone Golem",
+      "stats": {
+        "data": {
+          "hitpoints": 180,
+          "maxHitpoints": 180,
+          "armor": 0.150000006,
+          "magicArmor": 0.100000001,
+          "attack": 18,
+          "magicAttack": 0,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0,
+          "critDamage": 1.20000005,
+          "dodgeRate": 0,
+          "magicAmplifierRate": 1,
+          "level": 8,
+          "expe": 130,
+          "economy": {
+            "platinum": 0,
+            "gold": 2,
+            "silver": 0,
+            "copper": 0
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "An ancient golem made of stone, impervious to most attacks."
+      },
+      "minLevel": 8,
+      "debuffs": [],
+      "difficultyLevel": 8,
+      "allowedLocations": [
+        2
+      ],
+      "id": "stone_golem"
+    },
+    {
+      "name": "Pyre Imp",
+      "stats": {
+        "data": {
+          "hitpoints": 70,
+          "maxHitpoints": 70,
+          "armor": 0.0199999996,
+          "magicArmor": 0.0399999991,
+          "attack": 6,
+          "magicAttack": 8,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0.0799999982,
+          "critDamage": 1.70000005,
+          "dodgeRate": 0.150000006,
+          "magicAmplifierRate": 1.20000005,
+          "level": 4,
+          "expe": 65,
+          "economy": {
+            "platinum": 0,
+            "gold": 0,
+            "silver": 50,
+            "copper": 0
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "A small fiery demon, hurling balls of flame."
+      },
+      "minLevel": 4,
+      "debuffs": [
+        "Burning"
+      ],
+      "difficultyLevel": 4,
+      "allowedLocations": [
+        3
+      ],
+      "id": "pyre_imp"
+    },
+    {
+      "name": "Necromancer",
+      "stats": {
+        "data": {
+          "hitpoints": 80,
+          "maxHitpoints": 80,
+          "armor": 0.0399999991,
+          "magicArmor": 0.119999997,
+          "attack": 4,
+          "magicAttack": 18,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0.0500000007,
+          "critDamage": 1.5,
+          "dodgeRate": 0.0500000007,
+          "magicAmplifierRate": 1.39999998,
+          "level": 7,
+          "expe": 110,
+          "economy": {
+            "platinum": 0,
+            "gold": 1,
+            "silver": 50,
+            "copper": 0
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "A master of death magic, raising undead minions."
+      },
+      "minLevel": 7,
+      "debuffs": [
+        "Mana Weakness"
+      ],
+      "difficultyLevel": 7,
+      "allowedLocations": [
+        2
+      ],
+      "id": "necromancer"
+    },
+    {
+      "name": "Griffin",
+      "stats": {
+        "data": {
+          "hitpoints": 140,
+          "maxHitpoints": 140,
+          "armor": 0.0799999982,
+          "magicArmor": 0.0599999987,
+          "attack": 16,
+          "magicAttack": 0,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0.0399999991,
+          "critDamage": 1.5,
+          "dodgeRate": 0.0500000007,
+          "magicAmplifierRate": 1,
+          "level": 6,
+          "expe": 105,
+          "economy": {
+            "platinum": 0,
+            "gold": 1,
+            "silver": 25,
+            "copper": 0
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "A majestic beast with eagle wings and lion body, fiercely territorial."
+      },
+      "minLevel": 6,
+      "debuffs": [],
+      "difficultyLevel": 6,
+      "allowedLocations": [
+        3
+      ],
+      "id": "griffin"
+    },
+    {
+      "name": "Siren",
+      "stats": {
+        "data": {
+          "hitpoints": 90,
+          "maxHitpoints": 90,
+          "armor": 0.0500000007,
+          "magicArmor": 0.0799999982,
+          "attack": 8,
+          "magicAttack": 10,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0.0599999987,
+          "critDamage": 1.60000002,
+          "dodgeRate": 0.100000001,
+          "magicAmplifierRate": 1.10000002,
+          "level": 5,
+          "expe": 85,
+          "economy": {
+            "platinum": 0,
+            "gold": 0,
+            "silver": 75,
+            "copper": 0
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "A seductive sea creature, luring sailors to their doom."
+      },
+      "minLevel": 5,
+      "debuffs": [
+        "Freeze"
+      ],
+      "difficultyLevel": 5,
+      "allowedLocations": [
+        3
+      ],
+      "id": "siren"
+    },
+    {
+      "name": "Warlock",
+      "stats": {
+        "data": {
+          "hitpoints": 160,
+          "maxHitpoints": 160,
+          "armor": 0.119999997,
+          "magicArmor": 0.0799999982,
+          "attack": 14,
+          "magicAttack": 12,
+          "mana": 0,
+          "maxMana": 0,
+          "critRate": 0.0199999996,
+          "critDamage": 1.29999995,
+          "dodgeRate": 0.00999999978,
+          "magicAmplifierRate": 1,
+          "level": 7,
+          "expe": 125,
+          "economy": {
+            "platinum": 0,
+            "gold": 1,
+            "silver": 0,
+            "copper": 0
+          }
+        },
+        "scaled": false
+      },
+      "lore": {
+        "desc": "A master of forbidden sorcery, wielding sinister spells that corrupt both body and soul."
+      },
+      "minLevel": 7,
+      "debuffs": [
+        "Poison"
+      ],
+      "difficultyLevel": 7,
+      "allowedLocations": [
+        3,
+        2
+      ],
+      "id": "warlock"
+    }
+  ]
+}

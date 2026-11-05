@@ -93,6 +93,11 @@
               "type": "flag",
               "id": "edda_decision",
               "value": 1
+            },
+            {
+              "type": "standing",
+              "id": "silverthread",
+              "value": 3
             }
           ],
           "once": true,
@@ -115,10 +120,42 @@
               "type": "flag",
               "id": "edda_decision",
               "value": 2
+            },
+            {
+              "type": "standing",
+              "id": "silverthread",
+              "value": 3
             }
           ],
           "once": true,
           "result": "Edda remembered your advice: Use equal shares, with extra time to pay."
+        },
+        {
+          "id": "decline_concern",
+          "text": "Equal shares, no exceptions. Make them figure it out.",
+          "next": "",
+          "conditions": [
+            {
+              "type": "flag",
+              "id": "edda_decision",
+              "state": "eq",
+              "value": 0
+            }
+          ],
+          "effects": [
+            {
+              "type": "flag",
+              "id": "edda_decision",
+              "value": 3
+            },
+            {
+              "type": "standing",
+              "id": "silverthread",
+              "value": -4
+            }
+          ],
+          "once": true,
+          "result": "Edda remembered your refusal: You told her to ignore what people earn."
         },
         {
           "id": "concern_back",

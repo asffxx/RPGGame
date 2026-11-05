@@ -1,0 +1,146 @@
+{
+  "materials": [
+    {
+      "id": "iron_ore",
+      "questRewards": [{"quest": "commission_supplies", "quantity": 3}],
+      "name": "Iron Ore",
+      "description": "A lump of ore dense enough to be worth the walk home.",
+      "source": "Armoured foes and cave dwellers",
+      "weight": 2.0,
+      "sellValue": 8,
+      "drops": [
+        { "enemy": "cave_troll", "chance": 0.45, "minQuantity": 1, "maxQuantity": 2 },
+        { "enemy": "bonewalker", "chance": 0.25, "minQuantity": 1, "maxQuantity": 1 },
+        { "enemy": "magma_golem", "chance": 0.5, "minQuantity": 2, "maxQuantity": 3 }
+      ]
+    },
+    {
+      "id": "rough_leather",
+      "questRewards": [{"quest": "commission_supplies", "quantity": 1}],
+      "name": "Rough Leather",
+      "description": "Untanned hide, stiff but serviceable after a smith works it.",
+      "source": "Wolves and boars",
+      "weight": 0.8,
+      "sellValue": 6,
+      "drops": [
+        { "enemy": "direwolf", "chance": 0.6, "minQuantity": 1, "maxQuantity": 2 },
+        { "enemy": "tusk_boar", "chance": 0.5, "minQuantity": 1, "maxQuantity": 1 },
+        { "enemy": "dire_pack", "chance": 0.55, "minQuantity": 1, "maxQuantity": 2 }
+      ]
+    },
+    {
+      "id": "bone_shard",
+      "name": "Bone Shard",
+      "description": "A clean splinter of old bone. Smiths grind it for flux.",
+      "source": "Restless dead",
+      "weight": 0.6,
+      "sellValue": 5,
+      "drops": [
+        { "enemy": "bonewalker", "chance": 0.55, "minQuantity": 1, "maxQuantity": 2 },
+        { "enemy": "ancient_legionary", "chance": 0.4, "minQuantity": 1, "maxQuantity": 1 },
+        { "enemy": "ghoul", "chance": 0.3, "minQuantity": 1, "maxQuantity": 1 }
+      ]
+    },
+    {
+      "id": "venom_sac",
+      "name": "Venom Sac",
+      "description": "A intact sac of venom, still warm. Handle with care.",
+      "source": "Serpents and spiders",
+      "weight": 0.3,
+      "sellValue": 10,
+      "drops": [
+        { "enemy": "viper", "chance": 0.5, "minQuantity": 1, "maxQuantity": 1 },
+        { "enemy": "widow_spider", "chance": 0.45, "minQuantity": 1, "maxQuantity": 1 },
+        { "enemy": "desert_stinger", "chance": 0.4, "minQuantity": 1, "maxQuantity": 1 }
+      ]
+    },
+    {
+      "id": "arcane_dust",
+      "name": "Arcane Dust",
+      "description": "Powder that clings to the fingers and hums when spoken to.",
+      "source": "Spirits and haunted ruins",
+      "weight": 0.1,
+      "sellValue": 15,
+      "drops": [
+        { "enemy": "wraith", "chance": 0.35, "minQuantity": 1, "maxQuantity": 1 },
+        { "enemy": "specter", "chance": 0.3, "minQuantity": 1, "maxQuantity": 1 },
+        { "enemy": "sylvan_spirit", "chance": 0.25, "minQuantity": 1, "maxQuantity": 2 }
+      ]
+    },
+    {
+      "id": "ember_core",
+      "name": "Ember Core",
+      "description": "A coal that refuses to cool, even under water.",
+      "source": "Fire-born creatures",
+      "weight": 0.5,
+      "sellValue": 18,
+      "drops": [
+        { "enemy": "flameborn", "chance": 0.3, "minQuantity": 1, "maxQuantity": 1 },
+        { "enemy": "volcano_imp", "chance": 0.4, "minQuantity": 1, "maxQuantity": 1 },
+        { "enemy": "magma_golem", "chance": 0.35, "minQuantity": 1, "maxQuantity": 2 }
+      ]
+    },
+    {
+      "id": "frost_shard",
+      "name": "Frost Shard",
+      "description": "A splinter of ice that does not melt in a closed hand.",
+      "source": "Frozen wastes",
+      "weight": 0.4,
+      "sellValue": 16,
+      "drops": [
+        { "enemy": "frost_wraith", "chance": 0.4, "minQuantity": 1, "maxQuantity": 1 },
+        { "enemy": "frozen_yeti", "chance": 0.35, "minQuantity": 1, "maxQuantity": 1 }
+      ]
+    },
+    {
+      "id": "wyrm_scale",
+      "name": "Wyrm Scale",
+      "description": "A scale hard enough to turn a careless blade.",
+      "source": "Wyrms and griffins",
+      "weight": 1.2,
+      "sellValue": 40,
+      "drops": [
+        { "enemy": "wyrmling", "chance": 0.4, "minQuantity": 1, "maxQuantity": 1 },
+        { "enemy": "griffin", "chance": 0.2, "minQuantity": 1, "maxQuantity": 1 }
+      ]
+    },
+    {
+      "id": "slime_core",
+      "name": "Slime Core",
+      "description": "A jelly-like knot that alchemists use to bind powders.",
+      "source": "Oozes and bog creatures",
+      "weight": 0.7,
+      "sellValue": 7,
+      "drops": [
+        { "enemy": "sludge", "chance": 0.6, "minQuantity": 1, "maxQuantity": 2 },
+        { "enemy": "bog_beast", "chance": 0.25, "minQuantity": 1, "maxQuantity": 1 }
+      ]
+    },
+    {
+      "id": "wild_herb",
+      "questRewards": [{"quest": "commission_samples", "quantity": 3}],
+      "name": "Wild Herb",
+      "description": "A bitter leaf with a clean, green smell.",
+      "source": "Forest edges and old battlefields",
+      "weight": 0.05,
+      "sellValue": 4,
+      "drops": [
+        { "enemy": "sylvan_spirit", "chance": 0.35, "minQuantity": 1, "maxQuantity": 2 },
+        { "enemy": "bog_beast", "chance": 0.2, "minQuantity": 1, "maxQuantity": 1 }
+      ]
+    },
+    {
+      "id": "raw_meat",
+      "name": "Raw Meat",
+      "description": "Fresh enough to cook, not fresh enough to carry all week.",
+      "source": "Hunted beasts",
+      "weight": 0.9,
+      "sellValue": 5,
+      "drops": [
+        { "enemy": "direwolf", "chance": 0.45, "minQuantity": 1, "maxQuantity": 1 },
+        { "enemy": "tusk_boar", "chance": 0.55, "minQuantity": 1, "maxQuantity": 2 },
+        { "enemy": "dire_pack", "chance": 0.4, "minQuantity": 1, "maxQuantity": 1 }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "friendlyThreshold": 6,
+  "hostileThreshold": -6,
+  "friendlyDiscountPercent": 10,
+  "hostileMarkupPercent": 20,
+  "guildQuestStanding": 3,
+  "factions": [
+    {
+      "id": "ironward",
+      "friendlyStock": ["greatsword", "rage_potion", "fireball", "roasted_meat"],
+      "hostileHidden": ["steel_sword", "extra_large_health_potion", "comet_azur", "grilled_fish"]
+    },
+    {
+      "id": "lantern",
+      "friendlyStock": ["magic_staff", "magic_elixir", "comet_azur", "vegetable_soup"],
+      "hostileHidden": ["steel_armor", "extra_large_mana_potion", "greater_heal", "wine"]
+    },
+    {
+      "id": "silverthread",
+      "friendlyStock": ["enchanted_dagger", "extra_large_mana_potion", "stars_of_ruin", "wine"],
+      "hostileHidden": ["longsword", "extra_large_health_potion", "frost_nova", "roasted_meat"]
+    },
+    {
+      "id": "crownward",
+      "friendlyStock": ["steel_armor", "extra_large_health_potion", "greater_heal", "roasted_meat"],
+      "hostileHidden": ["halberd", "rage_potion", "comet_azur", "grilled_fish"]
+    },
+    {
+      "id": "tidebound",
+      "friendlyStock": ["halberd", "defense_potion", "frost_nova", "grilled_fish"],
+      "hostileHidden": ["steel_armor", "extra_large_mana_potion", "stars_of_ruin", "vegetable_soup"]
+    }
+  ]
+}

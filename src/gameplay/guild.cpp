@@ -95,8 +95,14 @@ void openGuildHall(GameSession& session) {
         } else if (progress.objectiveComplete) {
             display::message(claimGuildReward(session, guild->id) ? "Quest turned in. Reward received." : "You must be alive to claim the reward.");
         } else if (!progress.active) {
-            acceptGuildQuest(session, guild->id);
-            display::message("Quest accepted. Its destination is available under Travel -> Follow a lead.");
+            const auto& quest = guild->quests[progress.completedQuests];
+            const auto reason = questLockReason(session, quest);
+            if (!reason.empty()) {
+                display::message("The guild will not offer this job: " + reason + ".");
+            } else {
+                acceptGuildQuest(session, guild->id);
+                display::message("Quest accepted. Its destination is available under Travel -> Follow a lead.");
+            }
         } else display::message("Follow the objective in your Quest Journal, then return here for your reward.");
     }
 }
