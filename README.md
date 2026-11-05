@@ -3,7 +3,10 @@
 A C++17 terminal RPG with turn-based combat, exploration, guild quests, crafting,
 and persistent adventures.
 
-**Version:** v3.8.0.
+**Version:** v4.0.0.
+
+> The game will be continued in Godot in a separate repo. See the
+> [development log](DEVLOG.md).
 
 [Download](https://github.com/asffxx/RPGGame/releases/latest) ·
 [Development log](DEVLOG.md) · [Game content](content/README.md)
@@ -18,6 +21,11 @@ and persistent adventures.
 - 15 city residents with branching dialogue, remembered decisions, local jobs, and recipe teaching.
 - A Story Board with six milestones, unfinished jobs,
   residents' concerns, and remembered choices.
+- **New in v4.0.0:** debuffs apply through hidden resist bar meters instead of
+  chance rolls. Each combatant tracks a 0–100 fill per debuff; landed hits add
+  20 points, slowed to half armor fraction resistance (capped 50%); a full bar
+  applies the debuff and empties. Bars decay 5 points per round and are combat-only.
+  No save-format change.
 - **New in v3.8.0:** status effects share one duration and stacking model;
   equipment can be upgraded to +3 and repaired; crafting, upgrades, and repairs
   charge copper fees. Defense and crit stats use their authored units.

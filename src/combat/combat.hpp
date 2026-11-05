@@ -1,10 +1,13 @@
 #pragma once
 
+#include <algorithm>
+#include <map>
 #include <string>
 #include <vector>
 
 #include "core/types.hpp"
 #include "catalogs/spell.hpp"
+#include "catalogs/equipment.hpp"
 #include "entities/npc.hpp"
 #include "entities/enemy.hpp"
 #include "gameplay/inventory.hpp"
@@ -27,9 +30,14 @@ public:
     virtual void takeDamage(int amount) = 0;
     virtual const std::vector<ActiveDebuff>& getDebuffs() const = 0;
     virtual std::vector<ActiveDebuff>& mutableDebuffs() = 0;
+    // Hidden per-debuff fill toward the next application. Combat-only.
+    virtual const std::map<std::string, int>& debuffMeters() const = 0;
+    virtual std::map<std::string, int>& mutableDebuffMeters() = 0;
+    // Meter resistance derived from armor (0..0.5).
+    virtual float debuffResistance() const = 0;
     virtual void applyDebuff(const std::string& debuff) = 0;
     // Debuffs this combatant can inflict with a normal attack.
-    virtual const std::vector<std::string>& getInflictedDebuffs() const {
+    virtual const std::vector<std::string>& carriedDebuffs() const {
         static const std::vector<std::string> none;
         return none;
     }
@@ -52,6 +60,17 @@ public:
     void takeDamage(int amount) override { npc.stats.hitpoints -= amount; }
     const std::vector<ActiveDebuff>& getDebuffs() const override { return npc.debuffs; }
     std::vector<ActiveDebuff>& mutableDebuffs() override { return npc.debuffs; }
+    const std::map<std::string, int>& debuffMeters() const override { return npc.debuffMeters; }
+    std::map<std::string, int>& mutableDebuffMeters() override { return npc.debuffMeters; }
+    float debuffResistance() const override {
+        if (npc.equippedArmor.empty()) return 0.0f;
+        static const EquipmentandWeaponDatabase db;
+        for (const auto& eq : db.getEquipment())
+            if (eq.name == npc.equippedArmor)
+                return statuses::armorResistance(
+                    std::max(0, eq.defenseIncrease) / 100.0f);
+        return 0.0f;
+    }
     void applyDebuff(const std::string& debuff) override { statuses::apply(npc.debuffs, debuff); }
 
 private:
@@ -78,9 +97,11 @@ public:
     void takeDamage(int amount) override { player.stats.hitpoints -= amount; }
     const std::vector<ActiveDebuff>& getDebuffs() const override { return player.debuffs; }
     std::vector<ActiveDebuff>& mutableDebuffs() override { return player.debuffs; }
+    const std::map<std::string, int>& debuffMeters() const override { return player.debuffMeters; }
+    std::map<std::string, int>& mutableDebuffMeters() override { return player.debuffMeters; }
+    float debuffResistance() const override { return inventory ? inventory->armorResistance() : 0.0f; }
     void applyDebuff(const std::string& debuff) override { statuses::apply(player.debuffs, debuff); }
-    const std::vector<std::string>& getEquippedWeaponDebuffs() const { return player.equippedWeaponDebuffs; }
-    float getEquippedWeaponDebuffChance() const { return player.equippedWeaponDebuffChance; }
+    const std::vector<std::string>& carriedDebuffs() const override { return player.equippedWeaponDebuffs; }
 
 private:
     Player& player;
@@ -104,8 +125,11 @@ public:
     void takeDamage(int amount) override { enemy.stats.data.hitpoints -= amount; }
     const std::vector<ActiveDebuff>& getDebuffs() const override { return enemy.debuffs; }
     std::vector<ActiveDebuff>& mutableDebuffs() override { return enemy.debuffs; }
+    const std::map<std::string, int>& debuffMeters() const override { return enemy.debuffMeters; }
+    std::map<std::string, int>& mutableDebuffMeters() override { return enemy.debuffMeters; }
+    float debuffResistance() const override { return statuses::armorResistance(enemy.stats.data.armor); }
     void applyDebuff(const std::string& debuff) override { statuses::apply(enemy.debuffs, debuff); }
-    const std::vector<std::string>& getInflictedDebuffs() const override { return enemy.inflictedDebuffs; }
+    const std::vector<std::string>& carriedDebuffs() const override { return enemy.inflictedDebuffs; }
 
 private:
     Enemy& enemy;

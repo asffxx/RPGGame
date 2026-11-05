@@ -18,6 +18,16 @@ Keep internal names marked `id` unchanged so saved games still recognize them.
 If a file is missing or contains an error, the game may stop and explain what
 needs fixing.
 
+## Debuff meters (v4.0.0)
+
+Debuffs now apply through hidden fill meters instead of chance rolls. A landed
+hit that carries a debuff adds 20 points to the target's meter for that debuff,
+reduced by the target's armor resistance (half the armor fraction, capped at
+50%); at 100 the debuff applies and the meter empties. Meters decay 5 points
+per combat round and are never saved. The old `effectChance` and
+`debuffChance` catalog fields were removed; equipment descriptions describe
+meter fills. See `docs/BALANCE.md` §Debuff meters (in the source repo).
+
 ## Gap mechanics (v3.8.0)
 
 `world/debuffs.json` is the single status catalog. Each record has a stable `id`,

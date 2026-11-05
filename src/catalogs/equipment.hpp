@@ -16,7 +16,6 @@ public:
         float critRateIncrease;
         float critDamageIncrease;
         std::vector<std::string> debuffs;
-        float debuffChance;
         std::string effectDesc;
         int pricePlatinum;
         int priceGold;

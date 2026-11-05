@@ -28,7 +28,7 @@ void enemyAppeared(const Enemy& enemy) {
     std::cout << "A wild " << enemy.name << " has appeared!" << std::endl;
 }
 
-void enemyDefeated(const Enemy& enemy, const Player& player) {
+void enemyDefeated(const Enemy& enemy, [[maybe_unused]] const Player& player) {
     std::cout << "You have defeated " << enemy.name
          << ", you gained " << enemy.stats.data.economy.platinum << "p " << enemy.stats.data.economy.gold << "g " << enemy.stats.data.economy.silver << "s " << enemy.stats.data.economy.copper << "c"
          << " and " << enemy.stats.data.expe

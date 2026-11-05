@@ -86,6 +86,9 @@ public:
     static constexpr int maxDurability = 100;
     // Decrements equipped gear and returns messages for items that broke.
     std::vector<std::string> wearEquipment(Player& player, int amount);
+    // Debuff resistance granted by the equipped armor: half its current
+    // armor contribution, capped at 50%.
+    float armorResistance() const;
     // Reapplies the equipped stat delta after an item's upgrade level changes.
     void refreshUpgrade(Player& player, size_t dbIndex);
     // Returns a message when the buff expired.

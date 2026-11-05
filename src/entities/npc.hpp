@@ -1,5 +1,6 @@
 #pragma once
 
+#include <map>
 #include <set>
 #include <string>
 #include <vector>
@@ -19,6 +20,8 @@ struct NPC {
     std::string equippedWeapon;
     std::string equippedArmor;
     std::vector<ActiveDebuff> debuffs;
+    // Hidden 0..100 fill per debuff id; combat-only, never saved.
+    std::map<std::string, int> debuffMeters;
     std::vector<std::string> spells;
     int wagePerWeek;
     std::string story;

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <map>
 #include <set>
 #include <string>
 #include <vector>
@@ -44,8 +45,10 @@ public:
     PlayerClassTemplate playerClass;
     TimeSystem timeSystem;
     std::vector<ActiveDebuff> debuffs;
+    // Hidden 0..100 fill per debuff id; combat-only, never saved.
+    std::map<std::string, int> debuffMeters;
     std::vector<std::string> equippedWeaponDebuffs;
-    float equippedWeaponDebuffChance = 0.0f;
+    float equippedWeaponDebuffChance = 0.0f; // legacy: saved for format 5, unused
     LocationType currentLocationType;
     std::string currentLocation;
     std::vector<std::string> learnedSpells;

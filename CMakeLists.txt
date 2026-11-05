@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(RPGGame VERSION 3.8.0 LANGUAGES CXX)
+project(RPGGame VERSION 4.0.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -158,6 +158,15 @@ if(BUILD_TESTING AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tests/game_tests.cpp")
         foreach(group statuses equipment economy balance catalog)
             add_test(NAME phase7_${group} COMMAND rpg_phase7_tests ${group} ${CMAKE_CURRENT_BINARY_DIR}/phase7-tests/${group})
             set_tests_properties(phase7_${group} PROPERTIES ENVIRONMENT "TERM=dumb" TIMEOUT 20)
+        endforeach()
+    endif()
+
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tests/phase8_tests.cpp")
+        add_executable(rpg_phase8_tests tests/phase8_tests.cpp)
+        target_link_libraries(rpg_phase8_tests PRIVATE rpg_core)
+        foreach(group meters resistance combat)
+            add_test(NAME phase8_${group} COMMAND rpg_phase8_tests ${group} ${CMAKE_CURRENT_BINARY_DIR}/phase8-tests/${group})
+            set_tests_properties(phase8_${group} PROPERTIES ENVIRONMENT "TERM=dumb" TIMEOUT 20)
         endforeach()
     endif()
 

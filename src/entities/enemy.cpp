@@ -46,7 +46,7 @@ Enemy EnemyDatabase::getRandomEnemy(int difficultyLevel, LocationType locationTy
     std::uniform_int_distribution<size_t> dist(0, validEnemies.size() - 1);
     const EnemyTemplate* chosen = validEnemies[dist(gen)];
 
-    return Enemy{ chosen->name, chosen->stats, chosen->debuffs, {}, chosen->id };
+    return Enemy{ chosen->name, chosen->stats, chosen->debuffs, {}, {}, chosen->id };
 }
 
 Enemy EnemyDatabase::getRandomEnemy(int difficultyLevel) {
@@ -66,7 +66,7 @@ Enemy EnemyDatabase::getRandomEnemy(int difficultyLevel) {
     std::uniform_int_distribution<size_t> dist(0, validEnemies.size() - 1);
     const EnemyTemplate* chosen = validEnemies[dist(gen)];
 
-    return Enemy{ chosen->name, chosen->stats, chosen->debuffs, {}, chosen->id };
+    return Enemy{ chosen->name, chosen->stats, chosen->debuffs, {}, {}, chosen->id };
 }
 
 const EnemyDatabase::EnemyTemplate* EnemyDatabase::find(const std::string& id) const {
@@ -93,7 +93,7 @@ Enemy EnemyController::encounterEnemy(int difficultyLevel, LocationType location
 Enemy EnemyController::getEnemyByName(const std::string& name, int playerLevel, LocationType locationType) {
     for (const auto& tmpl : enemyDB.templates) {
         if (tmpl.name == name) {
-            Enemy enemy{ tmpl.name, tmpl.stats, tmpl.debuffs, {}, tmpl.id };
+            Enemy enemy{ tmpl.name, tmpl.stats, tmpl.debuffs, {}, {}, tmpl.id };
             enemyScaleLevel(enemy, playerLevel, locationType);
             return enemy;
         }

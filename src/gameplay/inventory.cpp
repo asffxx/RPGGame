@@ -423,6 +423,15 @@ float critDamageBonus(const EquipmentandWeaponDatabase::equipmentProperties& eq)
     return bonus > 0.0f ? bonus : 0.0f;
 }
 
+float PlayerInventory::armorResistance() const {
+    if (equipped.armorIndex < 0) return 0.0f;
+    const size_t index = static_cast<size_t>(equipped.armorIndex);
+    const auto& eq = equipmentDB.getEquipment()[index];
+    const int level = upgradeLevelOf(inventory, index);
+    const float armor = defenseOf(upgradedStat(eq.defenseIncrease, level));
+    return std::min(0.5f, armor * 0.5f);
+}
+
 void PlayerInventory::equipArmor(Player& player, size_t index) {
     const auto& eq = equipmentDB.getEquipment()[index];
     const int level = upgradeLevelOf(inventory, index);
@@ -441,7 +450,6 @@ void PlayerInventory::equipWeapon(Player& player, size_t index) {
     player.stats.critRate += upgradedStat(eq.critRateIncrease, level);
     player.stats.critDamage += upgradedStat(critDamageBonus(eq), level);
     player.equippedWeaponDebuffs = eq.debuffs;
-    player.equippedWeaponDebuffChance = eq.debuffChance;
     equipped.weaponIndex = static_cast<int>(index);
 }
 

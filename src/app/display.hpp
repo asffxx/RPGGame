@@ -27,7 +27,7 @@ void sleepPenalty();
 
 // --- entities/enemy ---
 void enemyAppeared(const Enemy& enemy);
-void enemyDefeated(const Enemy& enemy, const Player& player);
+void enemyDefeated(const Enemy& enemy, [[maybe_unused]] const Player& player);
 void materialDropped(const std::string& name, int quantity);
 void backpackFull(const std::string& name);
 

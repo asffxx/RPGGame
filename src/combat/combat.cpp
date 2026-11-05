@@ -5,6 +5,7 @@
 #include <cmath>
 #include <iostream>
 #include <limits>
+#include <map>
 #include <random>
 #include <string>
 #include <vector>
@@ -13,6 +14,21 @@
 #include "app/display.hpp"
 
 namespace {
+
+// Fills the target's per-debuff meters for every debuff the attacker
+// carries. A meter that fills applies its debuff and empties; the names of
+// the debuffs applied are returned.
+std::vector<std::string> fillDebuffMeters(ICombatant& attacker, ICombatant& target) {
+    const float resist = target.debuffResistance();
+    std::vector<std::string> inflicted;
+    for (const auto& debuff : attacker.carriedDebuffs())
+        if (statuses::addDebuffMeter(target.mutableDebuffMeters(), debuff, resist)) {
+            std::string message;
+            if (statuses::apply(target.mutableDebuffs(), debuff, &message))
+                inflicted.push_back(debuff);
+        }
+    return inflicted;
+}
 
 // Player-selectable actions in the combat menu.
 enum class CombatAction { Attack = 1, UseItem = 2, Run = 3, Signature = 4, CastSpell = 5 };
@@ -29,6 +45,12 @@ std::string makeHpBar(int hp, int maxHp, int width = 18) {
 std::string makeDebuffLine(const std::vector<ActiveDebuff>& debuffs) {
     if (debuffs.empty()) return "";
     return "Debuffs: " + statuses::describe(debuffs);
+}
+
+// Builds a meter line ("Meters: Burning [##--------] 20"), or an empty string.
+std::string makeMeterLine(const std::map<std::string, int>& meters) {
+    const std::string description = statuses::describeDebuffMeters(meters);
+    return description.empty() ? std::string{} : "Meters: " + description;
 }
 
 // Describes a single attack result as a combat-log line.
@@ -88,25 +110,7 @@ CombatResult CombatSystem::attack(ICombatant& attacker, ICombatant& target, floa
             totalDamage * damageMultiplier * statuses::incomingDamageMultiplier(target.getDebuffs())));
         target.takeDamage(totalDamage);
 
-        std::vector<std::string> inflicted;
-        if (attacker.isPlayer()) {
-            PlayerCombatant* playerAttacker = dynamic_cast<PlayerCombatant*>(&attacker);
-            if (playerAttacker) {
-                const auto& weaponDebuffs = playerAttacker->getEquippedWeaponDebuffs();
-                float chance = playerAttacker->getEquippedWeaponDebuffChance();
-                if (!weaponDebuffs.empty() && dist(gen) < chance) {
-                    std::uniform_int_distribution<size_t> debuffDist(0, weaponDebuffs.size() - 1);
-                    const std::string& chosen = weaponDebuffs[debuffDist(gen)];
-                    if (statuses::apply(target.mutableDebuffs(), chosen))
-                        inflicted.push_back(chosen);
-                }
-            }
-        } else {
-            for (const auto& debuff : attacker.getInflictedDebuffs()) {
-                if (statuses::applyRoll(target.mutableDebuffs(), debuff, dist(gen)))
-                    inflicted.push_back(debuff);
-            }
-        }
+        const std::vector<std::string> inflicted = fillDebuffMeters(attacker, target);
         for (size_t i = 0; i < inflicted.size(); ++i) {
             if (!debuffInflicted.empty()) debuffInflicted += ", ";
             debuffInflicted += inflicted[i];
@@ -133,6 +137,9 @@ void CombatScreen::startCombat(CombatSystem& combat, PlayerInventory& inventory)
     statuses::clear(player.debuffs);
     statuses::clear(enemy.debuffs);
     for (auto& npc : party) statuses::clear(npc.debuffs);
+    player.debuffMeters.clear();
+    enemy.debuffMeters.clear();
+    for (auto& npc : party) npc.debuffMeters.clear();
 
     while (inCombat && (player.stats.hitpoints > 0 || !party.empty()) && enemy.stats.data.hitpoints > 0) {
         clearScreen();
@@ -200,6 +207,9 @@ void CombatScreen::startCombat(CombatSystem& combat, PlayerInventory& inventory)
     statuses::clear(player.debuffs);
     statuses::clear(enemy.debuffs);
     for (auto& npc : party) statuses::clear(npc.debuffs);
+    player.debuffMeters.clear();
+    enemy.debuffMeters.clear();
+    for (auto& npc : party) npc.debuffMeters.clear();
     if (temporaryArmor > 0) {
         player.stats.armor = std::max(0.0f, player.stats.armor - temporaryArmor);
         temporaryArmor = 0.0f;
@@ -224,6 +234,9 @@ void CombatScreen::tickStatusEffects() {
     for (auto& npc : party)
         tickOne(npc.name, npc.debuffs, npc.stats.hitpoints, npc.stats.mana);
     tickOne(enemy.name, enemy.debuffs, enemy.stats.data.hitpoints, enemy.stats.data.mana);
+    statuses::decayDebuffMeters(player.debuffMeters);
+    for (auto& npc : party) statuses::decayDebuffMeters(npc.debuffMeters);
+    statuses::decayDebuffMeters(enemy.debuffMeters);
 }
 
 void CombatScreen::displayCombatScreen() {
@@ -235,12 +248,16 @@ void CombatScreen::displayCombatScreen() {
                     "   MP " + std::to_string(player.stats.mana) + "/" + std::to_string(player.stats.maxMana));
     std::string playerDebuffs = makeDebuffLine(player.debuffs);
     if (!playerDebuffs.empty()) lines.push_back("  " + playerDebuffs);
+    const std::string playerMeters = makeMeterLine(player.debuffMeters);
+    if (!playerMeters.empty()) lines.push_back("  " + playerMeters);
 
     for (const auto& npc : party) {
         lines.push_back(npc.name + "  " + makeHpBar(npc.stats.hitpoints, npc.stats.maxHitpoints) + " " +
                         std::to_string(npc.stats.hitpoints) + "/" + std::to_string(npc.stats.maxHitpoints));
         std::string npcDebuffs = makeDebuffLine(npc.debuffs);
         if (!npcDebuffs.empty()) lines.push_back("  " + npcDebuffs);
+        const std::string npcMeters = makeMeterLine(npc.debuffMeters);
+        if (!npcMeters.empty()) lines.push_back("  " + npcMeters);
     }
 
     lines.push_back("");
@@ -249,6 +266,8 @@ void CombatScreen::displayCombatScreen() {
                     std::to_string(enemy.stats.data.hitpoints) + "/" + std::to_string(enemy.stats.data.maxHitpoints));
     std::string enemyDebuffs = makeDebuffLine(enemy.debuffs);
     if (!enemyDebuffs.empty()) lines.push_back("  " + enemyDebuffs);
+    const std::string enemyMeters = makeMeterLine(enemy.debuffMeters);
+    if (!enemyMeters.empty()) lines.push_back("  " + enemyMeters);
 
     if (!attackInfos.empty()) {
         lines.push_back("");
@@ -341,7 +360,9 @@ void CombatScreen::handleCastSpell() {
         info += " and increased magic armor";
     }
     if (spell.hasDebuff) {
+        const float resist = enemyC.debuffResistance();
         for (const auto& debuff : spell.debuffs) {
+            if (!statuses::addDebuffMeter(enemy.debuffMeters, debuff, resist)) continue;
             if (statuses::apply(enemy.debuffs, debuff))
                 info += " and applied " + debuff;
         }

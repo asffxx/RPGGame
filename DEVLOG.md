@@ -1,363 +1,239 @@
 # Development log
 
-RPGGame's development history, newest milestone first. Unreleased work is marked
-separately from published releases.
+RPGGame's development history, newest milestone first. Add each release entry at the top.
+
+## v4.0.0 — Debuff resistances and feature freeze
+
+**Date:** 2026-11-06 — Windows x64 and Linux x86_64 release builds.
+
+- Debuffs now apply through resist-bar meters instead of chance rolls. Each
+  combatant keeps a hidden 0–100 fill per debuff; hits add 20 points, slowed
+  by armor resistance; a full bar applies the debuff and empties.
+- Armor resistance is half the armor fraction, capped at 50% (player/NPC from
+  equipped armor; enemy from armor stat). Meters decay 5 points per round,
+  clear at combat start and end, and are never saved. Save format stays 5.
+- Removed the old `effectChance` and `debuffChance` catalog fields.
+- Three new Phase 8 test groups; 50/50 on both fresh platform builds, zero
+  compiler warnings, checksums verified.
+- Repo is frozen for new features at v4.0.0. The pixel game continues in a
+  separate repo.
 
 ## v3.8.0 — Gap mechanics
 
 **Date:** 2026-11-05 — Windows x64 and Linux x86_64 release builds.
 
-- Unified every debuff under one duration and stacking model: per-stack damage
-  and drain, refresh on reapply, maximum-stack amplifiers, and percentage-point
-  armor reductions. All equipment, spell, and enemy references are audited.
-- Added equipment upgrades to +3 using materials and copper, plus durability and
-  repair. Broken gear is unequipped after combat instead of silently working.
-- Audited equipment stat units during the balance pass: defense and magic defense
-  are percentage points and crit damage is a multiplier bonus, with upgrades
-  following the same +15% base stat curve. Spell armor buffs are temporary
-  percentage points removed at combat end.
-- Added economy sinks: per-recipe station fees, upgrade fees, and repair fees.
-  Crafting remains atomic when a fee cannot be paid.
-- Documented the balance rules (level, damage, status, upgrade, income, and
-  sink tables) with every row pointing to a test.
-- Save format 5 stores active-debuff duration and stacks plus per-item upgrade
-  level and durability. Formats 1–4 still load; legacy debuff names migrate to
-  the new model.
-- Five new Phase 7 test groups bring coverage to 47 cases. The complete suite
-  passes with no compiler warnings.
-- Final review added equipment defense and crit regression checks; the full suite
-  still passes 47/47 with no compiler warnings.
+- One duration/stacking model for all debuffs: per-stack damage and drain,
+  refresh on reapply, maximum-stack amplifiers, percentage-point armor
+  reductions. All equipment, spell, and enemy references audited.
+- Equipment upgrades to +3 using materials and copper; added durability and
+  repair. Broken gear is unequipped after combat.
+- Defense and magic defense are percentage points; crit damage is a multiplier
+  bonus. Upgrades follow the +15% base-stat curve; spell armor buffs are
+  temporary percentage points removed at combat end.
+- Economy sinks: per-recipe, upgrade, and repair fees. Crafting stays atomic
+  when a fee cannot be paid.
+- Save format 5 stores debuff duration/stacks and per-item upgrade level and
+  durability. Formats 1–4 still load; legacy debuff names migrate.
+- Balance rules are documented, every row tied to a test.
+- Five new Phase 7 test groups; 47/47 with no compiler warnings.
 
 ## v3.7.0 — Reputation and faction standing
 
 **Date:** 2026-11-05 — Windows x64 and Linux x86_64 release builds.
 
-- Added five guild standings, derived city standing, a -100..100 clamp, and
-  friendly/hostile thresholds at 6/-6. No decay or save-format change.
-- All 15 residents have authored tier reactions, +3 helpful decisions, and a
-  once-only -4 dismissive decision. Guild storyline claims grant +3 standing.
-- Hostile halls refuse new work while allowing active jobs to be turned in.
-  Five friendly-only side jobs remain visible with their lock reasons.
-- City shops filter stock and apply a 10% friendly discount or 20% hostile
-  markup. Displayed and charged prices match; villages and towns stay neutral.
-- Added current-city dashboard standing and all five standings to the Story Board.
-- Rules and stock live in `content/narrative/reputation.json`.
-- Seven new test groups bring coverage to 42 cases; formats 1–4 remain readable.
-- Linux and Windows Release builds passed all 42 tests, with Windows execution
-  verified through Wine. Packaged executables passed version, startup, save/load,
-  dependency, and checksum checks with matching runtime content.
+- Five guild standings, derived city standing, -100..100 clamp, thresholds at
+  6/-6 (friendly/hostile). No decay or save-format change.
+- 15 residents with authored tier reactions: +3 helpful, once-only -4
+  dismissive, +3 guild claims. Hostile halls refuse new work; active jobs stay
+  turnable.
+- Friendly shops: 10% discount, five new jobs. Hostile: 20% markup. Small
+  settlements stay neutral.
+- Standing shown on the dashboard and Story Board. Rules in
+  `content/narrative/reputation.json`.
+- Seven new test groups; 42/42, formats 1–4 readable, Windows verified in Wine.
 
 ## v3.6.0 — Story board
 
 **Date:** 2026-11-04 — Windows x64 and Linux x86_64 release builds.
 
-- Added a Story Board under a new main-menu Story category. It shows Act One,
-  six sequential beats, open threads, and every remembered dialogue choice.
-- Completed beats show their full text; future beats show hints. Already-met
-  requirements advance together in order when the board opens, without changing
-  the save or advancing game time.
-- Story text lives in `content/story/acts.json`; UI code carries no act or beat
-  strings. Beat state is derived from flags, quests, recipes, guild membership,
-  travel, and standing, so save format stays 4.
-- Extracted dialogue condition parsing and evaluation into a shared engine.
-  Added a `count` condition for level, completed quests, known recipes, joined
-  guilds, discovered cities, recorded choices, and highest standing.
-- Open threads list active jobs, including current guild storyline quests, plus
-  unresolved residents in cities the player has reached.
-- The final beat is an unexplained omen after seeing all five cities. No collapse
-  cause, main quest, or responsible race was authored.
-- Added six story test groups; all 35 CTest cases pass and formats 1–4 still load.
-- Reused rule-validation tables, reserved story-view storage, and skipped checks
-  for locked beats and redundant completion scans.
-- Packaged Linux and Windows binaries with matching content and SHA-256 checksums.
-- Both extracted packages passed Continue, Story Board, and Exit checks; the
-  Windows executable was tested under Wine.
+- New Story menu: Act One with six sequential beats, open threads, and
+  remembered choices. Beat state is computed from existing flags — save
+  format stays 4.
+- Completed beats show full text; future ones show hints. Requirements advance
+  in order without changing the save or game time.
+- Story text in `content/story/acts.json`; UI code carries no beat strings.
+  Final beat is an unexplained omen; no collapse cause is authored.
+- Dialogue conditions extracted into a shared engine with a new `count`
+  condition (level, quests, recipes, guilds, cities, choices, standing).
+- Six new test groups; 35/35, formats 1–4 readable.
 
 ## v3.5.0 — Peaceful-city dialogue
 
 **Date:** 2026-11-03 — Windows x64 and Linux x86_64 release builds.
 
-- Added 15 authored, non-recruitable residents: three in each city, accessible
-  through Local Establishments → Talk. Each has local lore, a branching decision,
-  and remembered responses. Guild stories remain independent of the main quest.
-- Added JSON dialogue graphs with strict validation of IDs, references, effects,
-  conditions, node destinations, and reachability. Missing/invalid dialogue data
-  stops startup with a file-specific error.
-- Added conditions for flags, guild standing, items, quests, race, class, recipes,
-  and recorded choices; unavailable menu options explain their requirements.
-- Added atomic effects for flags, item gifts, quest acceptance, standing, recipe
-  teaching, and choice recording. Failed rewards leave all affected state intact.
-- Five craftspeople teach existing recipes. Five guild representatives introduce
-  existing local jobs. A Letter Never Sent now includes an optional bread reward.
-- Save format remains 4; decisions and responses survive reload. Added six
-  CTest groups; all 29 cases pass. Dialogue menus handle Back, Leave, and EOF.
-- The collapse, its cause, and the main quest remain deliberately unwritten.
-- Packaged both platforms with matching runtime content and SHA-256 checksums.
-  Added the explicit algorithm header needed by the LLVM-MinGW Windows build.
+- 15 authored, non-recruitable residents (three per city) with lore,
+  branching decisions, and remembered responses.
+- JSON dialogue graphs with strict validation; bad data stops startup with a
+  named file error.
+- Conditions cover flags, standing, items, quests, race, class, recipes, and
+  choices; unavailable options explain their requirements.
+- Atomic effects: flags, item gifts, quest acceptance, standing, recipe
+  teaching, choice recording. Failed rewards leave state intact.
+- Five craftspeople teach recipes; five guild reps introduce local jobs.
+- Save format stays 4. Six new test groups; 29/29. The main quest and its
+  cause remain deliberately unwritten. Fixed the missing algorithm header in
+  the Windows build.
 
-## v3.4.2 — Content JSON migration and catalog infrastructure relocation
+## v3.4.2 — Content JSON migration
 
 **Date:** 2026-11-03 — content migration and rebuilt release artifacts.
 
-- Migrated all remaining authored game content to `content/`, making JSON the
-  sole source of truth for narrative and NPC data:
-  - `content/narrative/guilds.json` — 5 guilds, 10 embedded storyline quests.
-  - `content/narrative/rumors.json` — 15 rumors (5 road leads, 10 tavern).
-  - `content/narrative/sidequests.json` — 20 side quests.
-  - `content/narrative/commissions.json` — 20 repeatable commissions.
-  - `content/narrative/mainquests.json` — empty main-quest catalog (reserved).
-  - `content/characters/npc_pools.json` — name pools, special characters,
-    backstories, dialogue lines, starter items.
-- Updated all catalog C++ loaders (`guild.cpp`, `rumor.cpp`, `sidequests.cpp`,
-  `commissions.cpp`, `quest.cpp`, `npc.cpp`, `establishments.cpp`) to read from
-  `content/` via `content::catalog<T>()`; all hardcoded vectors removed.
-- Relocated `src/core/ids.cpp/.hpp` → `src/catalogs/content_ids.cpp/.hpp` and
-  `src/core/paths.cpp/.hpp` → `src/catalogs/content_paths.cpp/.hpp`. Content
-  infrastructure now lives beside the catalog layer it serves. `src/core/` is
-  engine-only (economy, stats, timesystem, ui).
-- Updated content loaders, gameplay callers, and validation code to include the new paths
-  directly. No forwarding headers left behind.
-- Updated `CMakeLists.txt`: removed `src/core/ids.cpp` and `src/core/paths.cpp`;
-  added `src/catalogs/content_ids.cpp` and `src/catalogs/content_paths.cpp`.
-- Bumped the project version to 3.4.2 in `CMakeLists.txt` and
-  `src/core/version.hpp`, and synced the README release line.
-- Rebuilt the v3.4.2 release artifacts for Linux x86_64
-  and Windows x64 (MinGW-w64). Updated `dist/README.md` and `SHA256SUMS`;
-  both binaries launch and report v3.4.2.
-- Corrected stale documentation in `README.md` and `content/README.md`:
-  `RPG_CONTENT_DIR` (not `RPG_DATA_DIR`), current `content/` paths, the 23-test
-  suite, `src/catalogs/` and `src/gameplay/` layout, save format 4, and
-  JSON-sourced catalog ids.
+- All remaining content moved to `content/`: guilds, rumors, side quests,
+  commissions, main quest (reserved, empty), NPC pools.
+- All catalog loaders read from `content/` via `content::catalog<T>()`;
+  hardcoded vectors removed.
+- `src/core/ids.*` and `paths.*` relocated to `src/catalogs/`; `src/core/` is
+  engine-only.
+- Version bumped to 3.4.2; release artifacts rebuilt and checksummed; stale
+  docs corrected (`RPG_CONTENT_DIR`, paths, save format 4).
 
 ## v3.4.1 — Project structure refactor
 
 **Date:** 2026-11-01
 
-- Renamed `data/` to `content/` and reorganized JSON files into subdirectories
-  (`crafting/`, `narrative/`, `characters/`, `world/`, `items/`).
-- Renamed `src/systems/` to `src/gameplay/` and `src/content/` to `src/catalogs/`.
-- Renamed `src/ui/display.cpp` to `src/app/display.cpp`.
-- Moved `src/gameplay/datafile.*` to `src/gameplay/datafile.*`.
-- Updated all C++ include paths, CMake configurations, and JSON loader paths.
-- Updated path resolution to use `content/` instead of `data/`.
-- Verified build and 23/23 tests pass; verified catalog snapshot consistency.
+- Renamed `data/` → `content/` (subfolders: crafting, narrative, characters,
+  world, items), `src/systems/` → `src/gameplay/`, `src/content/` →
+  `src/catalogs/`, `src/ui/display.cpp` → `src/app/display.cpp`.
+- Updated all include paths, CMake, and loader paths; content lookups resolve
+  via `content/`.
+- 23/23 tests pass; catalog snapshot consistency verified.
 
-## v3.4.0 — Crafting, material drops, backpack, and selling
+## v3.4.0 — Crafting, drops, backpack, and selling
 
 **Date:** 2026-11-01 — crafting and inventory improvements.
 
-- Added eleven materials and nine recipes in `data/materials.json` and
-  `data/recipes.json`, with validated item, enemy, quest, guild, and station references.
-- Added city/guild-hall forge, alchemy, and kitchen menus. Crafts are atomic and
-  account for consumed ingredient weight before checking the output capacity.
-- Recipes unlock through starter availability, guild membership, quest completion,
-  or an exploration flag. Known recipes persist; NPC instruction follows in Phase 4.
-- Added independently rolled enemy materials to all four victory reward paths.
-  Two commissions supply materials; insufficient space leaves their rewards unclaimed.
-- Added a 50-weight backpack. Above 37.5, basic attack stats lose 10% and dodge
-  loses 10 percentage points. Full packs block purchases and material pickups.
-  Legacy overweight inventories remain loadable.
-- Stores buy items at half their shop price; materials use their JSON sell value.
-  Selling or crafting cannot remove the final equipped copy.
-- Save format remains 4, including material ids and known recipes. Runtime data
-  files are now required alongside future distributions.
-- Added five crafting test groups: catalog validation, atomic transactions,
-  backpack penalties, drops/rewards/save roundtrip, and interactive menu flows.
-- Verified 23/23 CTest cases, plus a real-binary Continue → craft → save → reload
-  → sell → save flow and the missing-data startup error.
+- Eleven materials, nine recipes with validated cross-references; city/guild
+  forge, alchemy, and kitchen menus. Crafting is atomic; recipes unlock by
+  play, known recipes persist.
+- All four victory paths roll for materials; two commissions supply them.
+  Insufficient space leaves rewards unclaimed.
+- 50-weight backpack: over 37.5 costs 10% attack and 10 points of dodge; full
+  packs block purchases and pickups. Legacy overweight saves stay loadable.
+- Selling pays half shop price (materials use their JSON sell value); the last
+  equipped copy can never leave the character.
+- Save format stays 4. Five crafting test groups; 23/23 plus a real binary
+  craft/save/reload/sell flow and the missing-data startup error.
 
 ## v3.3.0 — Content ids, JSON reader, save format 4
 
 **Date:** 2026-11-01
 
-- Added stable snake_case ids to every catalog record: equipment, potions, food,
-  locations, enemies, classes, races, spells, guilds, and quests. Lookups by id
-  and by table position both work; duplicate display names get `_2` suffixes.
-- Added `src/gameplay/datafile.cpp`, a strict reader for the JSON subset shared
-  with the future pixel engine. Comments, trailing commas, duplicate keys, lone
-  surrogates, and non-finite numbers are rejected. Errors name file, line, and
-  column.
-- Added `data/README.md` describing the format, id rules, cross-reference rules,
-  and the files that each later phase will add.
-- Save format 4 adds story flags, recorded choices, known recipes, and faction
-  standing, plus stable item ids. Versions 1, 2, and 3 stay readable and gain
-  item ids on load. Unknown or mismatched ids are hard errors.
-- Inventory items now carry their catalog id, and `PlayerInventory` resolves
-  ids to catalog indices.
-- Test count rises from 15 to 18: `catalog_ids`, `json_reader`, and `story_save`.
-- Source release only. Prebuilt binaries remain at v3.2.1 until the release
-  step rebuilds and checksums them.
+- Stable snake_case ids on every catalog record; id and position lookups both
+  work; duplicate names get `_2` suffixes.
+- Strict JSON-subset reader: errors name file, line, column; rejects comments,
+  trailing commas, duplicate keys, non-finite numbers.
+- Save format 4 adds story flags, choices, known recipes, standing, and item
+  ids. Formats 1–3 readable; unknown or mismatched ids are hard errors.
+- Inventory items carry catalog ids resolved by `PlayerInventory`.
+- 18 tests (from 15). Source-only release.
 
 ## v3.2.1 — Standalone Windows and Linux builds
 
 **Date:** 2026-11-01
 
-- Added prebuilt **Windows 10/11 x64** and **Linux x86_64** executables under
-  `dist/`, with a distribution README and SHA-256 checksums.
-- Windows build is a static MinGW-w64 UCRT console executable; no DLLs required.
-- Linux build is statically linked and runs without a separate C++ runtime.
-- Verified both binaries launch and show the v3.2.1 title screen. Windows checks
-  were run under Wine; full Linux tests remain green.
-- No gameplay or save-format changes. Patch release: 3.2.0 to 3.2.1.
+- Prebuilt Windows x64 (static MinGW UCRT console, no DLLs) and Linux x86_64
+  (statically linked) executables, with README and checksums.
+- Both launch and show v3.2.1; Windows checked under Wine; full Linux tests
+  green. No gameplay or save-format changes.
 
 ## v3.2.0 — Shorter, category-based main menu
 
 **Date:** 2026-11-01
 
-- Replaced the flat main menu with **Character**, **Local Establishments**,
-  **Actions**, and **System** categories.
-- The top level now shows four choices (three outside settlements) instead of up
-  to eleven actions. Selecting a category opens only its actions; `0. Back`
-  returns without running anything.
-- Establishments remain location-aware and appear only where stores, taverns,
-  magic stores, or guild halls exist.
-- Kept the character/status dashboard and numbered controls. Actions still refresh
-  the menu after returning.
-- Updated gameplay Basics text, README usage instructions, and CLI flows for the
-  new navigation. All 15 tests pass.
-
-Backward-compatible interface change: game version advances from 3.1.0 to
-3.2.0. Save format remains 3.
+- Flat menu replaced by **Character**, **Local Establishments**, **Actions**,
+  **System** categories; location-aware establishments only.
+- Numbered controls and dashboard kept. 15/15 tests. Interface change
+  3.1.0 → 3.2.0; save format stays 3.
 
 ## v3.1.0 — Terminal interface refresh
 
 **Date:** 2026-11-01
 
-- Retained portable numbered controls while introducing consistent ASCII panels,
-  terminal-width wrapping, and subtle heading and border colors.
-- Added a versioned title screen and an at-a-glance main-menu display with
-  character, class, level, HP/mana bars, location, time, and currency.
-- Applied the shared panel renderer to combat, travel, guild boards, the journal,
-  and other existing bordered menus.
-- Added plain-text output for redirected streams and `TERM=dumb`, plus `NO_COLOR`
-  support. Screen clearing is skipped when output is redirected or the terminal
-  is marked dumb.
-- Removed the Python dependency from CLI verification. Equivalent creation,
-  save/restart, and malformed-save checks now run through CMake.
-- Added C++ panel-wrapping, UTF-8 boundary, and resource-bar checks. All 15 tests
-  pass on Linux.
-- Updated usage instructions and linked the original game on the `v1` branch.
-
-This is a backward-compatible feature release: game version advances from
-3.0.0 to 3.1.0. The save format stays at 3 and still reads formats 1 and 2.
+- Consistent ASCII panels, width-aware wrapping, heading/border colors,
+  versioned title screen, stats dashboard with HP/mana bars.
+- Shared panel renderer applied to combat, travel, guild boards, and journal.
+- Plain output for `TERM=dumb` and redirects; `NO_COLOR` support.
+- CLI verification ported from Python to CMake; panel/UTF-8/resource-bar
+  checks added. 15/15 tests. Save format stays 3.
 
 ## v3.0.0 — Persistent adventures and shared quests
 
 **Date:** 2026-11-01
 
-This milestone turns individual play sessions into persistent adventures, with
-guild storylines, discoverable jobs, and more distinct character choices.
-
-### Save and continue
-
-- Added a manual save slot and Continue from the title screen.
-- Saves preserve the character, inventory, companions, travel progress, time,
-  guild memberships, rumor history, and quest progress.
-- Save format 3 records discovered jobs, active objectives, accepting guilds,
-  and commission completion counts. Formats 1 and 2 remain readable.
-- Added save validation and migration without replaying rewards.
-
-### Characters and combat
-
-- Added race/class lore and stat previews, confirmation, and Back navigation
-  before character creation. Fixed screen clearing when returning to race selection.
-- Added a signature combat ability for each of the 13 classes, available from
-  level 1 and usable once per encounter.
-- Made enemy encounters location-aware.
-
-### Cities, guilds, and discovery
-
-- Added five peaceful cities: Attania, Erden, Trisselie, Ariandel, The Royal Capital,
-  and Velmora.
-- Added five guilds with two storyline quests each. A character can join all five.
-- Added randomized tavern rumors, city travel leads, and quest hints.
-- Kept discovering a lead distinct from physically visiting its destination.
-
-### Forty new jobs
-
-- Added **20 one-time side quests** and **20 repeatable commissions**, alongside
-  the **10 guild storyline quests**: **50 playable quests in total**.
-- Added level, guild-membership, and specific guild-quest prerequisites.
-  Guild prerequisites count after reward turn-in, not objective completion alone.
-- General jobs are available at every guild and can be turned in at any hall.
-  Guild-specific jobs require membership and their originating hall.
-- Added Side Quests and Commissions boards, including after a guild's storyline ends.
-- Integrated objectives with combat, travel leads, and a categorized Quest Journal.
-- Commissions require explicit reacceptance and a fresh objective each run.
-  Completion counts persist; side quests cannot be repeated.
-- Prevented duplicate acceptance, repeated payouts, and multiple quest completions
-  from one selected objective action.
-
-### Internal structure and verification
-
-- Added shared quest definitions, progress, and handling in `src/world/`.
-- Split content into `guild_quest.*`, `quest.*`, `sidequests.*`, and `commissions.*`.
-  The main-story catalog in `quest.*` is reserved for future content and is empty.
-- Added persistent `GameSession` state and reusable combat ability handling.
-- Expanded CMake/CTest coverage to 14 tests, including save migration, unlock
-  rules, commission cycles, guild boards, combat menus, and CLI flows.
-- Verified the build and all 14 tests on Linux; updated gameplay documentation.
+- Manual save slot and Continue; saves cover character, inventory, party,
+  travel, time, guilds, rumors, and quest progress. Save format 3 records
+  jobs, objectives, accepting guilds, and commission counts; formats 1–2
+  readable. Validation and migration without reward replay.
+- Race/class lore and stat previews at creation; a level-1 signature combat
+  ability for all 13 classes, once per encounter; location-aware encounters.
+- Five cities, five guilds (all joinable), 10 storyline quests, 20 side
+  quests, 20 repeatable commissions — 50 playable quests with level,
+  membership, and specific-guild prerequisites.
+- Side Quests and Commissions boards; quest journal; commissions need explicit
+  reacceptance and a fresh objective per run; side quests never repeat;
+  payouts and completions guarded against duplicates.
+- Quest handling in `src/world/` split into guild_quest, quest, sidequests,
+  commissions. 14/14 tests on Linux.
 
 ## v2.0.0 — Refactoring milestone (retrospective)
 
 **Period:** 2026-07-09 through 2026-10-30
 
-The second milestone reorganized the existing game into maintainable modules
-and improved build portability. This is a retrospective milestone label, not
-an assertion that a `v2.0.0` tag was published at the time.
+Reorganized the single-file game into modules and improved build portability.
+Retrospective label — no v2.0.0 tag was published at the time.
 
 - [Initial refactor (`be6d543`)](https://github.com/asffxx/RPGGame/commit/be6d543)
-  split the large `src/main.cpp` into core, data, entities, combat, systems, UI,
+  split `src/main.cpp` into core, data, entities, combat, systems, UI,
   application, and world modules.
 - [Directory restructuring (`db9e14d`)](https://github.com/asffxx/RPGGame/commit/db9e14d)
   refined the source layout.
 - [Display separation (`17e6ada`)](https://github.com/asffxx/RPGGame/commit/17e6ada)
-  moved gameplay output into centralized display helpers.
+  centralized gameplay output in display helpers.
 - [Character-creation refactor (`e34675d`)](https://github.com/asffxx/RPGGame/commit/e34675d)
-  organized creation and display code; subsequent work renamed NPC/enemy entities.
+  organized creation and display code.
 - [Portable screen clearing (`08d3538`)](https://github.com/asffxx/RPGGame/commit/08d3538)
-  improved cross-platform terminal behavior.
-- [Build/tooling update (`0125cdf`)](https://github.com/asffxx/RPGGame/commit/0125cdf)
-  added the current CMake setup, tracked clangd configuration, and refreshed README.
+  and [build/tooling update (`0125cdf`)](https://github.com/asffxx/RPGGame/commit/0125cdf)
+  improved terminal behavior, added the current CMake setup, and refreshed the
+  README.
 
 ## v1.1.0 — Early interface and travel fixes
 
 **Date:** 2026-01-14
 
-The history explicitly names this version in
-[`0e2c157` — Update v1.1.0](https://github.com/asffxx/RPGGame/commit/0e2c157).
+Named in [`0e2c157` — Update v1.1.0](https://github.com/asffxx/RPGGame/commit/0e2c157).
 
-- Added consistent screen clearing around travel and combat.
-- Shortened the startup introduction.
-- Fixed marked-location travel failing to update the player's current location
-  and location type in the main menu.
+- Consistent screen clearing around travel and combat; shortened introduction.
+- Fixed marked-location travel not updating location and type.
 
 ## v1.0.0 — Initial project (retrospective)
 
 **Date:** 2026-01-14
 
-The original v1 game is preserved on the
-[`v1` branch](https://github.com/asffxx/RPGGame/tree/v1), whose current tip is
-[`19b50cb`](https://github.com/asffxx/RPGGame/commit/19b50cb). That branch includes
-the early v1.1.0 changes and predates the modular refactor; `main` carries current development.
+Preserved on the [`v1` branch](https://github.com/asffxx/RPGGame/tree/v1),
+whose tip is [`19b50cb`](https://github.com/asffxx/RPGGame/commit/19b50cb);
+`main` carries current development.
 
-- [Initial commit (`9c33a81`)](https://github.com/asffxx/RPGGame/commit/9c33a81)
-  created README, license, and Git attributes.
-- [Game commit (`b231a88`)](https://github.com/asffxx/RPGGame/commit/b231a88)
-  introduced the playable C++ game in a single large `src/main.cpp`.
-- Established the original character creation, combat, exploration, inventory,
-  progression, party, and establishment systems that later versions build on.
+- [Initial commit (`9c33a81`)](https://github.com/asffxx/RPGGame/commit/9c33a81):
+  README, license, Git attributes.
+- [Game commit (`b231a88`)](https://github.com/asffxx/RPGGame/commit/b231a88):
+  the playable game in one `src/main.cpp` — creation, combat, exploration,
+  inventory, progression, party, establishments.
 
-The initial-project label groups these two commits; the initial commit alone
-did not contain the game source.
+The label groups both commits; the initial commit alone had no game source.
 
 ## Versioning
 
-`v3.0.0` establishes the current release baseline using `vMAJOR.MINOR.PATCH`
-tags. The v1/v2 milestone labels above preserve the project's development eras;
-they do not retroactively create release tags.
-
-Future releases follow semantic versioning: incompatible supported-interface or
-save-compatibility changes increment MAJOR, backward-compatible features increment
-MINOR, and backward-compatible fixes increment PATCH. Save-format numbers are
-separate from game release versions. Add each release entry at the top of this log.
+`v3.0.0` establishes the release baseline using `vMAJOR.MINOR.PATCH` tags; the
+v1/v2 labels above are development eras, not release tags. Save-format numbers
+are separate from game versions. SemVer rules apply: MAJOR for incompatible
+interface or save changes, MINOR for features, PATCH for fixes.

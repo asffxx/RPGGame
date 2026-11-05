@@ -23,8 +23,7 @@
       "application": {
         "throwable": true,
         "enchantOnWeapon": true,
-        "nameOnEnchantment": "Fire Aspect",
-        "effectChance": 0.3
+        "nameOnEnchantment": "Fire Aspect"
       },
       "effectDesc": "Deals 10 damage per stack each round for 3 rounds."
     },
@@ -50,8 +49,7 @@
       "application": {
         "throwable": true,
         "enchantOnWeapon": true,
-        "nameOnEnchantment": "Frost Aspect",
-        "effectChance": 1
+        "nameOnEnchantment": "Frost Aspect"
       },
       "effectDesc": "Reduces attack by 2 per stack for 3 rounds."
     },
@@ -77,8 +75,7 @@
       "application": {
         "throwable": true,
         "enchantOnWeapon": true,
-        "nameOnEnchantment": "Poisoned",
-        "effectChance": 1
+        "nameOnEnchantment": "Poisoned"
       },
       "effectDesc": "Deals 3 damage per stack each round for 3 rounds."
     },
@@ -104,8 +101,7 @@
       "application": {
         "throwable": true,
         "enchantOnWeapon": true,
-        "nameOnEnchantment": "Vampiric",
-        "effectChance": 1
+        "nameOnEnchantment": "Vampiric"
       },
       "effectDesc": "Deals 4 damage per stack each round for 3 rounds."
     },
@@ -131,8 +127,7 @@
       "application": {
         "throwable": true,
         "enchantOnWeapon": true,
-        "nameOnEnchantment": "Weakening Strike",
-        "effectChance": 1
+        "nameOnEnchantment": "Weakening Strike"
       },
       "effectDesc": "Reduces attack by 5 per stack for 3 rounds."
     },
@@ -158,8 +153,7 @@
       "application": {
         "throwable": true,
         "enchantOnWeapon": true,
-        "nameOnEnchantment": "Crippling Strike",
-        "effectChance": 1
+        "nameOnEnchantment": "Crippling Strike"
       },
       "effectDesc": "Reduces armor and magic armor by 5 percentage points per stack."
     },
@@ -185,8 +179,7 @@
       "application": {
         "throwable": true,
         "enchantOnWeapon": true,
-        "nameOnEnchantment": "Nullifying Strike",
-        "effectChance": 1
+        "nameOnEnchantment": "Nullifying Strike"
       },
       "effectDesc": "Reduces magic attack by 5 per stack for 3 rounds."
     },
@@ -212,8 +205,7 @@
       "application": {
         "throwable": true,
         "enchantOnWeapon": true,
-        "nameOnEnchantment": "Mana Drain",
-        "effectChance": 1
+        "nameOnEnchantment": "Mana Drain"
       },
       "effectDesc": "Drains 10 mana per stack each round for 3 rounds."
     },
@@ -239,8 +231,7 @@
       "application": {
         "throwable": true,
         "enchantOnWeapon": true,
-        "nameOnEnchantment": "Blight Enchantment",
-        "effectChance": 1
+        "nameOnEnchantment": "Blight Enchantment"
       },
       "effectDesc": "Deals 3 damage per stack and amplifies damage at maximum stacks."
     },
@@ -266,8 +257,7 @@
       "application": {
         "throwable": true,
         "enchantOnWeapon": true,
-        "nameOnEnchantment": "Sundering Strike",
-        "effectChance": 1
+        "nameOnEnchantment": "Sundering Strike"
       },
       "effectDesc": "Reduces armor by 10 percentage points per stack for 3 rounds."
     },
@@ -293,8 +283,7 @@
       "application": {
         "throwable": true,
         "enchantOnWeapon": true,
-        "nameOnEnchantment": "Shocking Strike",
-        "effectChance": 1
+        "nameOnEnchantment": "Shocking Strike"
       },
       "effectDesc": "Reduces magic armor by 10 percentage points per stack for 2 rounds."
     }

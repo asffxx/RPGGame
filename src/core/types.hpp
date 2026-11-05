@@ -32,7 +32,6 @@ namespace debuffSettings {
         bool throwable = false;
         bool enchantOnWeapon = false;
         std::string nameOnEnchantment;
-        float effectChance = 1.0f;
     };
 }
 

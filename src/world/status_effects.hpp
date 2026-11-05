@@ -1,5 +1,6 @@
 #pragma once
 
+#include <map>
 #include <string>
 #include <vector>
 
@@ -18,7 +19,34 @@
 //   percentage points of the target's armor per stack.
 // - Durations tick down after their effect fires. Zero stacks remove the
 //   debuff.
+// - Debuffs are applied through the meter model. Every combatant carries a
+//   hidden 0..100 meter per debuff id. A landed hit carrying that debuff
+//   fills the meter by `debuffMeterPerHit`, reduced by the target's armor
+//   resistance; at 100 the debuff applies and the meter empties. Meters
+//   decay each round.
 namespace statuses {
+
+// Points a landed hit adds to the target's meter for that debuff.
+inline constexpr int debuffMeterPerHit = 20;
+// Points every meter loses each combat round.
+inline constexpr int debuffMeterDecayPerRound = 5;
+// Hard cap on the bar, in points.
+inline constexpr int debuffMeterMax = 100;
+
+// Resistance derived from armor: half the armor fraction, capped at 50%.
+// Armor 0.10 gives 0.05 resistance.
+float armorResistance(float armor);
+
+// Adds one hit of fill to the target's meter for `name`. Returns true and
+// empties the meter when it fills; the caller then applies the debuff.
+bool addDebuffMeter(std::map<std::string, int>& meters, const std::string& name, float resistance);
+
+// Drops every meter by `points` (floored at 0) and erases empty entries.
+void decayDebuffMeters(std::map<std::string, int>& meters, int points = debuffMeterDecayPerRound);
+
+// "Burning [##--------] 20, Poison [----------] 0" trimmed to non-zero
+// meters; empty string when nothing is tracked.
+std::string describeDebuffMeters(const std::map<std::string, int>& meters);
 
 const DebuffDatabase::DebuffDefinition* find(const std::string& nameOrId);
 
@@ -26,14 +54,6 @@ const DebuffDatabase::DebuffDefinition* find(const std::string& nameOrId);
 // in the catalog. The optional message describes the visible result.
 bool apply(std::vector<ActiveDebuff>& active, const std::string& name,
            std::string* message = nullptr);
-
-// Deterministic application used by combat and tests. `roll` is in [0, 1).
-// Returns true when the debuff was applied.
-bool applyRoll(std::vector<ActiveDebuff>& active, const std::string& name, float roll,
-               std::string* message = nullptr);
-
-// Catalog application chance, or 1.0 when the debuff is unknown.
-float applicationChance(const std::string& name);
 
 // Applies one round of damage, mana drain, and duration ticking. Removes
 // expired entries and returns player-facing log lines.

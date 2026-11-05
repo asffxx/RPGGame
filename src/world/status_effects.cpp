@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <map>
 
 namespace statuses {
 namespace {
@@ -28,9 +29,44 @@ const DebuffDatabase::DebuffDefinition* find(const std::string& nameOrId) {
     return catalog().find(nameOrId);
 }
 
-float applicationChance(const std::string& name) {
+float armorResistance(float armor) {
+    if (!std::isfinite(armor) || armor <= 0.0f) return 0.0f;
+    return std::min(0.5f, armor * 0.5f);
+}
+
+bool addDebuffMeter(std::map<std::string, int>& meters, const std::string& name, float resistance) {
     const auto* definition = find(name);
-    return definition ? definition->application.effectChance : 1.0f;
+    if (!definition) return false;
+    const float clamped = std::isfinite(resistance) ? std::clamp(resistance, 0.0f, 1.0f) : 0.0f;
+    const int fill = std::max(1, static_cast<int>(std::lround(
+        debuffMeterPerHit * (1.0f - clamped))));
+    int& value = meters[definition->name];
+    value += fill;
+    if (value < debuffMeterMax) return false;
+    meters.erase(definition->name);
+    return true;
+}
+
+void decayDebuffMeters(std::map<std::string, int>& meters, int points) {
+    if (points <= 0) return;
+    for (auto it = meters.begin(); it != meters.end();) {
+        it->second -= points;
+        if (it->second <= 0) it = meters.erase(it);
+        else ++it;
+    }
+}
+
+std::string describeDebuffMeters(const std::map<std::string, int>& meters) {
+    std::string result;
+    for (const auto& [name, value] : meters) {
+        if (value <= 0) continue;
+        const int clamped = std::min(value, debuffMeterMax);
+        const int filled = clamped * 10 / debuffMeterMax;
+        if (!result.empty()) result += ", ";
+        result += name + " [" + std::string(filled, '#') +
+                  std::string(10 - filled, '-') + "] " + std::to_string(clamped);
+    }
+    return result;
 }
 
 bool apply(std::vector<ActiveDebuff>& active, const std::string& name,
@@ -64,13 +100,6 @@ bool apply(std::vector<ActiveDebuff>& active, const std::string& name,
             *message += " (" + definition->stacking.maxStackEffectName + ")";
     }
     return true;
-}
-
-bool applyRoll(std::vector<ActiveDebuff>& active, const std::string& name, float roll,
-               std::string* message) {
-    if (roll < 0.0f || roll >= 1.0f) roll = 0.0f;
-    if (roll >= applicationChance(name)) return false;
-    return apply(active, name, message);
 }
 
 std::vector<std::string> tick(std::vector<ActiveDebuff>& active, int& hitpoints, int& mana) {

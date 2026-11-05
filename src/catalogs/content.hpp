@@ -33,7 +33,7 @@ namespace content {
 template<class A> void fields(A& a, EquipmentandWeaponDatabase::equipmentProperties& v) {
     FIELD(name); FIELD(type); FIELD(defenseIncrease); FIELD(magicDefenseIncrease);
     FIELD(attackIncrease); FIELD(magicAttackIncrease); FIELD(critRateIncrease); FIELD(critDamageIncrease);
-    FIELD(debuffs); FIELD(debuffChance); FIELD(effectDesc);
+    FIELD(debuffs); FIELD(effectDesc);
     FIELD(pricePlatinum); FIELD(priceGold); FIELD(priceSilver); FIELD(priceCopper); FIELD(id);
 }
 template<class A> void fields(A& a, PotionDatabase::potionProperties& v) {
@@ -88,7 +88,7 @@ template<class A> void fields(A& a, debuffSettings::DebuffStackRules& v) {
     FIELD(stackable); FIELD(maxStacks); FIELD(maxStackEffectName);
 }
 template<class A> void fields(A& a, debuffSettings::DebuffApplication& v) {
-    FIELD(throwable); FIELD(enchantOnWeapon); FIELD(nameOnEnchantment); FIELD(effectChance);
+    FIELD(throwable); FIELD(enchantOnWeapon); FIELD(nameOnEnchantment);
 }
 template<class A> void fields(A& a, DebuffDatabase::DebuffDefinition& v) {
     FIELD(id); FIELD(name); FIELD(effect); FIELD(stacking); FIELD(application); FIELD(effectDesc);

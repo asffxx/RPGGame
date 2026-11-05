@@ -1,5 +1,6 @@
 #pragma once
 
+#include <map>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -48,6 +49,8 @@ struct Enemy {
     std::vector<std::string> inflictedDebuffs;
     // Debuffs currently affecting this enemy.
     std::vector<ActiveDebuff> debuffs;
+    // Hidden 0..100 fill per debuff id; combat-only, never saved.
+    std::map<std::string, int> debuffMeters;
     std::string id;
 };
 

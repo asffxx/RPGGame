@@ -423,7 +423,6 @@ void magicStore::enchantItem(Player& player) {
         const auto& debuff = availableDebuffs[debuffIndex];
 
         player.equippedWeaponDebuffs.push_back(debuff.name);
-        player.equippedWeaponDebuffChance = item.debuffChance;
 
         for (auto& invItem : inventory.inventory) {
             if (invItem.type == PlayerInventory::ItemType::Equipment && invItem.dbIndex == itemIndex) {
