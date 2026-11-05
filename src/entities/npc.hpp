@@ -18,7 +18,7 @@ struct NPC {
     std::vector<std::string> inventory;
     std::string equippedWeapon;
     std::string equippedArmor;
-    std::vector<std::string> debuffs;
+    std::vector<ActiveDebuff> debuffs;
     std::vector<std::string> spells;
     int wagePerWeek;
     std::string story;

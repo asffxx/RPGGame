@@ -43,7 +43,7 @@ public:
     PlayerRace race;
     PlayerClassTemplate playerClass;
     TimeSystem timeSystem;
-    std::vector<std::string> debuffs;
+    std::vector<ActiveDebuff> debuffs;
     std::vector<std::string> equippedWeaponDebuffs;
     float equippedWeaponDebuffChance = 0.0f;
     LocationType currentLocationType;

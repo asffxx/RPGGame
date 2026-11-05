@@ -1,11 +1,32 @@
 #include "inventory.hpp"
 
 #include <algorithm>
+#include <cmath>
 #include <iostream>
 #include <limits>
 
 #include "core/ui.hpp"
 #include "app/display.hpp"
+
+namespace {
+
+// Equipment upgrades add 15% of the base stat per level.
+int upgradedStat(int base, int level) {
+    return static_cast<int>(std::lround(static_cast<double>(base) * (1.0 + 0.15 * level)));
+}
+
+float upgradedStat(float base, int level) {
+    return static_cast<float>(base * (1.0f + 0.15f * level));
+}
+
+int upgradeLevelOf(const std::vector<PlayerInventory::InventoryItem>& items, size_t dbIndex) {
+    for (const auto& item : items)
+        if (item.type == PlayerInventory::ItemType::Equipment && item.dbIndex == dbIndex)
+            return item.upgradeLevel;
+    return 0;
+}
+
+} // namespace
 
 void PlayerInventory::addItem(ItemType type, size_t dbIndex, int amount) {
     for (auto& item : inventory) {
@@ -205,15 +226,17 @@ void PlayerInventory::showInventory(Player& player) {
     handleSelectedItem(player, inventory[static_cast<size_t>(choice - 1)]);
 }
 
-void PlayerInventory::tickBuffs(Player& player) {
-    if (!activeBuff) return;
+std::string PlayerInventory::tickBuffs(Player& player) {
+    if (!activeBuff) return {};
 
     activeBuff->remainingTurns--;
     if (activeBuff->remainingTurns <= 0) {
+        const std::string name = activeBuff->name;
         removeBuff(player);
-        display::buffWoreOff(activeBuff->name);
         activeBuff.reset();
+        return name + " has worn off.";
     }
+    return {};
 }
 
 std::string PlayerInventory::getItemName(const InventoryItem& item) const {
@@ -389,17 +412,34 @@ void PlayerInventory::removeBuff(Player& player) {
     }
 }
 
+// Equipment defense values are percentage points (5 means +5% armor).
+float defenseOf(int percentagePoints) {
+    return static_cast<float>(percentagePoints) / 100.0f;
+}
+
+// Crit damage bonuses store 1 + bonus (2 means +100% crit damage).
+float critDamageBonus(const EquipmentandWeaponDatabase::equipmentProperties& eq) {
+    const float bonus = eq.critDamageIncrease - 1.0f;
+    return bonus > 0.0f ? bonus : 0.0f;
+}
+
 void PlayerInventory::equipArmor(Player& player, size_t index) {
     const auto& eq = equipmentDB.getEquipment()[index];
-    player.stats.armor += static_cast<float>(eq.defenseIncrease);
-    player.stats.magicArmor += static_cast<float>(eq.magicDefenseIncrease);
+    const int level = upgradeLevelOf(inventory, index);
+    player.stats.armor += defenseOf(upgradedStat(eq.defenseIncrease, level));
+    player.stats.magicArmor += defenseOf(upgradedStat(eq.magicDefenseIncrease, level));
+    player.stats.critRate += upgradedStat(eq.critRateIncrease, level);
+    player.stats.critDamage += upgradedStat(critDamageBonus(eq), level);
     equipped.armorIndex = static_cast<int>(index);
 }
 
 void PlayerInventory::equipWeapon(Player& player, size_t index) {
     const auto& eq = equipmentDB.getEquipment()[index];
-    player.stats.attack += eq.attackIncrease;
-    player.stats.magicAttack += eq.magicAttackIncrease;
+    const int level = upgradeLevelOf(inventory, index);
+    player.stats.attack += upgradedStat(eq.attackIncrease, level);
+    player.stats.magicAttack += upgradedStat(eq.magicAttackIncrease, level);
+    player.stats.critRate += upgradedStat(eq.critRateIncrease, level);
+    player.stats.critDamage += upgradedStat(critDamageBonus(eq), level);
     player.equippedWeaponDebuffs = eq.debuffs;
     player.equippedWeaponDebuffChance = eq.debuffChance;
     equipped.weaponIndex = static_cast<int>(index);
@@ -408,16 +448,22 @@ void PlayerInventory::equipWeapon(Player& player, size_t index) {
 void PlayerInventory::unequipArmor(Player& player) {
     if (equipped.armorIndex == -1) return;
     const auto& eq = equipmentDB.getEquipment()[equipped.armorIndex];
-    player.stats.armor -= static_cast<float>(eq.defenseIncrease);
-    player.stats.magicArmor -= static_cast<float>(eq.magicDefenseIncrease);
+    const int level = upgradeLevelOf(inventory, static_cast<size_t>(equipped.armorIndex));
+    player.stats.armor -= defenseOf(upgradedStat(eq.defenseIncrease, level));
+    player.stats.magicArmor -= defenseOf(upgradedStat(eq.magicDefenseIncrease, level));
+    player.stats.critRate -= upgradedStat(eq.critRateIncrease, level);
+    player.stats.critDamage -= upgradedStat(critDamageBonus(eq), level);
     equipped.armorIndex = -1;
 }
 
 void PlayerInventory::unequipWeapon(Player& player) {
     if (equipped.weaponIndex == -1) return;
     const auto& eq = equipmentDB.getEquipment()[equipped.weaponIndex];
-    player.stats.attack -= eq.attackIncrease;
-    player.stats.magicAttack -= eq.magicAttackIncrease;
+    const int level = upgradeLevelOf(inventory, static_cast<size_t>(equipped.weaponIndex));
+    player.stats.attack -= upgradedStat(eq.attackIncrease, level);
+    player.stats.magicAttack -= upgradedStat(eq.magicAttackIncrease, level);
+    player.stats.critRate -= upgradedStat(eq.critRateIncrease, level);
+    player.stats.critDamage -= upgradedStat(critDamageBonus(eq), level);
     player.equippedWeaponDebuffs.clear();
     player.equippedWeaponDebuffChance = 0.0f;
     equipped.weaponIndex = -1;
@@ -425,7 +471,11 @@ void PlayerInventory::unequipWeapon(Player& player) {
 
 void PlayerInventory::equipStaff(Player& player, size_t index) {
     const auto& eq = equipmentDB.getEquipment()[index];
-    player.stats.magicAttack += eq.magicAttackIncrease;
+    const int level = upgradeLevelOf(inventory, index);
+    player.stats.magicAttack += upgradedStat(eq.magicAttackIncrease, level);
+    player.stats.magicArmor += defenseOf(upgradedStat(eq.magicDefenseIncrease, level));
+    player.stats.critRate += upgradedStat(eq.critRateIncrease, level);
+    player.stats.critDamage += upgradedStat(critDamageBonus(eq), level);
     equipped.staffIndex = static_cast<int>(index);
 
 
@@ -442,7 +492,11 @@ void PlayerInventory::equipStaff(Player& player, size_t index) {
 void PlayerInventory::unequipStaff(Player& player) {
     if (equipped.staffIndex == -1) return;
     const auto& eq = equipmentDB.getEquipment()[equipped.staffIndex];
-    player.stats.magicAttack -= eq.magicAttackIncrease;
+    const int level = upgradeLevelOf(inventory, static_cast<size_t>(equipped.staffIndex));
+    player.stats.magicAttack -= upgradedStat(eq.magicAttackIncrease, level);
+    player.stats.magicArmor -= defenseOf(upgradedStat(eq.magicDefenseIncrease, level));
+    player.stats.critRate -= upgradedStat(eq.critRateIncrease, level);
+    player.stats.critDamage -= upgradedStat(critDamageBonus(eq), level);
 
 
     for (const auto& spellName : player.equippedStaffSpells) {
@@ -455,6 +509,55 @@ void PlayerInventory::unequipStaff(Player& player) {
     }
 
     equipped.staffIndex = -1;
+}
+
+std::vector<std::string> PlayerInventory::wearEquipment(Player& player, int amount) {
+    std::vector<std::string> messages;
+    if (amount <= 0) return messages;
+    auto wear = [&](int& slot, const std::string& expectedType) {
+        if (slot < 0) return;
+        const size_t dbIndex = static_cast<size_t>(slot);
+        auto item = std::find_if(inventory.begin(), inventory.end(), [&](const InventoryItem& entry) {
+            return entry.type == ItemType::Equipment && entry.dbIndex == dbIndex;
+        });
+        if (item == inventory.end()) return;
+        if (equipmentDB.getEquipment()[dbIndex].type != expectedType) return;
+        item->durability = std::max(0, item->durability - amount);
+        if (item->durability > 0) return;
+        const std::string name = equipmentDB.getEquipment()[dbIndex].name;
+        if (expectedType == "Armor") unequipArmor(player);
+        else if (expectedType == "Weapon") unequipWeapon(player);
+        else unequipStaff(player);
+        messages.push_back(name + " broke and was unequipped.");
+    };
+    wear(equipped.armorIndex, "Armor");
+    wear(equipped.weaponIndex, "Weapon");
+    wear(equipped.staffIndex, "Staff");
+    return messages;
+}
+
+void PlayerInventory::refreshUpgrade(Player& player, size_t dbIndex) {
+    const auto& eq = equipmentDB.getEquipment()[dbIndex];
+    const int level = upgradeLevelOf(inventory, dbIndex);
+    if (level <= 0) return;
+    auto deltaInt = [&](int base) { return upgradedStat(base, level) - upgradedStat(base, level - 1); };
+    auto deltaFloat = [&](float base) { return upgradedStat(base, level) - upgradedStat(base, level - 1); };
+    if (equipped.armorIndex == static_cast<int>(dbIndex)) {
+        player.stats.armor += defenseOf(deltaInt(eq.defenseIncrease));
+        player.stats.magicArmor += defenseOf(deltaInt(eq.magicDefenseIncrease));
+        player.stats.critRate += deltaFloat(eq.critRateIncrease);
+        player.stats.critDamage += deltaFloat(critDamageBonus(eq));
+    } else if (equipped.weaponIndex == static_cast<int>(dbIndex)) {
+        player.stats.attack += deltaInt(eq.attackIncrease);
+        player.stats.magicAttack += deltaInt(eq.magicAttackIncrease);
+        player.stats.critRate += deltaFloat(eq.critRateIncrease);
+        player.stats.critDamage += deltaFloat(critDamageBonus(eq));
+    } else if (equipped.staffIndex == static_cast<int>(dbIndex)) {
+        player.stats.magicAttack += deltaInt(eq.magicAttackIncrease);
+        player.stats.magicArmor += defenseOf(deltaInt(eq.magicDefenseIncrease));
+        player.stats.critRate += deltaFloat(eq.critRateIncrease);
+        player.stats.critDamage += deltaFloat(critDamageBonus(eq));
+    }
 }
 
 void PlayerInventory::moveItemToTop(size_t index) {

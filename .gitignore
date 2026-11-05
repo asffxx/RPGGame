@@ -24,7 +24,8 @@ compile_commands.json
 *.exe
 
 # ── Release packaging output ─────────────────────────────────────────────────
-# dist/ holds locally built release packages; not for version control.
+# dist/ holds locally built release packages; staged binaries and checksums
+# stay local build output.
 /dist/
 
 # ── Runtime data ──────────────────────────────────────────────────────────────

@@ -3,8 +3,8 @@
 This folder contains the people, places, items, and stories used by RPGGame.
 
 - **characters/** — races, classes, abilities, and city residents.
-- **items/** — equipment, food, potions, and spells.
-- **crafting/** — materials and recipes.
+- **items/** — equipment, food, potions, spells, and equipment upgrade levels.
+- **crafting/** — materials and recipes with station fees.
 - **narrative/** — guilds, quests, rumors, conversations, and reputation rules.
 - **story/** — the story board's acts and beats.
 - **world/** — locations, enemies, events, and harmful effects.
@@ -17,6 +17,18 @@ Follow the examples in the existing files and restart the game after editing.
 Keep internal names marked `id` unchanged so saved games still recognize them.
 If a file is missing or contains an error, the game may stop and explain what
 needs fixing.
+
+## Gap mechanics (v3.8.0)
+
+`world/debuffs.json` is the single status catalog. Each record has a stable `id`,
+a base `durationTurns`, stacking cap, refresh extension, per-stack damage/drain or
+stat penalties, and a maximum-stack amplifier. All equipment, spells, and enemies
+reference debuffs by display name or id.
+
+`items/upgrades.json` defines three sequential equipment upgrade levels. Each
+level lists required materials by item id and `feeCopper`. Upgrades add 15% of the
+base stats per level. Recipes in `crafting/recipes.json` also carry a mandatory
+`feeCopper` charged once per craft. Repairs are priced from the item's shop price.
 
 ## Reputation (v3.7.0)
 

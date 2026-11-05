@@ -10,11 +10,13 @@
 #include <stdexcept>
 #include <type_traits>
 #include "catalogs/class.hpp"
+#include "catalogs/debuff.hpp"
 #include "catalogs/race.hpp"
 #include "catalogs/location.hpp"
 #include "gameplay/guild.hpp"
 #include "world/quest_system.hpp"
 #include "world/story_types.hpp"
+#include "world/upgrades.hpp"
 #include "catalogs/content_ids.hpp"
 #ifdef _WIN32
 #define NOMINMAX
@@ -58,6 +60,12 @@ template<class A> void fields(A& a, NPC& v) {
 }
 template<class A> void fields(A& a, PlayerInventory::InventoryItem& v) {
     a(v.type, v.dbIndex, v.quantity, v.enchanted);
+    if (a.version >= 5) {
+        a(v.upgradeLevel, v.durability);
+    } else if constexpr (!A::writing) {
+        v.upgradeLevel = 0;
+        v.durability = PlayerInventory::maxDurability;
+    }
 }
 template<class A> void fields(A& a, PlayerInventory::Buff& v) {
     a(v.name, v.attackBonus, v.defenseBonus, v.magicAttackBonus, v.magicDefenseBonus,
@@ -120,8 +128,9 @@ template<class A> void fields(A& a, GameSession& v) {
 }
 
 struct Writer {
+    static constexpr bool writing = true;
     std::ostream& stream;
-    int version = 4;
+    int version = 5;
     template<class... T> void operator()(T&... v) { (value(v), ...); }
     template<class T> void value(T& v) {
         if constexpr (std::is_enum_v<T>) stream << static_cast<int>(v) << '\n';
@@ -137,6 +146,21 @@ struct Writer {
         stream << v.size() << '\n';
         for (auto& entry : v) value(entry);
     }
+    void value(std::vector<ActiveDebuff>& v) {
+        if (version >= 5) {
+            require(v.size() <= maxEntries, "Too many saved entries.");
+            stream << v.size() << '\n';
+            for (auto& entry : v) {
+                value(entry.name);
+                value(entry.remainingTurns);
+                value(entry.stacks);
+            }
+        } else {
+            std::vector<std::string> names;
+            for (const auto& entry : v) names.push_back(entry.name);
+            value(names);
+        }
+    }
     template<class T> void value(std::set<T>& v) {
         require(v.size() <= maxEntries, "Too many saved entries.");
         stream << v.size() << '\n';
@@ -144,8 +168,9 @@ struct Writer {
     }
 };
 struct Reader {
+    static constexpr bool writing = false;
     std::istream& stream;
-    int version = 4;
+    int version = 5;
     template<class... T> void operator()(T&... v) { (value(v), ...); }
     template<class T> void value(T& v) {
         if constexpr (std::is_enum_v<T>) {
@@ -165,6 +190,28 @@ struct Reader {
         require(count <= maxEntries, "Too many saved entries.");
         v.resize(count);
         for (auto& entry : v) value(entry);
+    }
+    void value(std::vector<ActiveDebuff>& v) {
+        if (version >= 5) {
+            size_t count = 0; value(count);
+            require(count <= maxEntries, "Too many saved entries.");
+            v.resize(count);
+            for (auto& entry : v) {
+                value(entry.name);
+                value(entry.remainingTurns);
+                value(entry.stacks);
+            }
+        } else {
+            std::vector<std::string> names;
+            value(names);
+            static const DebuffDatabase catalog;
+            v.clear();
+            for (const auto& name : names) {
+                const auto* definition = catalog.find(name);
+                require(definition != nullptr, "Unknown saved debuff.");
+                v.push_back({definition->name, std::max(1, definition->effect.durationTurns), 1});
+            }
+        }
     }
     template<class T> void value(std::set<T>& v) {
         size_t count = 0; value(count);
@@ -223,10 +270,24 @@ void validate(const GameSession& s) {
         for (const auto& name : names)
             require(std::any_of(db.begin(), db.end(), [&](const auto& spell) { return spell.spellName == name; }), "Unknown saved spell.");
     };
+    const DebuffDatabase debuffs;
+    auto activeDebuffs = [&](const std::vector<ActiveDebuff>& active) {
+        std::set<std::string> seen;
+        for (const auto& entry : active) {
+            const auto* definition = debuffs.find(entry.name);
+            require(definition != nullptr, "Unknown saved debuff.");
+            require(entry.remainingTurns > 0 && entry.remainingTurns <= 1000000 &&
+                    entry.stacks > 0 && entry.stacks <= definition->stacking.maxStacks,
+                    "Invalid saved debuff stacks or duration.");
+            require(seen.insert(definition->name).second, "Duplicate saved debuff.");
+        }
+    };
+    activeDebuffs(p.debuffs);
     spells(p.learnedSpells); spells(p.equippedStaffSpells);
     require(s.party.size() <= 4, "Too many companions.");
     for (const auto& npc : s.party) {
         validateStats(npc.stats); identity(npc.race, npc.playerClass); spells(npc.spells);
+        activeDebuffs(npc.debuffs);
         require(!npc.name.empty() && npc.level > 0 &&
                 npc.wagePerWeek >= 0 && npc.wagePerWeek <= 100000000, "Invalid companion.");
     }
@@ -243,6 +304,14 @@ void validate(const GameSession& s) {
         require(item.dbIndex < size && item.quantity > 0 && item.quantity <= 1000000, "Invalid inventory item.");
         if (item.type == PlayerInventory::ItemType::Material)
             require(item.quantity <= inv.stackLimitOf(item.type, item.dbIndex) && !item.enchanted, "Invalid material stack.");
+        require(item.upgradeLevel >= 0 &&
+                item.upgradeLevel <= (item.type == PlayerInventory::ItemType::Equipment
+                    ? equipmentUpgradeDatabase().maxLevel() : 0),
+                "Invalid equipment upgrade level.");
+        require(item.durability >= 0 && item.durability <= PlayerInventory::maxDurability,
+                "Invalid equipment durability.");
+        if (item.type != PlayerInventory::ItemType::Equipment)
+            require(item.durability == PlayerInventory::maxDurability, "Non-equipment item has durability.");
         require(!item.id.empty() &&
                 inv.indexOfItem(item.type, item.id) == static_cast<int>(item.dbIndex),
                 "Saved item id does not match the catalog.");
@@ -351,7 +420,7 @@ std::optional<GameSession> load(const std::filesystem::path& path, std::string& 
         std::string header;
         std::getline(in, header);
         require(header == "RPGGAME 1" || header == "RPGGAME 2" || header == "RPGGAME 3" ||
-                header == "RPGGAME 4", "Unsupported save format or version.");
+                header == "RPGGAME 4" || header == "RPGGAME 5", "Unsupported save format or version.");
         PlayerClassCollection classes;
         GameSession result(Player("", PlayerRace{}, classes.templates.front()));
         Reader reader{in, header.back() - '0'}; reader(result);

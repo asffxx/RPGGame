@@ -3,6 +3,31 @@
 RPGGame's development history, newest milestone first. Unreleased work is marked
 separately from published releases.
 
+## v3.8.0 — Gap mechanics
+
+**Date:** 2026-11-05 — local development build.
+
+- Unified every debuff under one duration and stacking model: per-stack damage
+  and drain, refresh on reapply, maximum-stack amplifiers, and percentage-point
+  armor reductions. All equipment, spell, and enemy references are audited.
+- Added equipment upgrades to +3 using materials and copper, plus durability and
+  repair. Broken gear is unequipped after combat instead of silently working.
+- Audited equipment stat units during the balance pass: defense and magic defense
+  are percentage points and crit damage is a multiplier bonus, with upgrades
+  following the same +15% base stat curve. Spell armor buffs are temporary
+  percentage points removed at combat end.
+- Added economy sinks: per-recipe station fees, upgrade fees, and repair fees.
+  Crafting remains atomic when a fee cannot be paid.
+- Documented the balance rules (level, damage, status, upgrade, income, and
+  sink tables) with every row pointing to a test.
+- Save format 5 stores active-debuff duration and stacks plus per-item upgrade
+  level and durability. Formats 1–4 still load; legacy debuff names migrate to
+  the new model.
+- Five new Phase 7 test groups bring coverage to 47 cases. The complete suite
+  passes with no compiler warnings.
+- Final review added equipment defense and crit regression checks; the full suite
+  still passes 47/47 with no compiler warnings.
+
 ## v3.7.0 — Reputation and faction standing
 
 **Date:** 2026-11-05 — Windows x64 and Linux x86_64 release builds.

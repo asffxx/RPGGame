@@ -13,6 +13,7 @@
 #include "gameplay/guild.hpp"
 #include "gameplay/inventory.hpp"
 #include "world/quest_system.hpp"
+#include "world/upgrades.hpp"
 
 namespace {
 
@@ -74,6 +75,9 @@ bool CraftingDatabase::load(const std::filesystem::path& path, std::string& erro
             recipe.station = entry.at("station").string();
             if (stations.count(recipe.station) == 0)
                 throw std::runtime_error(fieldError(where + ".station", "unknown station"));
+            recipe.feeCopper = entry.at("feeCopper").integer();
+            if (recipe.feeCopper < 0 || recipe.feeCopper > 1000000)
+                throw std::runtime_error(fieldError(where + ".feeCopper", "outside 0..1000000"));
 
             std::set<std::string> inputIds;
             const auto& inputs = entry.at("inputs").array();
@@ -253,6 +257,11 @@ bool craft(GameSession& session, const Recipe& recipe, std::string& error) {
         error = "Your backpack is full. Crafting would exceed its weight limit.";
         return false;
     }
+    if (recipe.feeCopper > 0 &&
+        !session.hero.economy.subtractCurrency(0, 0, 0, recipe.feeCopper)) {
+        error = "The station needs " + std::to_string(recipe.feeCopper) + " copper for this craft.";
+        return false;
+    }
 
     session.inventory = std::move(result);
     if (std::find(session.story.knownRecipes.begin(), session.story.knownRecipes.end(), recipe.id) == session.story.knownRecipes.end())
@@ -290,12 +299,21 @@ void openCrafting(GameSession& session, const std::string& station) {
             const std::string lock = recipeLockReason(session, recipe);
             lines.push_back(std::to_string(i + 1) + ". " + recipe.name +
                             " (" + inputList(session.inventory, recipe) + ")" +
+                            " fee " + std::to_string(recipe.feeCopper) + "c" +
                             (lock.empty() ? "" : " [Locked: " + lock + "]"));
+        }
+        if (current == "forge") {
+            lines.push_back(std::to_string(recipes.size() + 1) + ". Upgrade equipment");
         }
         lines.push_back("0. Back");
         displayBorderedMenu(lines, "Choose a recipe: ");
-        const int choice = getNumberInput(0, static_cast<int>(recipes.size()));
+        const int choices = static_cast<int>(recipes.size()) + (current == "forge" ? 1 : 0);
+        const int choice = getNumberInput(0, choices);
         if (choice == 0) return;
+        if (current == "forge" && choice == static_cast<int>(recipes.size()) + 1) {
+            openUpgradeMenu(session);
+            continue;
+        }
         const auto& recipe = *recipes[static_cast<size_t>(choice - 1)];
         std::string error;
         if (craft(session, recipe, error))

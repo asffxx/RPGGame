@@ -25,15 +25,10 @@ std::string makeHpBar(int hp, int maxHp, int width = 18) {
     return "[" + std::string(filled, '#') + std::string(width - filled, '-') + "]";
 }
 
-// Builds a comma-separated debuff line, or an empty string when none.
-std::string makeDebuffLine(const std::vector<std::string>& debuffs) {
+// Builds a debuff line with stacks and remaining rounds, or an empty string.
+std::string makeDebuffLine(const std::vector<ActiveDebuff>& debuffs) {
     if (debuffs.empty()) return "";
-    std::string line = "Debuffs: ";
-    for (size_t i = 0; i < debuffs.size(); ++i) {
-        if (i > 0) line += ", ";
-        line += debuffs[i];
-    }
-    return line;
+    return "Debuffs: " + statuses::describe(debuffs);
 }
 
 // Describes a single attack result as a combat-log line.
@@ -45,6 +40,8 @@ std::string describeAttack(const CombatResult& result) {
         info += " and dealt " + std::to_string(result.totalDamage) + " damage";
         if (result.isCrit) info += " (Critical Hit!)";
         info += ".";
+        if (!result.debuffInflicted.empty())
+            info += " It inflicted " + result.debuffInflicted + ".";
     }
     return info;
 }
@@ -70,8 +67,16 @@ CombatResult CombatSystem::attack(ICombatant& attacker, ICombatant& target, floa
     std::string debuffInflicted = "";
 
     if (!dodge) {
-        physicalDamage = calculateDamage(attacker.getPhysicalAttack(), target.getArmor());
-        magicalDamage = calculateDamage(attacker.getMagicAttack(), target.getMagicArmor());
+        int attack = std::max(0, attacker.getPhysicalAttack() -
+                                 statuses::attackPenalty(attacker.getDebuffs()));
+        int magicAttack = std::max(0, attacker.getMagicAttack() -
+                                      statuses::magicAttackPenalty(attacker.getDebuffs()));
+        float armor = std::max(0.0f, target.getArmor() *
+                                         statuses::armorMultiplier(target.getDebuffs()));
+        float magicArmor = std::max(0.0f, target.getMagicArmor() *
+                                              statuses::magicArmorMultiplier(target.getDebuffs()));
+        physicalDamage = calculateDamage(attack, std::min(armor, 1.0f));
+        magicalDamage = calculateDamage(magicAttack, std::min(magicArmor, 1.0f));
         totalDamage = physicalDamage + magicalDamage;
 
         if (dist(gen) < attacker.getCritRate()) {
@@ -79,9 +84,11 @@ CombatResult CombatSystem::attack(ICombatant& attacker, ICombatant& target, floa
             totalDamage = static_cast<int>(std::round(totalDamage * attacker.getCritDamage()));
         }
 
-        totalDamage = static_cast<int>(std::round(totalDamage * damageMultiplier));
+        totalDamage = static_cast<int>(std::round(
+            totalDamage * damageMultiplier * statuses::incomingDamageMultiplier(target.getDebuffs())));
         target.takeDamage(totalDamage);
 
+        std::vector<std::string> inflicted;
         if (attacker.isPlayer()) {
             PlayerCombatant* playerAttacker = dynamic_cast<PlayerCombatant*>(&attacker);
             if (playerAttacker) {
@@ -89,10 +96,20 @@ CombatResult CombatSystem::attack(ICombatant& attacker, ICombatant& target, floa
                 float chance = playerAttacker->getEquippedWeaponDebuffChance();
                 if (!weaponDebuffs.empty() && dist(gen) < chance) {
                     std::uniform_int_distribution<size_t> debuffDist(0, weaponDebuffs.size() - 1);
-                    debuffInflicted = weaponDebuffs[debuffDist(gen)];
-                    target.applyDebuff(debuffInflicted);
+                    const std::string& chosen = weaponDebuffs[debuffDist(gen)];
+                    if (statuses::apply(target.mutableDebuffs(), chosen))
+                        inflicted.push_back(chosen);
                 }
             }
+        } else {
+            for (const auto& debuff : attacker.getInflictedDebuffs()) {
+                if (statuses::applyRoll(target.mutableDebuffs(), debuff, dist(gen)))
+                    inflicted.push_back(debuff);
+            }
+        }
+        for (size_t i = 0; i < inflicted.size(); ++i) {
+            if (!debuffInflicted.empty()) debuffInflicted += ", ";
+            debuffInflicted += inflicted[i];
         }
     }
 
@@ -111,6 +128,11 @@ void CombatScreen::startCombat(CombatSystem& combat, PlayerInventory& inventory)
     playerC.setInventory(inventory);
     bool inCombat = true;
     abilityState = {};
+    temporaryArmor = 0.0f;
+    temporaryMagicArmor = 0.0f;
+    statuses::clear(player.debuffs);
+    statuses::clear(enemy.debuffs);
+    for (auto& npc : party) statuses::clear(npc.debuffs);
 
     while (inCombat && (player.stats.hitpoints > 0 || !party.empty()) && enemy.stats.data.hitpoints > 0) {
         clearScreen();
@@ -162,15 +184,46 @@ void CombatScreen::startCombat(CombatSystem& combat, PlayerInventory& inventory)
         }
 
         handleEnemyTurn(combat);
+
+        const std::string buffExpired = inventory.tickBuffs(player);
+        if (!buffExpired.empty()) attackInfos.push_back(buffExpired);
+        tickStatusEffects();
+        removeDeadPartyMembers();
+
         clearScreen();
         displayCombatScreen();
         waitForEnter();
-
-        inventory.tickBuffs(player);
-        removeDeadPartyMembers();
     }
 
+    // Combat statuses last for the encounter only. Spell armor bonuses are also
+    // temporary, so they cannot leak into saved stats.
+    statuses::clear(player.debuffs);
+    statuses::clear(enemy.debuffs);
+    for (auto& npc : party) statuses::clear(npc.debuffs);
+    if (temporaryArmor > 0) {
+        player.stats.armor = std::max(0.0f, player.stats.armor - temporaryArmor);
+        temporaryArmor = 0.0f;
+    }
+    if (temporaryMagicArmor > 0) {
+        player.stats.magicArmor = std::max(0.0f, player.stats.magicArmor - temporaryMagicArmor);
+        temporaryMagicArmor = 0.0f;
+    }
+    const auto wearMessages = inventory.wearEquipment(player, 3);
+
     displayCombatOutcome();
+    for (const auto& message : wearMessages) display::message(message);
+}
+
+void CombatScreen::tickStatusEffects() {
+    auto tickOne = [&](const std::string& name, std::vector<ActiveDebuff>& active,
+                       int& hitpoints, int& mana) {
+        for (const auto& line : statuses::tick(active, hitpoints, mana))
+            attackInfos.push_back(name + " " + line);
+    };
+    tickOne(player.name, player.debuffs, player.stats.hitpoints, player.stats.mana);
+    for (auto& npc : party)
+        tickOne(npc.name, npc.debuffs, npc.stats.hitpoints, npc.stats.mana);
+    tickOne(enemy.name, enemy.debuffs, enemy.stats.data.hitpoints, enemy.stats.data.mana);
 }
 
 void CombatScreen::displayCombatScreen() {
@@ -247,8 +300,21 @@ void CombatScreen::handleCastSpell() {
     std::string info = player.name + " cast " + spell.spellName;
 
     if (spell.healthDamage > 0) {
-        enemy.stats.data.hitpoints -= spell.healthDamage;
-        info += " and dealt " + std::to_string(spell.healthDamage) + " damage";
+        float modifier = spell.hasDebuff && spell.debuffModifierOnHit > 0.0f
+            ? spell.debuffModifierOnHit : 1.0f;
+        int damage = static_cast<int>(std::round(spell.healthDamage * modifier));
+        enemy.stats.data.hitpoints -= damage;
+        info += " and dealt " + std::to_string(damage) + " damage";
+    }
+    if (spell.armorReduction > 0) {
+        enemy.stats.data.armor = std::max(0.0f, enemy.stats.data.armor -
+                                               static_cast<float>(spell.armorReduction) / 100.0f);
+        info += " and broke armor";
+    }
+    if (spell.magicArmorReduction > 0) {
+        enemy.stats.data.magicArmor = std::max(0.0f, enemy.stats.data.magicArmor -
+                                                    static_cast<float>(spell.magicArmorReduction) / 100.0f);
+        info += " and broke magic armor";
     }
     if (spell.manaDamage > 0) {
         enemy.stats.data.mana = std::max(0, enemy.stats.data.mana - spell.manaDamage);
@@ -265,17 +331,19 @@ void CombatScreen::handleCastSpell() {
         info += " and restored " + std::to_string(restore) + " mana";
     }
     if (spell.armorIncrease > 0) {
-        player.stats.armor += spell.armorIncrease;
+        player.stats.armor += spell.armorIncrease / 100.0f;
+        temporaryArmor += spell.armorIncrease / 100.0f;
         info += " and increased armor";
     }
     if (spell.magicArmorIncrease > 0) {
-        player.stats.magicArmor += spell.magicArmorIncrease;
+        player.stats.magicArmor += spell.magicArmorIncrease / 100.0f;
+        temporaryMagicArmor += spell.magicArmorIncrease / 100.0f;
         info += " and increased magic armor";
     }
     if (spell.hasDebuff) {
         for (const auto& debuff : spell.debuffs) {
-            enemy.debuffs.push_back(debuff);
-            info += " and applied " + debuff;
+            if (statuses::apply(enemy.debuffs, debuff))
+                info += " and applied " + debuff;
         }
     }
 

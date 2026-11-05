@@ -488,7 +488,8 @@ void storeHeader(const Player& player) {
     std::cout << "1. Buy Potions\n";
     std::cout << "2. Buy Equipment\n";
     std::cout << "3. Sell Items\n";
-    std::cout << "4. Exit Store\n";
+    std::cout << "4. Repair Equipment\n";
+    std::cout << "5. Exit Store\n";
     std::cout << "Choose an option: ";
 }
 

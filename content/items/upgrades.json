@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "levels": [
+    {
+      "level": 1,
+      "feeCopper": 50,
+      "materials": [
+        { "item": "iron_ore", "quantity": 3 },
+        { "item": "rough_leather", "quantity": 1 }
+      ]
+    },
+    {
+      "level": 2,
+      "feeCopper": 150,
+      "materials": [
+        { "item": "ember_core", "quantity": 2 },
+        { "item": "arcane_dust", "quantity": 2 }
+      ]
+    },
+    {
+      "level": 3,
+      "feeCopper": 400,
+      "materials": [
+        { "item": "wyrm_scale", "quantity": 1 },
+        { "item": "frost_shard", "quantity": 1 }
+      ]
+    }
+  ]
+}

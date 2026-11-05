@@ -5,104 +5,232 @@
       "name": "Iron Sword",
       "station": "forge",
       "inputs": [
-        { "item": "iron_ore", "quantity": 3 },
-        { "item": "rough_leather", "quantity": 1 }
+        {
+          "item": "iron_ore",
+          "quantity": 3
+        },
+        {
+          "item": "rough_leather",
+          "quantity": 1
+        }
       ],
-      "output": { "item": "iron_sword", "quantity": 1 },
-      "unlock": { "type": "always" }
+      "output": {
+        "item": "iron_sword",
+        "quantity": 1
+      },
+      "unlock": {
+        "type": "always"
+      },
+      "feeCopper": 30
     },
     {
       "id": "iron_armor_recipe",
       "name": "Iron Armor",
       "station": "forge",
       "inputs": [
-        { "item": "iron_ore", "quantity": 4 },
-        { "item": "rough_leather", "quantity": 2 }
+        {
+          "item": "iron_ore",
+          "quantity": 4
+        },
+        {
+          "item": "rough_leather",
+          "quantity": 2
+        }
       ],
-      "output": { "item": "iron_armor", "quantity": 1 },
-      "unlock": { "type": "guild", "id": "ironward" }
+      "output": {
+        "item": "iron_armor",
+        "quantity": 1
+      },
+      "unlock": {
+        "type": "guild",
+        "id": "ironward"
+      },
+      "feeCopper": 40
     },
     {
       "id": "steel_sword_recipe",
       "name": "Steel Sword",
       "station": "forge",
       "inputs": [
-        { "item": "iron_ore", "quantity": 5 },
-        { "item": "rough_leather", "quantity": 2 },
-        { "item": "ember_core", "quantity": 1 }
+        {
+          "item": "iron_ore",
+          "quantity": 5
+        },
+        {
+          "item": "rough_leather",
+          "quantity": 2
+        },
+        {
+          "item": "ember_core",
+          "quantity": 1
+        }
       ],
-      "output": { "item": "steel_sword", "quantity": 1 },
-      "unlock": { "type": "flag", "id": "smith_mastery" }
+      "output": {
+        "item": "steel_sword",
+        "quantity": 1
+      },
+      "unlock": {
+        "type": "flag",
+        "id": "smith_mastery"
+      },
+      "feeCopper": 75
     },
     {
       "id": "small_health_potion_recipe",
       "name": "Small Health Potion",
       "station": "alchemy",
       "inputs": [
-        { "item": "wild_herb", "quantity": 2 },
-        { "item": "slime_core", "quantity": 1 }
+        {
+          "item": "wild_herb",
+          "quantity": 2
+        },
+        {
+          "item": "slime_core",
+          "quantity": 1
+        }
       ],
-      "output": { "item": "small_health_potion", "quantity": 1 },
-      "unlock": { "type": "always" }
+      "output": {
+        "item": "small_health_potion",
+        "quantity": 1
+      },
+      "unlock": {
+        "type": "always"
+      },
+      "feeCopper": 10
     },
     {
       "id": "strength_potion_recipe",
       "name": "Strength Potion",
       "station": "alchemy",
       "inputs": [
-        { "item": "venom_sac", "quantity": 1 },
-        { "item": "wild_herb", "quantity": 1 },
-        { "item": "arcane_dust", "quantity": 1 }
+        {
+          "item": "venom_sac",
+          "quantity": 1
+        },
+        {
+          "item": "wild_herb",
+          "quantity": 1
+        },
+        {
+          "item": "arcane_dust",
+          "quantity": 1
+        }
       ],
-      "output": { "item": "strength_potion", "quantity": 1 },
-      "unlock": { "type": "guild", "id": "silverthread" }
+      "output": {
+        "item": "strength_potion",
+        "quantity": 1
+      },
+      "unlock": {
+        "type": "guild",
+        "id": "silverthread"
+      },
+      "feeCopper": 25
     },
     {
       "id": "large_health_potion_recipe",
       "name": "Large Health Potion",
       "station": "alchemy",
       "inputs": [
-        { "item": "wild_herb", "quantity": 3 },
-        { "item": "slime_core", "quantity": 2 },
-        { "item": "arcane_dust", "quantity": 1 }
+        {
+          "item": "wild_herb",
+          "quantity": 3
+        },
+        {
+          "item": "slime_core",
+          "quantity": 2
+        },
+        {
+          "item": "arcane_dust",
+          "quantity": 1
+        }
       ],
-      "output": { "item": "large_health_potion", "quantity": 1 },
-      "unlock": { "type": "quest", "id": "side_waystone" }
+      "output": {
+        "item": "large_health_potion",
+        "quantity": 1
+      },
+      "unlock": {
+        "type": "quest",
+        "id": "side_waystone"
+      },
+      "feeCopper": 20
     },
     {
       "id": "greater_mana_potion_recipe",
       "name": "Large Mana Potion",
       "station": "alchemy",
       "inputs": [
-        { "item": "arcane_dust", "quantity": 2 },
-        { "item": "frost_shard", "quantity": 1 },
-        { "item": "wild_herb", "quantity": 1 }
+        {
+          "item": "arcane_dust",
+          "quantity": 2
+        },
+        {
+          "item": "frost_shard",
+          "quantity": 1
+        },
+        {
+          "item": "wild_herb",
+          "quantity": 1
+        }
       ],
-      "output": { "item": "large_mana_potion", "quantity": 1 },
-      "unlock": { "type": "quest", "id": "side_navigator_debt" }
+      "output": {
+        "item": "large_mana_potion",
+        "quantity": 1
+      },
+      "unlock": {
+        "type": "quest",
+        "id": "side_navigator_debt"
+      },
+      "feeCopper": 35
     },
     {
       "id": "roasted_meat_recipe",
       "name": "Roasted Meat",
       "station": "kitchen",
       "inputs": [
-        { "item": "raw_meat", "quantity": 1 },
-        { "item": "wild_herb", "quantity": 1 }
+        {
+          "item": "raw_meat",
+          "quantity": 1
+        },
+        {
+          "item": "wild_herb",
+          "quantity": 1
+        }
       ],
-      "output": { "item": "roasted_meat", "quantity": 1 },
-      "unlock": { "type": "always" }
+      "output": {
+        "item": "roasted_meat",
+        "quantity": 1
+      },
+      "unlock": {
+        "type": "always"
+      },
+      "feeCopper": 5
     },
     {
       "id": "meat_stew_recipe",
       "name": "Meat Stew",
       "station": "kitchen",
       "inputs": [
-        { "item": "raw_meat", "quantity": 2 },
-        { "item": "wild_herb", "quantity": 1 },
-        { "item": "bread", "quantity": 1 }
+        {
+          "item": "raw_meat",
+          "quantity": 2
+        },
+        {
+          "item": "wild_herb",
+          "quantity": 1
+        },
+        {
+          "item": "bread",
+          "quantity": 1
+        }
       ],
-      "output": { "item": "meat_stew", "quantity": 1 },
-      "unlock": { "type": "always" }
+      "output": {
+        "item": "meat_stew",
+        "quantity": 1
+      },
+      "unlock": {
+        "type": "always"
+      },
+      "feeCopper": 8
     }
   ]
 }

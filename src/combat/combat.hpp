@@ -9,6 +9,7 @@
 #include "entities/enemy.hpp"
 #include "gameplay/inventory.hpp"
 #include "entities/player.hpp"
+#include "world/status_effects.hpp"
 #include "abilities.hpp"
 
 // Abstract interface for anything that can fight in combat.
@@ -24,8 +25,14 @@ public:
     virtual float getDodgeRate() const = 0;
     virtual bool isPlayer() const = 0;
     virtual void takeDamage(int amount) = 0;
-    virtual const std::vector<std::string>& getDebuffs() const = 0;
+    virtual const std::vector<ActiveDebuff>& getDebuffs() const = 0;
+    virtual std::vector<ActiveDebuff>& mutableDebuffs() = 0;
     virtual void applyDebuff(const std::string& debuff) = 0;
+    // Debuffs this combatant can inflict with a normal attack.
+    virtual const std::vector<std::string>& getInflictedDebuffs() const {
+        static const std::vector<std::string> none;
+        return none;
+    }
     virtual ~ICombatant() = default;
 };
 
@@ -43,8 +50,9 @@ public:
     float getDodgeRate() const override { return npc.stats.dodgeRate; }
     bool isPlayer() const override { return false; }
     void takeDamage(int amount) override { npc.stats.hitpoints -= amount; }
-    const std::vector<std::string>& getDebuffs() const override { return npc.debuffs; }
-    void applyDebuff(const std::string& debuff) override { npc.debuffs.push_back(debuff); }
+    const std::vector<ActiveDebuff>& getDebuffs() const override { return npc.debuffs; }
+    std::vector<ActiveDebuff>& mutableDebuffs() override { return npc.debuffs; }
+    void applyDebuff(const std::string& debuff) override { statuses::apply(npc.debuffs, debuff); }
 
 private:
     NPC& npc;
@@ -68,8 +76,9 @@ public:
     }
     bool isPlayer() const override { return true; }
     void takeDamage(int amount) override { player.stats.hitpoints -= amount; }
-    const std::vector<std::string>& getDebuffs() const override { return player.debuffs; }
-    void applyDebuff(const std::string& debuff) override { player.debuffs.push_back(debuff); }
+    const std::vector<ActiveDebuff>& getDebuffs() const override { return player.debuffs; }
+    std::vector<ActiveDebuff>& mutableDebuffs() override { return player.debuffs; }
+    void applyDebuff(const std::string& debuff) override { statuses::apply(player.debuffs, debuff); }
     const std::vector<std::string>& getEquippedWeaponDebuffs() const { return player.equippedWeaponDebuffs; }
     float getEquippedWeaponDebuffChance() const { return player.equippedWeaponDebuffChance; }
 
@@ -93,8 +102,10 @@ public:
     float getDodgeRate() const override { return enemy.stats.data.dodgeRate; }
     bool isPlayer() const override { return false; }
     void takeDamage(int amount) override { enemy.stats.data.hitpoints -= amount; }
-    const std::vector<std::string>& getDebuffs() const override { return enemy.debuffs; }
-    void applyDebuff(const std::string& debuff) override { enemy.debuffs.push_back(debuff); }
+    const std::vector<ActiveDebuff>& getDebuffs() const override { return enemy.debuffs; }
+    std::vector<ActiveDebuff>& mutableDebuffs() override { return enemy.debuffs; }
+    void applyDebuff(const std::string& debuff) override { statuses::apply(enemy.debuffs, debuff); }
+    const std::vector<std::string>& getInflictedDebuffs() const override { return enemy.inflictedDebuffs; }
 
 private:
     Enemy& enemy;
@@ -128,7 +139,11 @@ private:
     NPCGenerator& npcGen;
     SpellDatabase& spellDB;
     AbilityState abilityState;
+    // Spell armor bonuses are temporary and stored as percentage points.
+    float temporaryArmor = 0.0f;
+    float temporaryMagicArmor = 0.0f;
 
+    void tickStatusEffects();
     void displayCombatScreen();
     int getPlayerActionInput() const;
     void handlePlayerAttack(CombatSystem& combat);

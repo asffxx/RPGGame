@@ -10,6 +10,7 @@
 #include "catalogs/guild.hpp"
 #include "gameplay/rumor.hpp"
 #include "world/reputation.hpp"
+#include "world/upgrades.hpp"
 
 namespace {
 struct ShopContext {
@@ -165,7 +166,7 @@ void Store::openStore(Player& player) {
     while (shopping) {
         display::storeHeader(player);
 
-        int choice = getNumberInput(1, 4);
+        int choice = getNumberInput(1, 5);
 
         switch (choice) {
             case 1:
@@ -180,6 +181,9 @@ void Store::openStore(Player& player) {
                 sellItems(player);
                 break;
             case 4:
+                openRepairMenu(session);
+                break;
+            case 5:
                 shopping = false;
                 break;
         }

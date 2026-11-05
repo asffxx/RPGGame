@@ -9,6 +9,7 @@
 class DebuffDatabase {
 public:
     struct DebuffDefinition {
+        std::string id{};
         std::string name;
         debuffSettings::DebuffEffect effect;
         debuffSettings::DebuffStackRules stacking;
@@ -21,6 +22,10 @@ public:
     const std::vector<DebuffDefinition>& getDebuffs() const {
         return debuffList;
     }
+
+    // Lookup by id or display name. Names remain the reference used by spells,
+    // weapons, enemies, and saves.
+    const DebuffDefinition* find(const std::string& nameOrId) const;
 
 private:
     std::vector<DebuffDefinition> debuffList;

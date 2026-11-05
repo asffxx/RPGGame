@@ -7,7 +7,7 @@
 
 namespace saves {
 inline constexpr const char* defaultPath = "savegame.dat";
-inline constexpr int saveFormat = 4;
+inline constexpr int saveFormat = 5;
 
 bool save(const GameSession& session, const std::filesystem::path& path, std::string& error);
 

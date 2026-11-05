@@ -44,7 +44,10 @@ struct enemyLore {
 struct Enemy {
     std::string name;
     EnemyStats stats;
-    std::vector<std::string> debuffs;
+    // Debuffs this enemy can inflict on a successful attack.
+    std::vector<std::string> inflictedDebuffs;
+    // Debuffs currently affecting this enemy.
+    std::vector<ActiveDebuff> debuffs;
     std::string id;
 };
 

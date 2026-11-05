@@ -80,8 +80,9 @@ template<class A> void fields(A& a, EnemyDatabase::EnemyTemplate& v) {
     FIELD(difficultyLevel); FIELD(allowedLocations); FIELD(id);
 }
 template<class A> void fields(A& a, debuffSettings::DebuffEffect& v) {
-    FIELD(healthDecrease); FIELD(attackDecrease); FIELD(defenseDecrease); FIELD(magicAttackDecrease);
-    FIELD(magicDefenseDecrease); FIELD(durationTurns); FIELD(damageProc); FIELD(addedTurnOnTrigger); FIELD(amplifierOnTrigger);
+    FIELD(healthDecrease); FIELD(manaDecrease); FIELD(attackDecrease); FIELD(defenseDecrease);
+    FIELD(magicAttackDecrease); FIELD(magicDefenseDecrease); FIELD(durationTurns);
+    FIELD(addedTurnOnTrigger); FIELD(amplifierOnTrigger);
 }
 template<class A> void fields(A& a, debuffSettings::DebuffStackRules& v) {
     FIELD(stackable); FIELD(maxStacks); FIELD(maxStackEffectName);
@@ -90,7 +91,7 @@ template<class A> void fields(A& a, debuffSettings::DebuffApplication& v) {
     FIELD(throwable); FIELD(enchantOnWeapon); FIELD(nameOnEnchantment); FIELD(effectChance);
 }
 template<class A> void fields(A& a, DebuffDatabase::DebuffDefinition& v) {
-    FIELD(name); FIELD(effect); FIELD(stacking); FIELD(application); FIELD(effectDesc);
+    FIELD(id); FIELD(name); FIELD(effect); FIELD(stacking); FIELD(application); FIELD(effectDesc);
 }
 template<class A> void fields(A& a, eventDatabase::eventProperties& v) {
     FIELD(name); FIELD(description); FIELD(goldReward); FIELD(expReward); FIELD(healthEffect);

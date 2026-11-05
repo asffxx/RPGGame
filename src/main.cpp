@@ -14,6 +14,7 @@
 #include "world/dialogue.hpp"
 #include "world/reputation.hpp"
 #include "world/story_board.hpp"
+#include "world/upgrades.hpp"
 
 int main() {
     if (!materialDatabase().loaded() || !craftingDatabase().loaded()) {
@@ -30,6 +31,10 @@ int main() {
     }
     if (!reputationDatabase().loaded()) {
         std::cerr << "Content load failed: " << reputationDatabase().error() << '\n';
+        return 1;
+    }
+    if (!equipmentUpgradeDatabase().loaded()) {
+        std::cerr << "Content load failed: " << equipmentUpgradeDatabase().error() << '\n';
         return 1;
     }
     while (true) {

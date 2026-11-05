@@ -3,7 +3,7 @@
 A C++17 terminal RPG with turn-based combat, exploration, guild quests, crafting,
 and persistent adventures.
 
-**Version:** v3.7.0.
+**Version:** v3.8.0.
 
 [Download](https://github.com/asffxx/RPGGame/releases/latest) ·
 [Development log](DEVLOG.md) · [Game content](content/README.md)
@@ -18,6 +18,9 @@ and persistent adventures.
 - 15 city residents with branching dialogue, remembered decisions, local jobs, and recipe teaching.
 - A Story Board with six milestones, unfinished jobs,
   residents' concerns, and remembered choices.
+- **New in v3.8.0:** status effects share one duration and stacking model;
+  equipment can be upgraded to +3 and repaired; crafting, upgrades, and repairs
+  charge copper fees. Defense and crit stats use their authored units.
 - **New in v3.7.0:** guild reputation changes resident reactions, quest offers,
   shop stock, and prices. Standing appears in the dashboard and Story Board.
 
@@ -39,9 +42,11 @@ Linux requires system glibc. Package checksums are provided with each release.
   Guild storyline rewards give +3. Friendly starts at 6, hostile at -6; no decay.
 - Friendly cities offer five new local jobs and 10% shop discounts. Hostile
   cities refuse new jobs and charge 20% more; active jobs can still be turned in.
+- Use **Local Establishments → Store → Repair Equipment** to restore worn gear.
+  At the forge, choose **Upgrade equipment** to spend materials and copper on +1 to +3.
 - Set `NO_COLOR=1` to disable colors; `TERM=dumb` uses plain output.
 
-Save format 4 reads formats 1–3. Back up your save before changing versions or content.
+Save format 5 reads formats 1–4. Back up your save before changing versions or content.
 
 ## Build from source
 
@@ -64,7 +69,7 @@ then the build-time source directory. An invalid explicit override fails startup
 
 - `src/` — application, catalogs, combat, core, entities, gameplay, UI, and world systems.
 - `content/` — runtime JSON for characters, items, crafting, narrative, story, and world data.
-- `dist/` — platform packages and checksums; see [distribution instructions](dist/README.md).
+- Release builds are published on the [Releases page](https://github.com/asffxx/RPGGame/releases/latest); `dist/` is local build output and not in the repo.
 
 The original game is preserved on the [`v1` branch](https://github.com/asffxx/RPGGame/tree/v1).
 

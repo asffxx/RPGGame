@@ -2,17 +2,18 @@
   "schemaVersion": 1,
   "records": [
     {
+      "id": "burning",
       "name": "Burning",
       "effect": {
         "healthDecrease": 10,
+        "manaDecrease": 0,
         "attackDecrease": 0,
         "defenseDecrease": 0,
         "magicAttackDecrease": 0,
         "magicDefenseDecrease": 0,
         "durationTurns": 3,
-        "damageProc": 5,
-        "addedTurnOnTrigger": 0,
-        "amplifierOnTrigger": 1
+        "addedTurnOnTrigger": 1,
+        "amplifierOnTrigger": 1.5
       },
       "stacking": {
         "stackable": true,
@@ -23,26 +24,27 @@
         "throwable": true,
         "enchantOnWeapon": true,
         "nameOnEnchantment": "Fire Aspect",
-        "effectChance": 0.300000012
+        "effectChance": 0.3
       },
-      "effectDesc": "Deals 10 damage over 3 turns."
+      "effectDesc": "Deals 10 damage per stack each round for 3 rounds."
     },
     {
+      "id": "freeze",
       "name": "Freeze",
       "effect": {
         "healthDecrease": 0,
-        "attackDecrease": 0,
+        "manaDecrease": 0,
+        "attackDecrease": 2,
         "defenseDecrease": 0,
         "magicAttackDecrease": 0,
         "magicDefenseDecrease": 0,
         "durationTurns": 3,
-        "damageProc": 0,
-        "addedTurnOnTrigger": 2,
-        "amplifierOnTrigger": 1.20000005
+        "addedTurnOnTrigger": 0,
+        "amplifierOnTrigger": 1
       },
       "stacking": {
         "stackable": true,
-        "maxStacks": 6,
+        "maxStacks": 3,
         "maxStackEffectName": "Frostbite"
       },
       "application": {
@@ -51,20 +53,21 @@
         "nameOnEnchantment": "Frost Aspect",
         "effectChance": 1
       },
-      "effectDesc": "Freezes the target, slowing them and dealing frost damage over time."
+      "effectDesc": "Reduces attack by 2 per stack for 3 rounds."
     },
     {
+      "id": "poison",
       "name": "Poison",
       "effect": {
-        "healthDecrease": 5,
+        "healthDecrease": 3,
+        "manaDecrease": 0,
         "attackDecrease": 0,
         "defenseDecrease": 0,
         "magicAttackDecrease": 0,
         "magicDefenseDecrease": 0,
         "durationTurns": 3,
-        "damageProc": 0,
-        "addedTurnOnTrigger": 2,
-        "amplifierOnTrigger": 1.29999995
+        "addedTurnOnTrigger": 1,
+        "amplifierOnTrigger": 1.3
       },
       "stacking": {
         "stackable": true,
@@ -77,19 +80,20 @@
         "nameOnEnchantment": "Poisoned",
         "effectChance": 1
       },
-      "effectDesc": "Poisons the target, dealing damage over time and stacking poison effects."
+      "effectDesc": "Deals 3 damage per stack each round for 3 rounds."
     },
     {
+      "id": "bleeding",
       "name": "Bleeding",
       "effect": {
-        "healthDecrease": 5,
+        "healthDecrease": 4,
+        "manaDecrease": 0,
         "attackDecrease": 0,
         "defenseDecrease": 0,
         "magicAttackDecrease": 0,
         "magicDefenseDecrease": 0,
-        "durationTurns": 0,
-        "damageProc": 0,
-        "addedTurnOnTrigger": 0,
+        "durationTurns": 3,
+        "addedTurnOnTrigger": 1,
         "amplifierOnTrigger": 2
       },
       "stacking": {
@@ -103,18 +107,19 @@
         "nameOnEnchantment": "Vampiric",
         "effectChance": 1
       },
-      "effectDesc": "Causes severe bleeding over time, dealing high damage and may heal the attacker."
+      "effectDesc": "Deals 4 damage per stack each round for 3 rounds."
     },
     {
+      "id": "weakness",
       "name": "Weakness",
       "effect": {
         "healthDecrease": 0,
+        "manaDecrease": 0,
         "attackDecrease": 5,
         "defenseDecrease": 0,
         "magicAttackDecrease": 0,
         "magicDefenseDecrease": 0,
         "durationTurns": 3,
-        "damageProc": 0,
         "addedTurnOnTrigger": 0,
         "amplifierOnTrigger": 1
       },
@@ -129,18 +134,19 @@
         "nameOnEnchantment": "Weakening Strike",
         "effectChance": 1
       },
-      "effectDesc": "Reduces the target's attack temporarily."
+      "effectDesc": "Reduces attack by 5 per stack for 3 rounds."
     },
     {
+      "id": "vulnerability",
       "name": "Vulnerability",
       "effect": {
         "healthDecrease": 0,
+        "manaDecrease": 0,
         "attackDecrease": 0,
-        "defenseDecrease": 0,
+        "defenseDecrease": 5,
         "magicAttackDecrease": 0,
-        "magicDefenseDecrease": 0,
+        "magicDefenseDecrease": 5,
         "durationTurns": 3,
-        "damageProc": 0,
         "addedTurnOnTrigger": 0,
         "amplifierOnTrigger": 1
       },
@@ -155,18 +161,19 @@
         "nameOnEnchantment": "Crippling Strike",
         "effectChance": 1
       },
-      "effectDesc": "Makes the target more vulnerable, increasing damage taken."
+      "effectDesc": "Reduces armor and magic armor by 5 percentage points per stack."
     },
     {
+      "id": "magic_dampening",
       "name": "Magic Dampening",
       "effect": {
         "healthDecrease": 0,
+        "manaDecrease": 0,
         "attackDecrease": 0,
         "defenseDecrease": 0,
         "magicAttackDecrease": 5,
         "magicDefenseDecrease": 0,
         "durationTurns": 3,
-        "damageProc": 0,
         "addedTurnOnTrigger": 0,
         "amplifierOnTrigger": 1
       },
@@ -181,18 +188,19 @@
         "nameOnEnchantment": "Nullifying Strike",
         "effectChance": 1
       },
-      "effectDesc": "Reduces the target's magic damage output."
+      "effectDesc": "Reduces magic attack by 5 per stack for 3 rounds."
     },
     {
+      "id": "mana_weakness",
       "name": "Mana Weakness",
       "effect": {
         "healthDecrease": 0,
+        "manaDecrease": 10,
         "attackDecrease": 0,
         "defenseDecrease": 0,
         "magicAttackDecrease": 0,
         "magicDefenseDecrease": 0,
         "durationTurns": 3,
-        "damageProc": 10,
         "addedTurnOnTrigger": 0,
         "amplifierOnTrigger": 1
       },
@@ -207,18 +215,19 @@
         "nameOnEnchantment": "Mana Drain",
         "effectChance": 1
       },
-      "effectDesc": "Reduces the target's mana and ability to cast spells."
+      "effectDesc": "Drains 10 mana per stack each round for 3 rounds."
     },
     {
+      "id": "health_blight",
       "name": "Health Blight",
       "effect": {
-        "healthDecrease": 0,
+        "healthDecrease": 3,
+        "manaDecrease": 0,
         "attackDecrease": 0,
         "defenseDecrease": 0,
         "magicAttackDecrease": 0,
         "magicDefenseDecrease": 0,
         "durationTurns": 3,
-        "damageProc": 0,
         "addedTurnOnTrigger": 0,
         "amplifierOnTrigger": 1.5
       },
@@ -233,7 +242,61 @@
         "nameOnEnchantment": "Blight Enchantment",
         "effectChance": 1
       },
-      "effectDesc": "Reduces the target's max HP and increases all incoming damage."
+      "effectDesc": "Deals 3 damage per stack and amplifies damage at maximum stacks."
+    },
+    {
+      "id": "armor_break",
+      "name": "Armor Break",
+      "effect": {
+        "healthDecrease": 0,
+        "manaDecrease": 0,
+        "attackDecrease": 0,
+        "defenseDecrease": 10,
+        "magicAttackDecrease": 0,
+        "magicDefenseDecrease": 0,
+        "durationTurns": 3,
+        "addedTurnOnTrigger": 0,
+        "amplifierOnTrigger": 1
+      },
+      "stacking": {
+        "stackable": true,
+        "maxStacks": 3,
+        "maxStackEffectName": "Shattered"
+      },
+      "application": {
+        "throwable": true,
+        "enchantOnWeapon": true,
+        "nameOnEnchantment": "Sundering Strike",
+        "effectChance": 1
+      },
+      "effectDesc": "Reduces armor by 10 percentage points per stack for 3 rounds."
+    },
+    {
+      "id": "shock",
+      "name": "Shock",
+      "effect": {
+        "healthDecrease": 0,
+        "manaDecrease": 0,
+        "attackDecrease": 0,
+        "defenseDecrease": 0,
+        "magicAttackDecrease": 0,
+        "magicDefenseDecrease": 10,
+        "durationTurns": 2,
+        "addedTurnOnTrigger": 0,
+        "amplifierOnTrigger": 1
+      },
+      "stacking": {
+        "stackable": true,
+        "maxStacks": 3,
+        "maxStackEffectName": "Overloaded"
+      },
+      "application": {
+        "throwable": true,
+        "enchantOnWeapon": true,
+        "nameOnEnchantment": "Shocking Strike",
+        "effectChance": 1
+      },
+      "effectDesc": "Reduces magic armor by 10 percentage points per stack for 2 rounds."
     }
   ]
 }

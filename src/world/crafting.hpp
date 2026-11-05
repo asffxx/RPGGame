@@ -17,6 +17,8 @@ struct Recipe {
     std::string id;
     std::string name;
     std::string station;
+    // Station fee in copper, charged once per craft.
+    int feeCopper = 0;
     std::vector<RecipeInput> inputs;
     std::string outputId;
     int outputQuantity = 1;

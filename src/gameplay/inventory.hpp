@@ -23,6 +23,10 @@ public:
         int quantity;
         bool enchanted = false;
         std::string id;
+        // Equipment only. Upgrades add 15% of the base stat per level.
+        int upgradeLevel = 0;
+        // Equipment only. At zero the item breaks and is unequipped.
+        int durability = 100;
     };
 
     struct Buff {
@@ -79,7 +83,13 @@ public:
 
     static constexpr double capacityWeight = 50.0;
     static constexpr double softLimit = 0.75;
-    void tickBuffs(Player& player);
+    static constexpr int maxDurability = 100;
+    // Decrements equipped gear and returns messages for items that broke.
+    std::vector<std::string> wearEquipment(Player& player, int amount);
+    // Reapplies the equipped stat delta after an item's upgrade level changes.
+    void refreshUpgrade(Player& player, size_t dbIndex);
+    // Returns a message when the buff expired.
+    std::string tickBuffs(Player& player);
 
     const std::optional<Buff>& getActiveBuff() const {
         return activeBuff;
