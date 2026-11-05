@@ -22,8 +22,10 @@ compile_commands.json
 *.so
 *.dll
 *.exe
-# Published Windows release binaries are tracked; local build output is not.
-!dist/releases/**/*.exe
+
+# ── Release packaging output ─────────────────────────────────────────────────
+# dist/ holds locally built release packages; not for version control.
+/dist/
 
 # ── Runtime data ──────────────────────────────────────────────────────────────
 # Player save file lives next to the executable, never in the repo.
@@ -35,7 +37,7 @@ savegame.dat
 /cli-test/
 
 # ── Python ────────────────────────────────────────────────────────────────────
-# scripts/ is tracked; its bytecode cache is not.
+# scripts/ is ignored; bytecode caches stay out too.
 __pycache__/
 *.py[cod]
 *.pyo
@@ -58,7 +60,7 @@ Thumbs.db
 /RPGDOCS/
 
 # ── Development-only material ────────────────────────────────────────────────
-# Local documentation, helper scripts, and tests stay off release branches.
+# Local documentation, helper scripts, and tests stay off the repo.
 /docs/
 /scripts/
 /tests/
