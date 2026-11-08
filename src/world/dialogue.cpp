@@ -235,6 +235,7 @@ void openDialogue(GameSession& s, const DialogueResident& npc) {
     if (s.hero.currentLocation != npc.city || s.hero.currentLocationType != PeacefulCity) return;
     const auto tier = cityTier(s, npc.city);
     if (tier == ReputationTier::Hostile) {
+        clearScreen();
         displayBorderedMenu({npc.name + " - " + npc.role, npc.hostileLine, "",
                              "0. Leave conversation"}, "Choose: ");
         input(0);
@@ -242,6 +243,7 @@ void openDialogue(GameSession& s, const DialogueResident& npc) {
     }
     auto* node = npc.node(npc.entry);
     while (node) {
+        clearScreen();
         std::vector<std::string> lines{npc.name + " - " + npc.role};
         if (tier == ReputationTier::Friendly && node == npc.node(npc.entry))
             lines.push_back(npc.friendlyLine);
@@ -269,6 +271,7 @@ void openResidents(GameSession& s) {
     std::vector<const DialogueResident*> residents;
     for (const auto& r : dialogueDatabase().residents()) if (r.city == s.hero.currentLocation) residents.push_back(&r);
     while (true) {
+        clearScreen();
         std::vector<std::string> lines{"Residents of " + s.hero.currentLocation};
         for (size_t i = 0; i < residents.size(); ++i) lines.push_back(std::to_string(i + 1) + ". " + residents[i]->name + " - " + residents[i]->role);
         lines.push_back("0. Back");

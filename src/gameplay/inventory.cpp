@@ -4,9 +4,21 @@
 #include <cmath>
 #include <iostream>
 #include <limits>
+#include <sstream>
 
 #include "core/ui.hpp"
 #include "app/display.hpp"
+
+namespace {
+
+// Weight formatted like the old stream output: 0, 37.5, never 6 decimals.
+std::string weightText(float value) {
+    std::ostringstream text;
+    text << value;
+    return text.str();
+}
+
+} // namespace
 
 namespace {
 
@@ -192,10 +204,14 @@ long long PlayerInventory::sellValueOf(ItemType type, size_t index) const {
 }
 
 void PlayerInventory::showInventory(Player& player) {
-    displayBorderedMenu({"Backpack: " + std::to_string(totalWeight()) + "/50 weight. Penalties above 37.5.",
-        encumbered() ? "Encumbered: attack -10%, dodge -10 percentage points." : "Burden: normal."}, "");
+    clearScreen();
+    std::vector<std::string> header = {"[ Backpack ]", "Weight: " + weightText(totalWeight()) + "/50. Penalties above 37.5.",
+        encumbered() ? "Encumbered: attack -10%, dodge -10 percentage points." : "Burden: normal.",
+        "----------------------------"};
     if (inventory.empty()) {
-        display::inventoryEmpty();
+        header.push_back("Inventory is empty.");
+        displayBorderedMenu(header, "");
+        display::pressEnter();
         return;
     }
 
@@ -216,14 +232,12 @@ void PlayerInventory::showInventory(Player& player) {
         lines.push_back(itemLine);
     }
 
-    displayBorderedMenu(lines, "Choose item (0 to exit): ");
-    int choice;
-    std::cin >> choice;
-    std::cin.ignore();
-
-    if (choice <= 0 || choice > static_cast<int>(inventory.size())) return;
-
-    handleSelectedItem(player, inventory[static_cast<size_t>(choice - 1)]);
+    std::string weightLabel = weightText(totalWeight()) + "/50";
+    if (encumbered()) weightLabel += " - Encumbered";
+    PagedSelector selector(lines, 5, "Backpack (Weight " + weightLabel + ")");
+    int choice = selector.select();
+    if (choice < 0) return;
+    handleSelectedItem(player, inventory[static_cast<size_t>(choice)]);
 }
 
 std::string PlayerInventory::tickBuffs(Player& player) {

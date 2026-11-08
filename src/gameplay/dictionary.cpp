@@ -27,8 +27,9 @@ void showDictionary(Player& hero) {
                 continue;
             }
             std::vector<std::string> enemyNames(hero.defeatedEnemies.begin(), hero.defeatedEnemies.end());
-            PagedSelector enemySelector(enemyNames);
-            size_t idx = enemySelector.select();
+            PagedSelector enemySelector(enemyNames, 5, "Enemies");
+            int idx = enemySelector.select();
+            if (idx < 0) continue;
             std::string enemyName = enemyNames[idx];
             EnemyDatabase enemyDB;
             for (const auto& tmpl : enemyDB.templates) {
@@ -55,8 +56,9 @@ void showDictionary(Player& hero) {
                 continue;
             }
             std::vector<std::string> weaponNames(hero.boughtWeapons.begin(), hero.boughtWeapons.end());
-            PagedSelector weaponSelector(weaponNames);
-            size_t idx = weaponSelector.select();
+            PagedSelector weaponSelector(weaponNames, 5, "Weapons");
+            int idx = weaponSelector.select();
+            if (idx < 0) continue;
             std::string weaponName = weaponNames[idx];
             EquipmentandWeaponDatabase eqDB;
             for (const auto& eq : eqDB.getEquipment()) {
@@ -83,8 +85,9 @@ void showDictionary(Player& hero) {
                 continue;
             }
             std::vector<std::string> locationNames(hero.discoveredLocations.begin(), hero.discoveredLocations.end());
-            PagedSelector locationSelector(locationNames);
-            size_t idx = locationSelector.select();
+            PagedSelector locationSelector(locationNames, 5, "Locations");
+            int idx = locationSelector.select();
+            if (idx < 0) continue;
             std::string locationName = locationNames[idx];
             locationDatabase locDB;
             for (const auto& loc : locDB.getLocations()) {
@@ -111,8 +114,9 @@ void showDictionary(Player& hero) {
                 continue;
             }
             std::vector<std::string> eventNames(hero.encounteredEvents.begin(), hero.encounteredEvents.end());
-            PagedSelector eventSelector(eventNames);
-            size_t idx = eventSelector.select();
+            PagedSelector eventSelector(eventNames, 5, "Events");
+            int idx = eventSelector.select();
+            if (idx < 0) continue;
             std::string eventName = eventNames[idx];
             eventDatabase eventDB;
             for (const auto& ev : eventDB.getEvents()) {

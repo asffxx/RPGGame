@@ -3,22 +3,28 @@
 #include "core/ui.hpp"
 #include "core/version.hpp"
 
-void Menu::displayAndExecute() {
+void Menu::displayAndExecute(std::string* activeCategory) {
     const auto order = visibleCategories();
     if (order.empty()) return;
 
     while (true) {
-        displayOverview(order);
-        const auto& category = order[static_cast<size_t>(getNumberInput(1, static_cast<int>(order.size())) - 1)];
+        std::string category = activeCategory ? *activeCategory : "";
+        if (categories.count(category) == 0 || categories.at(category).empty()) {
+            displayOverview(order);
+            category = order[static_cast<size_t>(getNumberInput(1, static_cast<int>(order.size())) - 1)];
+        }
         const auto& indices = categories.at(category);
 
         bool acted = false;
         while (!acted) {
             displayCategory(category);
             int choice = getNumberInput(0, static_cast<int>(indices.size()));
-            if (choice == 0) break;
+            if (choice == 0) {
+                if (activeCategory) activeCategory->clear();
+                break;
+            }
+            if (activeCategory) *activeCategory = category;
             items[indices[static_cast<size_t>(choice - 1)]].action();
-            clearScreen();
             acted = true;
         }
         if (acted) return;
@@ -27,7 +33,7 @@ void Menu::displayAndExecute() {
 
 std::vector<std::string> Menu::visibleCategories() const {
     std::vector<std::string> result;
-    for (const auto& name : {"Character", "Story", "Local Establishments", "Actions", "System"}) {
+    for (const auto& name : {"Actions", "Character", "Local Establishments", "Story", "System"}) {
         auto found = categories.find(name);
         if (found != categories.end() && !found->second.empty()) result.push_back(name);
     }
@@ -37,22 +43,25 @@ std::vector<std::string> Menu::visibleCategories() const {
 std::vector<std::string> Menu::statusLines() const {
     std::vector<std::string> lines = {
         std::string("[ RPGGame / v") + gameVersion + " ]",
-        hero.name + " / " + hero.playerClass.name + " / Level " + std::to_string(hero.stats.level),
+        hero.name + " - " + hero.playerClass.name + " - Level " + std::to_string(hero.stats.level),
+        "============================",
         resourceBar("HP", hero.stats.hitpoints, hero.stats.maxHitpoints),
         resourceBar("MP", hero.stats.mana, hero.stats.maxMana),
+        "----------------------------",
         "Current Location: " + hero.currentLocation,
-        "Current Time: " + hero.timeSystem.getPeriodString() + " | " + hero.timeSystem.getFormattedTimePassed(),
         "Currency: " + std::to_string(hero.economy.platinum) + "p " +
             std::to_string(hero.economy.gold) + "g " + std::to_string(hero.economy.silver) + "s " +
-            std::to_string(hero.economy.copper) + "c"
+            std::to_string(hero.economy.copper) + "c",
+        "Current Time: " + hero.timeSystem.getPeriodString() + " | " + hero.timeSystem.getFormattedTimePassed()
     };
     if (!status.empty()) {
-        lines.insert(lines.begin() + 5, status);
+        lines.push_back(status);
     }
     return lines;
 }
 
 void Menu::displayOverview(const std::vector<std::string>& order) {
+    clearScreen();
     auto lines = statusLines();
     lines.push_back("");
     lines.push_back("[ Main Menu ]");
@@ -64,6 +73,7 @@ void Menu::displayOverview(const std::vector<std::string>& order) {
 }
 
 void Menu::displayCategory(const std::string& category) {
+    clearScreen();
     auto lines = statusLines();
     lines.push_back("");
     lines.push_back("[" + category + "]");

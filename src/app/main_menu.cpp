@@ -56,6 +56,7 @@ void mainMenu(GameSession& session, bool debugMode) {
     auto& actionCounter = session.actionCounter;
     auto& lastWeekPaid = session.lastWeekPaid;
     bool running = true;
+    std::string activeCategory;
 
     while (running) {
         clearScreen();
@@ -163,8 +164,7 @@ void mainMenu(GameSession& session, bool debugMode) {
             actionCounter = (actionCounter + 1) % 4;
             if (actionCounter == 0) {
                 hero.timeSystem.advanceTime(hero);
-                display::timePassed();
-                clearScreen();
+                display::message("Time has passed.");
             }
         }});
         categories["Actions"].push_back(items.size() - 1);
@@ -172,7 +172,6 @@ void mainMenu(GameSession& session, bool debugMode) {
 
         categories["System"] = {};
         items.push_back({"Basics", "Explain the game mechanics.", [&]() {
-            clearScreen();
             display::gameBasics();
         }});
         categories["System"].push_back(items.size() - 1);
@@ -186,7 +185,6 @@ void mainMenu(GameSession& session, bool debugMode) {
         categories["System"].push_back(items.size() - 1);
 
         Menu menu(items, categories, hero, standingStatus(session));
-        menu.displayAndExecute();
-        clearScreen();
+        menu.displayAndExecute(&activeCategory);
     }
 }

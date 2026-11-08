@@ -241,7 +241,7 @@ void openUpgradeMenu(GameSession& session) {
         const auto* rule = database.ruleFor(item.upgradeLevel + 1);
         if (!rule) continue;
         available.push_back(i);
-        lines.push_back(std::to_string(available.size()) + ". " + itemLabel(session.inventory, item) +
+        lines.push_back(itemLabel(session.inventory, item) +
                         " -> +" + std::to_string(rule->level) + " (" +
                         upgradeMaterialLabel(session.inventory, *rule) + ", " +
                         repairCostLabel(rule->feeCopper) + ")");
@@ -250,12 +250,11 @@ void openUpgradeMenu(GameSession& session) {
         display::message("Nothing can be upgraded.");
         return;
     }
-    lines.push_back("0. Back");
-    displayBorderedMenu(lines, "Choose equipment to upgrade: ");
-    const int choice = getNumberInput(0, static_cast<int>(available.size()));
-    if (choice == 0) return;
+    PagedSelector selector(lines, 5, "Upgrade Equipment");
+    const int choice = selector.select();
+    if (choice < 0) return;
     std::string error;
-    if (upgradeEquipmentItem(session, available[static_cast<size_t>(choice - 1)], error))
+    if (upgradeEquipmentItem(session, available[static_cast<size_t>(choice)], error))
         display::message("Upgrade complete.");
     else
         display::message(error);
@@ -268,7 +267,7 @@ void openRepairMenu(GameSession& session) {
         const auto& item = session.inventory.inventory[i];
         if (!isEquipment(item) || item.durability >= PlayerInventory::maxDurability) continue;
         available.push_back(i);
-        lines.push_back(std::to_string(available.size()) + ". " + itemLabel(session.inventory, item) +
+        lines.push_back(itemLabel(session.inventory, item) +
                         " (" + std::to_string(item.durability) + "/" +
                         std::to_string(PlayerInventory::maxDurability) + ", " +
                         repairCostLabel(repairCostCopper(item)) + ")");
@@ -277,12 +276,11 @@ void openRepairMenu(GameSession& session) {
         display::message("Nothing needs repair.");
         return;
     }
-    lines.push_back("0. Back");
-    displayBorderedMenu(lines, "Choose equipment to repair: ");
-    const int choice = getNumberInput(0, static_cast<int>(available.size()));
-    if (choice == 0) return;
+    PagedSelector selector(lines, 5, "Repair Equipment");
+    const int choice = selector.select();
+    if (choice < 0) return;
     std::string error;
-    if (repairEquipmentItem(session, available[static_cast<size_t>(choice - 1)], error))
+    if (repairEquipmentItem(session, available[static_cast<size_t>(choice)], error))
         display::message("Repairs complete.");
     else
         display::message(error);

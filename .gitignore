@@ -2,6 +2,7 @@
 # ── Build output ─────────────────────────────────────────────────────────────
 /build/
 /build-win/
+/build-release/
 /cmake-build-*/
 /out/
 
@@ -54,11 +55,16 @@ Thumbs.db
 .vscode/
 .idea/
 .cache/
+/.serena/
 *.user
 
 # ── Obsidian vault ────────────────────────────────────────────────────────────
 # Keep the local Obsidian vault out of version control.
 /RPGDOCS/
+
+# ── Knowledge graph (generated) ──────────────────────────────────────────────
+# graphify-out/ is local build output from `graphify`; cache + reports stay local.
+/graphify-out/
 
 # ── Development-only material ────────────────────────────────────────────────
 # Local documentation, helper scripts, and tests stay off the repo.

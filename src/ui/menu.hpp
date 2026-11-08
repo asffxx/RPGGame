@@ -14,7 +14,7 @@ public:
     Menu(const std::vector<MenuItem>& menuItems, const std::map<std::string, std::vector<size_t>>& menuCategories, Player& heroRef, std::string standingStatus = "")
         : items(menuItems), categories(menuCategories), hero(heroRef), status(std::move(standingStatus)) {}
 
-    void displayAndExecute();
+    void displayAndExecute(std::string* activeCategory = nullptr);
 
 private:
     std::vector<MenuItem> items;

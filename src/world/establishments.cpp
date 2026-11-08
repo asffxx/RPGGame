@@ -34,6 +34,8 @@ void Tavern::openTavern(Player& player, TimeSystem& timeSystem) {
     while (inTavern) {
         clearScreen();
         std::vector<std::string> lines = {
+            "[ The Rattling Flagon Tavern ]",
+            "----------------------------",
             "1. Sleep for 1 Gold (Restore HP & Advance Time)",
             "2. Buy Food and Drinks",
             "3. Hire a Party Member (Max 4)",
@@ -41,7 +43,6 @@ void Tavern::openTavern(Player& player, TimeSystem& timeSystem) {
             "5. Exit"
         };
 
-        display::tavernHeader();
         displayBorderedMenu(lines, "The Tavernkeeper wipes a mug. 'What'll it be?' ");
 
         int choice = getNumberInput(1, 5);
@@ -51,9 +52,9 @@ void Tavern::openTavern(Player& player, TimeSystem& timeSystem) {
                 player.stats.hitpoints = player.stats.maxHitpoints;
                 player.sleptToday = true;
                 timeSystem.advanceTime(player);
-                display::tavernSlept();
+                display::message("You settle into a hay-stuffed mattress. The world fades to black... You wake up feeling refreshed! (HP Restored)");
             } else {
-                display::tavernNoCoin();
+                display::message("'No coin, no bed,' the Tavernkeeper grunts.");
             }
         }
         else if (choice == 2) {
@@ -66,7 +67,7 @@ void Tavern::openTavern(Player& player, TimeSystem& timeSystem) {
             listenToRumors(session);
         }
         else if (choice == 5) {
-            display::tavernExit();
+            display::message("You step back out into the cold air.");
             inTavern = false;
         }
     }
@@ -90,8 +91,7 @@ void Tavern::buyFoodAndDrinks(Player& player) {
         return;
     }
 
-    std::cout << "\n--- Available ---" << std::endl;
-    PagedSelector foodSelector(foodNames);
+    PagedSelector foodSelector(foodNames, 5, "Food and Drinks");
     int selected = foodSelector.select();
     if (selected == -1) return;
     const size_t index = available[static_cast<size_t>(selected)];
@@ -125,14 +125,17 @@ void Tavern::hirePartyMember(Player& player) {
     int statBonus = (newNPC.stats.attack + newNPC.stats.magicAttack + newNPC.stats.armor + newNPC.stats.magicArmor) / 10;
     int totalCost = baseCost + levelMultiplier + statBonus;
 
-    display::tavernHireInfo(newNPC, totalCost);
+    displayBorderedMenu({"[ Hire " + newNPC.name + " ]",
+        "In the corner, you see " + newNPC.name + ", a " + newNPC.race.name + " " + newNPC.playerClass.name + " (Lv " + std::to_string(newNPC.level) + ").",
+        "Hiring cost: " + std::to_string(totalCost) + " Gold.",
+        "Gear: " + (newNPC.equippedWeapon.empty() ? std::string("Rags") : newNPC.equippedWeapon),
+        "----------------------------",
+        "1. Hire member",
+        "2. Decline"},
+        "Choose: ");
+    int confirm = getNumberInput(1, 2);
 
-    std::cout << "Confirm hire? (y/n): ";
-    char confirm;
-    std::cin >> confirm;
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-    if (confirm != 'y' && confirm != 'Y') {
+    if (confirm != 1) {
         display::tavernHireDeclined();
         return;
     }
@@ -164,18 +167,28 @@ void Tavern::hirePartyMember(Player& player) {
 void Store::openStore(Player& player) {
     bool shopping = true;
     while (shopping) {
-        display::storeHeader(player);
+        clearScreen();
+        std::vector<std::string> lines = {
+            "[ Store ]",
+            "Currency: " + std::to_string(player.economy.platinum) + "p " + std::to_string(player.economy.gold) + "g " +
+                std::to_string(player.economy.silver) + "s " + std::to_string(player.economy.copper) + "c",
+            "----------------------------",
+            "1. Buy Potions",
+            "2. Buy Equipment",
+            "3. Sell Items",
+            "4. Repair Equipment",
+            "5. Exit Store",
+        };
+        displayBorderedMenu(lines, "Choose an option: ");
 
         int choice = getNumberInput(1, 5);
 
         switch (choice) {
             case 1:
                 buyPotions(player);
-                clearScreen();
                 break;
             case 2:
                 buyEquipment(player);
-                clearScreen();
                 break;
             case 3:
                 sellItems(player);
@@ -206,7 +219,7 @@ void Store::buyPotions(Player& player) {
         display::message("Nothing in stock at this standing.");
         return;
     }
-    PagedSelector potionSelector(potionNames);
+    PagedSelector potionSelector(potionNames, 5, "Buy Potions");
     int selected = potionSelector.select();
     if (selected < 0) return;
     const size_t index = available[static_cast<size_t>(selected)];
@@ -241,7 +254,7 @@ void Store::buyEquipment(Player& player) {
         display::message("Nothing in stock at this standing.");
         return;
     }
-    PagedSelector equipmentSelector(equipmentNames);
+    PagedSelector equipmentSelector(equipmentNames, 5, "Buy Equipment");
     int selected = equipmentSelector.select();
     if (selected < 0) return;
     const size_t index = available[static_cast<size_t>(selected)];
@@ -287,22 +300,24 @@ bool sellItem(Player& player, PlayerInventory& inventory, size_t slot, int quant
 
 void Store::sellItems(Player& player) {
     while (!inventory.inventory.empty()) {
-        std::vector<std::string> lines = {"Sell items (shop goods: half price; materials: listed value)."};
+        clearScreen();
+        std::vector<std::string> lines;
         for (size_t i = 0; i < inventory.inventory.size(); ++i) {
             const auto& item = inventory.inventory[i];
-            lines.push_back(std::to_string(i + 1) + ". " + inventory.itemName(item.type, item.dbIndex) +
+            lines.push_back(inventory.itemName(item.type, item.dbIndex) +
                 " x" + std::to_string(item.quantity) + " - " + std::to_string(inventory.sellValueOf(item.type, item.dbIndex)) + " copper each");
         }
-        lines.push_back("0. Back");
-        displayBorderedMenu(lines, "Choose an item: ");
-        int choice = getNumberInput(0, static_cast<int>(inventory.inventory.size()));
-        if (!choice) return;
-        const auto item = inventory.inventory[choice - 1];
-        displayBorderedMenu({"0. Cancel"}, "Quantity to sell: ");
+        PagedSelector selector(lines, 5, "Sell Items (shop goods: half price; materials: listed value)");
+        int choice = selector.select();
+        if (choice < 0) return;
+        const auto item = inventory.inventory[static_cast<size_t>(choice)];
+        displayBorderedMenu({"[ " + inventory.itemName(item.type, item.dbIndex) + " ]",
+            "You hold x" + std::to_string(item.quantity) + ".", "0. Cancel"},
+            "Quantity to sell: ");
         int quantity = getNumberInput(0, item.quantity);
         if (!quantity) continue;
         std::string error;
-        if (sellItem(player, inventory, choice - 1, quantity, error))
+        if (sellItem(player, inventory, static_cast<size_t>(choice), quantity, error))
             display::storeSold(inventory.itemName(item.type, item.dbIndex), quantity, inventory.sellValueOf(item.type, item.dbIndex) * quantity);
         else display::message(error);
     }
@@ -312,18 +327,26 @@ void Store::sellItems(Player& player) {
 void magicStore::openStore(Player& player) {
     bool shopping = true;
     while (shopping) {
-        display::magicStoreHeader(player);
+        clearScreen();
+        std::vector<std::string> lines = {
+            "[ Magic Store ]",
+            "Currency: " + std::to_string(player.economy.platinum) + "p " + std::to_string(player.economy.gold) + "g " +
+                std::to_string(player.economy.silver) + "s " + std::to_string(player.economy.copper) + "c",
+            "----------------------------",
+            "1. Buy Spells",
+            "2. Enchant Equipment",
+            "3. Exit Store",
+        };
+        displayBorderedMenu(lines, "Choose an option: ");
 
         int choice = getNumberInput(1, 3);
 
         switch (choice) {
             case 1:
                 buySpells(player);
-                clearScreen();
                 break;
             case 2:
                 enchantItem(player);
-                clearScreen();
                 break;
             case 3:
                 shopping = false;
@@ -354,8 +377,9 @@ void magicStore::buySpells(Player& player) {
                                          spell.priceSilver, spell.priceCopper, context.tier);
         spellNames.push_back(spell.spellName + " - " + priceLabel(price));
     }
-    PagedSelector spellSelector(spellNames);
-    size_t selectedIndex = spellSelector.select();
+    PagedSelector spellSelector(spellNames, 5, "Buy Spells");
+    int selectedIndex = spellSelector.select();
+    if (selectedIndex < 0) return;
     size_t index = availableSpells[selectedIndex];
     const auto& spell = spells[index];
     const auto price = adjustedPrice(spell.pricePlatinum, spell.priceGold,
@@ -393,7 +417,6 @@ void magicStore::enchantItem(Player& player) {
         return;
     }
 
-    display::magicStoreEnchantItemHeader();
     std::vector<std::string> enchantLines;
     for (size_t j = 0; j < enchantableIndices.size(); ++j) {
         size_t i = enchantableIndices[j];
@@ -406,11 +429,6 @@ void magicStore::enchantItem(Player& player) {
     size_t itemIndex = enchantableIndices[static_cast<size_t>(itemChoice - 1)];
     const auto& item = equipment[itemIndex];
 
-    if (!player.economy.subtractCurrency(0, 100, 0, 0)) {
-        display::magicStoreNotEnoughGold();
-        return;
-    }
-
     if (item.type == "Weapon") {
 
         const auto& availableDebuffs = debuffDB.getDebuffs();
@@ -418,8 +436,13 @@ void magicStore::enchantItem(Player& player) {
         for (const auto& debuff : availableDebuffs) {
             debuffNames.push_back(debuff.name + " - " + debuff.effectDesc);
         }
-        PagedSelector debuffSelector(debuffNames);
-        size_t debuffIndex = debuffSelector.select();
+        PagedSelector debuffSelector(debuffNames, 5, "Choose an Enchantment");
+        int debuffIndex = debuffSelector.select();
+        if (debuffIndex < 0) return;
+        if (!player.economy.subtractCurrency(0, 100, 0, 0)) {
+            display::magicStoreNotEnoughGold();
+            return;
+        }
         const auto& debuff = availableDebuffs[debuffIndex];
 
         player.equippedWeaponDebuffs.push_back(debuff.name);
@@ -438,14 +461,19 @@ void magicStore::enchantItem(Player& player) {
         for (const auto& spell : spells) {
             spellNames.push_back(spell.spellName + " - " + spell.description);
         }
-        PagedSelector spellSelector(spellNames);
-        size_t spellIndex = spellSelector.select();
+        PagedSelector spellSelector(spellNames, 5, "Choose a Spell");
+        int spellIndex = spellSelector.select();
+        if (spellIndex < 0) return;
+        if (!player.economy.subtractCurrency(0, 100, 0, 0)) {
+            display::magicStoreNotEnoughGold();
+            return;
+        }
         const auto& spell = spells[spellIndex];
 
         player.equippedStaffSpells.push_back(spell.spellName);
 
         player.stats.magicAttack += static_cast<int>(std::round(spell.healthDamage * spell.staffBonusModifier));
 
-        std::cout << "Enchanted " << item.name << " with " << spell.spellName << "!\n";
+        display::message("Enchanted " + item.name + " with " + spell.spellName + "!");
     }
 }

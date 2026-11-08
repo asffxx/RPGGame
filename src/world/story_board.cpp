@@ -7,6 +7,7 @@
 
 #include "app/display.hpp"
 #include "app/session.hpp"
+#include "core/ui.hpp"
 #include "catalogs/content_ids.hpp"
 #include "catalogs/content_paths.hpp"
 #include "catalogs/guild.hpp"
@@ -152,6 +153,7 @@ StoryView buildStoryView(const GameSession& session) {
 
 void openStoryBoard(const GameSession& session) {
     const auto view = buildStoryView(session);
+    clearScreen();
     if (!view.act) {
         display::message("Story data is unavailable.");
         return;

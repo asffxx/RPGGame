@@ -294,6 +294,7 @@ void openQuestBoard(GameSession& session, QuestCategory category) {
 }
 
 void showQuestJournal(const GameSession& session) {
+    clearScreen();
     std::vector<std::string> lines = {"=== Quest Journal ==="};
     for (auto category : {QuestCategory::Guild, QuestCategory::Main, QuestCategory::Side, QuestCategory::Commission}) {
         lines.push_back(std::string("--- ") + questCategoryName(category) + " ---");
@@ -325,6 +326,7 @@ void showQuestJournal(const GameSession& session) {
 void performQuestAction(GameSession& session, EnemyController& enemies, CombatSystem& combat, NPCGenerator& generator) {
     auto ids = questsAtLocation(session);
     if (ids.empty()) { display::message("No active quest objective here."); return; }
+    clearScreen();
     std::vector<std::string> lines;
     for (const auto& id : ids) {
         const auto& quest = *findQuest(id);

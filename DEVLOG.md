@@ -2,6 +2,24 @@
 
 RPGGame's development history, newest milestone first. Add each release entry at the top.
 
+## v4.0.1 — Terminal UI and encounter fixes
+
+**Date:** 2026-11-08 — Windows x64 and Linux x86_64 release builds.
+
+- Added richer ASCII panels, colored status bars, and boxed prompts and notices.
+- Reordered main categories by gameplay priority and retained the selected category
+  after actions. Added explicit Back choices and clearer page navigation.
+- Paged backpack, shop, upgrade, repair, and selling lists; replaced item and hire
+  yes/no prompts with numbered choices.
+- Improved clearing for events and dialogue, and readability of action results.
+- Combined victory and rewards into one panel, removed a stray combat separator,
+  and clamped displayed HP to zero. Experience and other decimal values use compact formatting.
+- Fixed cancellation handling in item selectors and prevented cancelled enchantments from charging gold.
+- Fixed six event references to missing enemies, including the Bandit Camp crash.
+- Verified 50/50 tests on Linux and 50/50 through Wine for Windows, plus packaged
+  executable and save/load checks on both platforms.
+- Save format remains 5. The game will continue in Godot in a separate repository.
+
 ## v4.0.0 — Debuff resistances and feature freeze
 
 **Date:** 2026-11-06 — Windows x64 and Linux x86_64 release builds.

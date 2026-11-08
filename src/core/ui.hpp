@@ -16,14 +16,17 @@ std::string resourceBar(const std::string& label, int current, int maximum);
 // Scrollable numbered selector over a list of items.
 class PagedSelector {
 public:
-    PagedSelector(const std::vector<std::string>& itemList, size_t pageSizeParam = 5)
-        : items(itemList), pageSize(pageSizeParam), pageStart(0) {}
+    PagedSelector(const std::vector<std::string>& itemList, size_t pageSizeParam = 5,
+                  std::string title = "")
+        : items(itemList), pageSize(pageSizeParam), title(std::move(title)), pageStart(0) {}
 
-    size_t select();
+    // Returns -1 on Back, empty list, or end of input.
+    int select();
 
 private:
     std::vector<std::string> items;
     size_t pageSize;
+    std::string title;
     size_t pageStart;
 };
 

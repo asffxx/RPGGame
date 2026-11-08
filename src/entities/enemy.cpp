@@ -102,11 +102,18 @@ Enemy EnemyController::getEnemyByName(const std::string& name, int playerLevel, 
 }
 
 void EnemyController::enemyGoldExpDrop(Player& player, const Enemy& enemy, PlayerInventory* inventory) {
-    player.economy.addCurrency(enemy.stats.data.economy.platinum, enemy.stats.data.economy.gold, enemy.stats.data.economy.silver, enemy.stats.data.economy.copper);
+    player.economy.addCurrency(enemy.stats.data.economy.platinum, enemy.stats.data.economy.gold,
+                               enemy.stats.data.economy.silver, enemy.stats.data.economy.copper);
     player.stats.expe += enemy.stats.data.expe;
 
-    display::enemyDefeated(enemy, player);
-
+    // One consolidated, pausing victory/spoils screen: deterministic regardless of drop rolls.
+    std::vector<std::string> lines;
+    lines.push_back("[ Victory ]");
+    lines.push_back("+" + display::num(enemy.stats.data.expe) + " experience");
+    lines.push_back("+" + display::coins(enemy.stats.data.economy.platinum,
+                                         enemy.stats.data.economy.gold,
+                                         enemy.stats.data.economy.silver,
+                                         enemy.stats.data.economy.copper));
     if (inventory && !enemy.id.empty()) {
         static std::mt19937 gen(std::random_device{}());
         for (const auto& gain : rollDrops(enemy.id, gen)) {
@@ -114,9 +121,9 @@ void EnemyController::enemyGoldExpDrop(Player& player, const Enemy& enemy, Playe
             if (index < 0) continue;
             const auto& material = materialDatabase().getMaterials()[static_cast<size_t>(index)];
             if (inventory->tryAddItem(PlayerInventory::ItemType::Material, static_cast<size_t>(index), gain.quantity))
-                display::materialDropped(material.name, gain.quantity);
+                lines.push_back("+" + material.name + " x" + std::to_string(gain.quantity));
             else
-                display::backpackFull(material.name);
+                lines.push_back("Backpack full: left " + material.name + " behind.");
         }
     }
 
@@ -124,6 +131,8 @@ void EnemyController::enemyGoldExpDrop(Player& player, const Enemy& enemy, Playe
         player.defeatedEnemies.insert(enemy.name);
         player.hasNewDictionaryEntry = true;
     }
+
+    display::spoils(lines);
 }
 
 void EnemyController::enemyScaleLevel(Enemy& enemy, int difficultyLevel, LocationType locationType) {

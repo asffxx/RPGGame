@@ -38,6 +38,7 @@ int main() {
         return 1;
     }
     while (true) {
+        clearScreen();
         displayBorderedMenu({std::string("[ RPGGame / v") + gameVersion + " ]",
             "Explore. Join a guild. Leave your mark.", "",
             "1. Start", "2. Continue", "3. Exit", "",
@@ -69,7 +70,6 @@ int main() {
         raceChoice = getNumberInput(1, static_cast<int>(raceNames.size()));
         clearScreen();
         display::racePreview(raceDb.templates[raceChoice - 1]);
-        displayBorderedMenu({"1. Confirm race", "2. Back"}, "Choose an option: ");
     } while (getNumberInput(1, 2) != 1);
     const PlayerRaceTemplate& chosenRace = raceDb.templates[raceChoice - 1];
     clearScreen();
@@ -78,11 +78,11 @@ int main() {
     for (const auto& c : classDb.templates) classNames.push_back(std::to_string(classNames.size() + 1) + ". " + c.name);
     int classChoice;
     do {
+        clearScreen();
         displayBorderedMenu(classNames, "Choose your class: ");
         classChoice = getNumberInput(1, static_cast<int>(classNames.size()));
         clearScreen();
         display::classPreview(classDb.templates[classChoice - 1], chosenRace);
-        displayBorderedMenu({"1. Confirm class", "2. Back"}, "Choose an option: ");
     } while (getNumberInput(1, 2) != 1);
     const PlayerClassTemplate& chosenClass = classDb.templates[classChoice - 1];
     clearScreen();
@@ -94,8 +94,8 @@ int main() {
     Player hero(name, playerRace, chosenClass);
     hero.applyRaceBonus(chosenRace.statBonus);
 
-    display::characterCreated();
-    clearScreen();
+    displayBorderedMenu({"[ Character Created ]", "Welcome, " + name + "! Your adventure begins."}, "");
+    display::pressEnter();
     GameSession session(hero);
     mainMenu(session);
     return 0;

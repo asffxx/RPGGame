@@ -20,28 +20,28 @@ namespace display {
 
 // --- core/ui (shared prompts) ---
 void pressEnter();
-void invalidChoice();
 
 // --- core/timesystem ---
 void sleepPenalty();
 
 // --- entities/enemy ---
 void enemyAppeared(const Enemy& enemy);
-void enemyDefeated(const Enemy& enemy, [[maybe_unused]] const Player& player);
-void materialDropped(const std::string& name, int quantity);
-void backpackFull(const std::string& name);
+// Compact coin amount, e.g. "5g 70c"; "0c" when empty.
+std::string coins(int platinum, int gold, int silver, int copper);
+// Boxed victory/spoils screen with a pause to read it.
+void spoils(const std::vector<std::string>& lines);
+
+// Formatted values (two decimals, trailing zeros trimmed).
+std::string num(float value);
 
 // --- combat ---
 void combatRunAway();
 void combatInvalidChoice();
 void combatSpellPrompt(const std::vector<std::string>& spellNames);
 void combatManaInsufficient();
-void combatVictory(const std::string& enemyName);
 void combatDefeat(const std::string& playerName);
 
 // --- systems/inventory ---
-void inventoryEmpty();
-void buffWoreOff(const std::string& name);
 bool usePotionPrompt(const std::string& potionName);
 void potionRecoveredHp(int heal);
 void potionRecoveredMana(int restore);
@@ -57,22 +57,10 @@ bool equipPrompt(const std::string& itemName);
 void itemEffect(const std::string& effectDesc);
 
 // --- systems/event ---
-void eventHeader(const std::string& name, const std::string& description);
-void eventGoldGained(int amount);
-void eventGoldLost(int amount);
-void eventNotEnoughGold();
-void eventExpGained(int amount);
-void eventExpLost(int amount);
-void eventHpRecovered(int heal);
-void eventHpDamage(int damage, bool survived);
-void eventManaRecovered(int restore);
-void eventManaLost(int drain);
-void eventEnemyEncounter();
+void eventBox(const std::vector<std::string>& lines);
 void eventPressEnter();
 
 // --- systems/party ---
-void wagesPaid(int total);
-void wagesInsufficient();
 void partyEmpty();
 void partyMemberLeft(const std::string& name);
 void partyMemberList(const std::vector<NPC>& party);
@@ -102,36 +90,27 @@ void dictionaryEventDescription(const std::string& desc);
 void dictionarySpecialCharacters(const std::vector<std::string>& names);
 
 // --- ui/menu ---
-void menuInvalidChoice();
 
 // --- ui/player_controller ---
 void showPlayerStats(const Player& player, float reqAmount, const std::optional<PlayerInventory::Buff>& activeBuff);
 void leveledUp();
 
 // --- world/establishments ---
-void tavernHeader();
-void tavernSlept();
-void tavernNoCoin();
-void tavernExit();
 void tavernFoodPurchased(const std::string& name);
 void tavernFoodTooExpensive();
 void tavernPartyTooBig();
-void tavernHireInfo(const NPC& npc, int totalCost);
 void tavernHireDeclined();
 void tavernHireTooExpensive();
 void tavernHireJoined(const NPC& npc, const std::string& line);
-void storeHeader(const Player& player);
 void storeBoughtPotion(const std::string& name);
 void storeBoughtEquipment(const std::string& name);
 void storeNotEnoughCurrency();
 void storeSold(const std::string& name, int quantity, long long copper);
 void storeNothingToSell();
-void magicStoreHeader(const Player& player);
 void magicStoreNoSpells();
 void magicStoreLearned(const std::string& name);
 void magicStoreAlreadyKnown(const std::string& name);
 void magicStoreNoEnchantable();
-void magicStoreEnchantItemHeader();
 void magicStoreEnchantChoice(const std::vector<std::string>& lines);
 void magicStoreNotEnoughGold();
 void magicStoreEnchanted(const std::string& itemName, const std::string& applied);
@@ -139,14 +118,11 @@ void magicStoreEnchanted(const std::string& itemName, const std::string& applied
 // --- world/travel ---
 void travelNoMarkedLocations();
 void travelLocationList(const std::vector<std::string>& lines);
-void travelDiscovered(const std::string& name);
 void travelLocationHeader(const std::string& name, const std::string& description, bool hasQuest = false);
 void travelLocationMarked();
 
 // --- app/main_menu ---
-void timePassed();
 void gameBasics();
-void characterCreated();
 void message(const std::string& text);
 void message(const std::vector<std::string>& lines);
 void racePreview(const PlayerRaceTemplate& race);

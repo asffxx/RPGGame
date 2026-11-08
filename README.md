@@ -3,7 +3,7 @@
 A C++17 terminal RPG with turn-based combat, exploration, guild quests, crafting,
 and persistent adventures.
 
-**Version:** v4.0.0.
+**Version:** v4.0.1.
 
 > The game will be continued in Godot in a separate repo. See the
 > [development log](DEVLOG.md).
@@ -21,7 +21,11 @@ and persistent adventures.
 - 15 city residents with branching dialogue, remembered decisions, local jobs, and recipe teaching.
 - A Story Board with six milestones, unfinished jobs,
   residents' concerns, and remembered choices.
-- **New in v4.0.0:** debuffs apply through hidden resist bar meters instead of
+- **New in v4.0.1:** richer ASCII panels, numbered confirmations, paged inventory,
+  shop, upgrade, and repair lists, and category navigation that stays where you left it.
+  Combat rewards share one victory panel; numbers use compact formatting.
+  Fixed six event encounters that referenced missing enemies.
+- **New in v4.0.0:** debuffs apply through resist bar meters instead of
   chance rolls. Each combatant tracks a 0–100 fill per debuff; landed hits add
   20 points, slowed to half armor fraction resistance (capped 50%); a full bar
   applies the debuff and empties. Bars decay 5 points per round and are combat-only.
@@ -40,7 +44,9 @@ the executable from the extracted folder. Keep the included `content/` directory
 Linux requires system glibc. Package checksums are provided with each release.
 
 - Enter the displayed number to choose an action; `0` returns where offered.
-- Main categories: **Character**, **Story**, **Local Establishments**, **Actions**, **System**.
+- Main categories: **Actions**, **Character**, **Local Establishments**, **Story**, **System**.
+- After an action, you return to its category. Choose **0. Back** for the overview.
+- Paged lists show explicit Back and page-navigation choices.
 - Use **System → Save Game**, then **Continue** next time. Exit does not save.
 - Saves use `savegame.dat` in the working directory, not necessarily beside the executable.
 - Use **Story → Story Board** to review your progress.

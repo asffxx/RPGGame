@@ -13,13 +13,14 @@ void deductWeeklyWages(Player& player, std::vector<NPC>& playerParty) {
         totalWages += npc.wagePerWeek;
     }
     if (player.economy.subtractCurrency(0, totalWages, 0, 0)) {
-        display::wagesPaid(totalWages);
+        display::message("Paid " + std::to_string(totalWages) + " gold in wages to party members.");
     } else {
-        display::wagesInsufficient();
+        display::message("Not enough gold to pay wages! Party members may become unhappy.");
     }
 }
 
 void manageParty(std::vector<NPC>& playerParty, NPCGenerator& npcGen, Player& player) {
+    clearScreen();
     if (playerParty.empty()) {
         display::partyEmpty();
         return;

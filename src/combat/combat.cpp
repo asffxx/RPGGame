@@ -242,9 +242,10 @@ void CombatScreen::tickStatusEffects() {
 void CombatScreen::displayCombatScreen() {
     std::vector<std::string> lines;
 
-    lines.push_back("Your Party:");
+    lines.push_back("[ Combat ]");
+    lines.push_back("[ Your Party ]");
     lines.push_back(player.name + "  " + makeHpBar(player.stats.hitpoints, player.stats.maxHitpoints) + " " +
-                    std::to_string(player.stats.hitpoints) + "/" + std::to_string(player.stats.maxHitpoints) +
+                    std::to_string(std::max(0, player.stats.hitpoints)) + "/" + std::to_string(player.stats.maxHitpoints) +
                     "   MP " + std::to_string(player.stats.mana) + "/" + std::to_string(player.stats.maxMana));
     std::string playerDebuffs = makeDebuffLine(player.debuffs);
     if (!playerDebuffs.empty()) lines.push_back("  " + playerDebuffs);
@@ -253,7 +254,7 @@ void CombatScreen::displayCombatScreen() {
 
     for (const auto& npc : party) {
         lines.push_back(npc.name + "  " + makeHpBar(npc.stats.hitpoints, npc.stats.maxHitpoints) + " " +
-                        std::to_string(npc.stats.hitpoints) + "/" + std::to_string(npc.stats.maxHitpoints));
+                        std::to_string(std::max(0, npc.stats.hitpoints)) + "/" + std::to_string(npc.stats.maxHitpoints));
         std::string npcDebuffs = makeDebuffLine(npc.debuffs);
         if (!npcDebuffs.empty()) lines.push_back("  " + npcDebuffs);
         const std::string npcMeters = makeMeterLine(npc.debuffMeters);
@@ -261,9 +262,9 @@ void CombatScreen::displayCombatScreen() {
     }
 
     lines.push_back("");
-    lines.push_back("Enemy:");
+    lines.push_back("[ Enemy ]");
     lines.push_back(enemy.name + "  " + makeHpBar(enemy.stats.data.hitpoints, enemy.stats.data.maxHitpoints) + " " +
-                    std::to_string(enemy.stats.data.hitpoints) + "/" + std::to_string(enemy.stats.data.maxHitpoints));
+                    std::to_string(std::max(0, enemy.stats.data.hitpoints)) + "/" + std::to_string(enemy.stats.data.maxHitpoints));
     std::string enemyDebuffs = makeDebuffLine(enemy.debuffs);
     if (!enemyDebuffs.empty()) lines.push_back("  " + enemyDebuffs);
     const std::string enemyMeters = makeMeterLine(enemy.debuffMeters);
@@ -271,7 +272,7 @@ void CombatScreen::displayCombatScreen() {
 
     if (!attackInfos.empty()) {
         lines.push_back("");
-        lines.push_back("--- Combat Log ---");
+        lines.push_back("[ Combat Log ]");
         for (const auto& info : attackInfos) {
             lines.push_back(info);
         }
@@ -288,8 +289,10 @@ int CombatScreen::getPlayerActionInput() const {
     if (!player.learnedSpells.empty()) {
         actions.push_back("5. Cast Spell");
     }
-    displayBorderedMenu({std::string(ability.name) + ": " + ability.description}, "");
-    displayBorderedMenu(actions, "Choose your action: ");
+    std::vector<std::string> menu = {std::string(ability.name) + ": " + ability.description,
+                                    "----------------------------"};
+    menu.insert(menu.end(), actions.begin(), actions.end());
+    displayBorderedMenu(menu, "Choose your action: ");
     return getNumberInput(1, static_cast<int>(actions.size()));
 }
 
@@ -395,9 +398,8 @@ void CombatScreen::removeDeadPartyMembers() {
 }
 
 void CombatScreen::displayCombatOutcome() const {
+    // Victory spoils are shown by the caller's drop/gold report; defeat keeps its own screen.
     if (player.stats.hitpoints <= 0) {
         display::combatDefeat(player.name);
-    } else if (enemy.stats.data.hitpoints <= 0) {
-        display::combatVictory(enemy.name);
     }
 }

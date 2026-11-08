@@ -20,7 +20,7 @@
       "healthEffect": -10,
       "manaEffect": 0,
       "enemyEncounter": true,
-      "enemyName": "Cutpurse",
+      "enemyName": "Outlaw",
       "enemyCount": 3
     },
     {
@@ -86,7 +86,7 @@
       "healthEffect": 0,
       "manaEffect": 0,
       "enemyEncounter": true,
-      "enemyName": "Ancient Remains",
+      "enemyName": "Bonewalker",
       "enemyCount": 2
     },
     {
@@ -174,7 +174,7 @@
       "healthEffect": 0,
       "manaEffect": 0,
       "enemyEncounter": true,
-      "enemyName": "Highwayman",
+      "enemyName": "Outlaw",
       "enemyCount": 2
     },
     {
@@ -240,7 +240,7 @@
       "healthEffect": 0,
       "manaEffect": 0,
       "enemyEncounter": true,
-      "enemyName": "Dragon Hatchling",
+      "enemyName": "Wyrmling",
       "enemyCount": 1
     },
     {
@@ -295,7 +295,7 @@
       "healthEffect": 0,
       "manaEffect": 0,
       "enemyEncounter": true,
-      "enemyName": "Highwayman",
+      "enemyName": "Outlaw",
       "enemyCount": 3
     },
     {
@@ -350,7 +350,7 @@
       "healthEffect": 0,
       "manaEffect": 0,
       "enemyEncounter": true,
-      "enemyName": "Shadow Fiend",
+      "enemyName": "Shadow lurker",
       "enemyCount": 1
     }
   ]

@@ -1,8 +1,10 @@
 #include "player_controller.hpp"
 
 #include "app/display.hpp"
+#include "core/ui.hpp"
 
 void PlayerController::showStats() const {
+    clearScreen();
     display::showPlayerStats(player, reqAmount, inventory.getActiveBuff());
 }
 
